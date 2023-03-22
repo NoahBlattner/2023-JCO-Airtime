@@ -15,6 +15,7 @@
 #include "gamecanvas.h"
 #include "resources.h"
 #include "utilities.h"
+#include "Player.h"
 
 const int SCENE_WIDTH = 1280;
 
@@ -34,7 +35,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
     
     // Instancier et initialiser les sprite ici :
-    // ...
+    Player* player = new Player();
+    player->setPos(m_pScene->sceneRect().center());
+    m_pScene->addSpriteToScene(player);
 
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
