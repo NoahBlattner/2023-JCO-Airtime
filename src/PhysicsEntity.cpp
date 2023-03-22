@@ -24,7 +24,11 @@ void PhysicsEntity::setParentScene(GameScene *pScene) {
 void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
     // If gravity is enabled, apply it
     if (m_gravityEnabled) {
-        m_velocity.setY(m_velocity.y() + GRAVITY * elapsedTimeInMilliseconds / 1000.0f);
+        if (m_isOnGround && m_velocity.y() > 0) { // If the player is on the ground and moving down
+            m_velocity.setY(0);
+        } else {
+            m_velocity.setY(m_velocity . y() + GRAVITY * elapsedTimeInMilliseconds / 1000.0f);
+        }
     }
 
     // Calculate the move vector
@@ -79,4 +83,28 @@ void PhysicsEntity::move(QVector2D moveVector) {
 
     // Set the new position
     setPos(newRect.topLeft());
+
+    reevaluateGrounded();
+}
+
+//! Reevaluate if the entity is on the ground
+//! This is done by checking if the entity is colliding with another sprite at the bottom
+//! And if the entity is at the bottom of the scene
+//! \return True if the entity is on the ground, false otherwise
+bool PhysicsEntity::reevaluateGrounded() {
+    // Check if the player is on the ground
+    QRectF newRect = sceneBoundingRect().translated(0, GROUND_DISTANCE);
+    QList<Sprite*> collidingSprites = m_pParentScene->collidingSprites(newRect);
+    collidingSprites.removeAll(this);
+
+    if (!collidingSprites.empty() // If the player is colliding with another sprite at the bottom
+        || sceneBoundingRect().bottom() >= m_pParentScene->sceneRect().bottom() - GROUND_DISTANCE) { // Or if the player is at the bottom of the scene
+        // The player is on the ground
+        m_isOnGround = true;
+    } else {
+        // The player is not on the ground
+        m_isOnGround = false;
+    }
+
+    return m_isOnGround;
 }

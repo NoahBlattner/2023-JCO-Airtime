@@ -30,6 +30,19 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
 }
 
 /*****************************
+ * MOUVEMENT
+ ****************************/
+
+//! Makes the player jump
+void Player::jump() {
+    // If the player is on the ground
+    if (isOnGround()) {
+        // Set the y velocity to make the player jump
+        setYVelocity(PLAYER_JUMP_SPEED);
+    }
+}
+
+/*****************************
  * SLOTS
  ****************************/
 
@@ -43,6 +56,9 @@ void Player::onKeyPressed(int key) {
             break;
         case Qt::Key_D:
             walkDirection += 1;
+            break;
+        case Qt::Key_Space:
+            jump();
             break;
     }
 }

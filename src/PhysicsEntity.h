@@ -27,14 +27,20 @@ public:
     inline bool isGravityEnabled() const { return m_gravityEnabled; }
     inline void setGravityEnabled(bool enabled) { m_gravityEnabled = enabled; }
 
+    inline bool isOnGround() const { return m_isOnGround; }
+
+    bool reevaluateGrounded();
+
     void tick(long long elapsedTimeInMilliseconds) override;
 
 private:
-    const float GRAVITY = 9.81;
+    const float GRAVITY = 12;
+    const float GROUND_DISTANCE = 1;
 
     QVector2D m_velocity = QVector2D(0, 0);
 
     bool m_gravityEnabled = true;
+    bool m_isOnGround = false;
 
 };
 

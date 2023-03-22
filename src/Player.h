@@ -18,11 +18,14 @@ public:
     explicit Player(GameCore* gamecore);
 
     const int PLAYER_WALK_SPEED = 1;
+    const int PLAYER_JUMP_SPEED = -3;
 
     void tick(long long int elapsedTimeInMilliseconds) override;
 
 private:
     float walkDirection = 0;
+
+    void jump();
 
 private slots:
     void onKeyPressed(int key);
