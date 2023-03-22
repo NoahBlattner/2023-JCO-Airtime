@@ -5,28 +5,24 @@
 #ifndef INC_2023_JCO_AIRTIME_PLAYER_H
 #define INC_2023_JCO_AIRTIME_PLAYER_H
 
-#include "sprite.h"
+#include "PhysicsEntity.h"
 
 #include <QVector2D>
 
 class GameCore;
 
-class Player : public Sprite {
+class Player : public PhysicsEntity {
     Q_OBJECT
 
 public:
     explicit Player(GameCore* gamecore);
 
-    const int PLAYER_SPEED = 1;
+    const int PLAYER_WALK_SPEED = 1;
 
-    inline QVector2D moveDirection() const { return m_moveDirection; }
-
-    void move(QVector2D moveVector);
-
-    virtual void setParentScene(GameScene* pScene) override;
+    void tick(long long int elapsedTimeInMilliseconds) override;
 
 private:
-    QVector2D m_moveDirection = QVector2D(0, 0);
+    float walkDirection = 0;
 
 private slots:
     void onKeyPressed(int key);
