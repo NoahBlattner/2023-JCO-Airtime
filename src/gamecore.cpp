@@ -17,7 +17,7 @@
 #include "utilities.h"
 #include "Player.h"
 
-const int SCENE_WIDTH = 1280;
+const int SCENE_WIDTH = 1920;
 
 //! Initialise le contrôleur de jeu.
 //! \param pGameCanvas  GameCanvas pour lequel cet objet travaille.
@@ -58,7 +58,6 @@ GameCore::~GameCore() {
 //!
 void GameCore::keyPressed(int key) {
     emit notifyKeyPressed(key);
-
 }
 
 //! Traite le relâchement d'une touche.

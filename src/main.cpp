@@ -190,6 +190,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    /*
     QCoreApplication::setOrganizationName("cejef-divtec");
     QCoreApplication::setOrganizationDomain("divtec.ch");
     QCoreApplication::setApplicationName("2023-JCO-Airtime");
@@ -203,6 +204,7 @@ int main(int argc, char *argv[])
         qCritical() << "Dossier des ressources introuvable : Fin d'exécution du programme.";
         return -1;
     }
+     */
 
     MainFrm w;
     w.show();
@@ -211,7 +213,7 @@ int main(int argc, char *argv[])
     // w.showMaximized();
 
     // Pour un mode d'affichage non-fenêtré, plein écran
-    // w.showFullScreen();
+    w.showFullScreen();
 
     return a.exec();
 }
