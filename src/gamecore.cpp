@@ -35,7 +35,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
     
     // Instancier et initialiser les sprite ici :
-    Player* player = new Player();
+    Player* player = new Player(this);
     player->setPos(m_pScene->sceneRect().center());
     m_pScene->addSpriteToScene(player);
 

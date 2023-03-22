@@ -192,7 +192,7 @@ public:
     int right() const { return static_cast<int>(globalBoundingRect().right()); }
     int bottom() const { return static_cast<int>(globalBoundingRect().bottom()); }
 
-    void setParentScene(GameScene* pScene);
+    virtual void setParentScene(GameScene* pScene);
 
     enum { SpriteItemType = UserType + 1 };
     virtual int type() const override { return SpriteItemType; }
