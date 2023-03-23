@@ -12,7 +12,14 @@
 
 //! Constructor
 //! \param gameCore The game core which sends the key events
-Player::Player(GameCore *gameCore) : PhysicsEntity(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/player.png")) {
+Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent) {
+    // Set animations
+    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/player.png")));
+    addAnimation();
+    setActiveAnimation(1);
+    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/player-flip.png")));
+    startAnimation();
+
     // Connect the key events to the player
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);
     connect(gameCore, &GameCore::notifyKeyReleased, this, &Player::onKeyReleased);
@@ -22,8 +29,16 @@ Player::Player(GameCore *gameCore) : PhysicsEntity(QDir::toNativeSeparators(Game
 //! Makes the player move on x axis based on the move direction
 //! \param elapsedTimeInMilliseconds The elapsed time since the last tick
 void Player::tick(long long elapsedTimeInMilliseconds) {
+    float prevXDirection = velocity().x();
+    float newXDirection = walkDirection * PLAYER_WALK_SPEED;
+
     // set the x velocity based on the move direction
-    setXVelocity(walkDirection * PLAYER_WALK_SPEED);
+    setXVelocity(newXDirection);
+
+    if ((prevXDirection <= 0 && newXDirection > 0) ||
+        (prevXDirection >= 0 && newXDirection < 0)) { // If the player is changing walking direction
+        setActiveAnimation((walkDirection < 0) ? 1 : 0); // Change the animation
+    }
 
     // Call the parent tick handler
     PhysicsEntity::tick(elapsedTimeInMilliseconds);

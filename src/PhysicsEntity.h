@@ -12,7 +12,8 @@
 class PhysicsEntity : public Sprite {
 
 public:
-    explicit PhysicsEntity(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
+    PhysicsEntity(QGraphicsItem* pParent = nullptr);
+    PhysicsEntity(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
 
     void setParentScene(GameScene* pScene) override;
 

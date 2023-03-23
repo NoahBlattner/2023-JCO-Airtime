@@ -6,7 +6,9 @@
 
 #include "GameScene.h"
 
-PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) : Sprite(rImagePath, pParent) {}
+PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : Sprite(pParent) {};
+
+PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) : Sprite(rImagePath, pParent) {};
 
 //! Set the parent scene
 //! Automatically registers the player for ticks when the scene is set
