@@ -21,7 +21,8 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     startAnimation();
 
     // Set friction
-    m_friction = PLAYER_FRICTION;
+    friction = PLAYER_FRICTION;
+    gravity = PLAYER_GRAVITY;
 
     // Connect the key events to the player
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);
@@ -39,7 +40,8 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
     // Clamp the new x velocity to the max walk speed
     newXVelocity = std::clamp<float>(newXVelocity, -PLAYER_WALK_SPEED, PLAYER_WALK_SPEED);
 
-    if (walkDirection == 0) { // If the player is not walking
+    // Adapt velocity
+    if (walkDirection == 0 && isOnGround()) { // If the player is not walking
         if (abs(newXVelocity) <= PLAYER_STOP_SPEED) { // If the player is slow enough to stop
             newXVelocity = 0;
         } else {

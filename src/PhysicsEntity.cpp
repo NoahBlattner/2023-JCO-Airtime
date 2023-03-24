@@ -25,18 +25,18 @@ void PhysicsEntity::setParentScene(GameScene *pScene) {
 //! \param elapsedTimeInMilliseconds The elapsed time in milliseconds
 void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
     // If gravity is enabled, apply it
-    if (m_gravityEnabled) {
-        if (m_isOnGround && m_velocity.y() > 0) { // If the player is on the ground and moving down
+    if (gravityEnabled) {
+        if (m_isOnGround && velocityVector.y() > 0) { // If the player is on the ground and moving down
             // Remove the y velocity
-            m_velocity.setY(0);
+            velocityVector.setY(0);
         } else {
             // Apply gravity
-            m_velocity.setY(m_velocity . y() + GRAVITY * elapsedTimeInMilliseconds / 1000.0f);
+            velocityVector.setY(velocityVector.y() - gravity * elapsedTimeInMilliseconds / 1000.0f);
         }
     }
 
     // Apply friction
-    m_velocity *= 1 - m_friction * elapsedTimeInMilliseconds / 1000.0f;
+    velocityVector *= 1 - friction * elapsedTimeInMilliseconds / 1000.0f;
 
     // Move the player
     move(velocity() * elapsedTimeInMilliseconds);
