@@ -29,16 +29,36 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
 //! Makes the player move on x axis based on the move direction
 //! \param elapsedTimeInMilliseconds The elapsed time since the last tick
 void Player::tick(long long elapsedTimeInMilliseconds) {
-    float prevXDirection = velocity().x();
-    float newXDirection = walkDirection * PLAYER_WALK_SPEED;
+    float prevXVelocity = velocity().x();
+    float newXVelocity = prevXVelocity;
 
-    // set the x velocity based on the move direction
-    setXVelocity(newXDirection);
+    if (walkDirection == 0) { // If the player is not moving
+        // Slow down the player within a certain time
+        if (prevXVelocity > 0)
+            newXVelocity -= PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f / PLAYER_STOP_TIME;
+        else if (prevXVelocity < 0)
+            newXVelocity += PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f / PLAYER_STOP_TIME;
+    } else {
+        // Calculate the new x velocity based on the move direction and the elapsed time
+        newXVelocity = prevXVelocity + walkDirection * PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f;
+        // Clamp the new x velocity to the max walk speed
+        newXVelocity = std::clamp<float>(newXVelocity, -PLAYER_WALK_SPEED, PLAYER_WALK_SPEED);
 
-    if ((prevXDirection <= 0 && newXDirection > 0) ||
-        (prevXDirection >= 0 && newXDirection < 0)) { // If the player is changing walking direction
-        setActiveAnimation((walkDirection < 0) ? 1 : 0); // Change the animation
+        if ((prevWalkDirection <= 0 && walkDirection > 0) ||
+            (prevWalkDirection >= 0 && walkDirection < 0)) { // If the player is changing walking direction
+            setActiveAnimation((walkDirection < 0) ? 1 : 0); // Change the animation
+
+            // Give the player a little boost in the opposite direction
+            // In order to avoid to much sliding
+            newXVelocity += walkDirection * PLAYER_WALK_SPEED / 1.1;
+        }
+
     }
+    // Set the x velocity based on the move direction
+    setXVelocity(newXVelocity);
+
+    // Remember the move direction
+    prevWalkDirection = walkDirection;
 
     // Call the parent tick handler
     PhysicsEntity::tick(elapsedTimeInMilliseconds);
