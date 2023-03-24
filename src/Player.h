@@ -17,9 +17,11 @@ class Player : public PhysicsEntity {
 public:
     explicit Player(GameCore* gamecore, QGraphicsItem* parent = nullptr);
 
-    const float PLAYER_WALK_SPEED = 1;
-    const float PLAYER_JUMP_SPEED = -3;
-    const float PLAYER_STOP_TIME = .15;
+    const float PLAYER_WALK_SPEED = 2;
+    const float PLAYER_JUMP_SPEED = -4;
+    const float PLAYER_STOP_SPEED = .5;
+    const float PLAYER_STOP_TIME = .2;
+    const float PLAYER_FRICTION = .75;
 
     void tick(long long int elapsedTimeInMilliseconds) override;
 

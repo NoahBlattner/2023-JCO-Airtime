@@ -36,12 +36,14 @@ public:
 
 private:
     const float GRAVITY = 12;
-    const float GROUND_DISTANCE = 1;
+    const float GROUNDED_DISTANCE = 1;
 
+protected:
     QVector2D m_velocity = QVector2D(0, 0);
-
     bool m_gravityEnabled = true;
     bool m_isOnGround = false;
+
+    float m_friction = .15;
 
 };
 

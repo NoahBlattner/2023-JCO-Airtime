@@ -20,6 +20,9 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/player-flip.png")));
     startAnimation();
 
+    // Set friction
+    m_friction = PLAYER_FRICTION;
+
     // Connect the key events to the player
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);
     connect(gameCore, &GameCore::notifyKeyReleased, this, &Player::onKeyReleased);
@@ -30,32 +33,29 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
 //! \param elapsedTimeInMilliseconds The elapsed time since the last tick
 void Player::tick(long long elapsedTimeInMilliseconds) {
     float prevXVelocity = velocity().x();
-    float newXVelocity = prevXVelocity;
 
-    if (walkDirection == 0) { // If the player is not moving
-        // Slow down the player within a certain time
-        if (prevXVelocity > 0)
-            newXVelocity -= PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f / PLAYER_STOP_TIME;
-        else if (prevXVelocity < 0)
-            newXVelocity += PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f / PLAYER_STOP_TIME;
-    } else {
-        // Calculate the new x velocity based on the move direction and the elapsed time
-        newXVelocity = prevXVelocity + walkDirection * PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f;
-        // Clamp the new x velocity to the max walk speed
-        newXVelocity = std::clamp<float>(newXVelocity, -PLAYER_WALK_SPEED, PLAYER_WALK_SPEED);
+    // Calculate the new x velocity based on the move direction and the elapsed time
+    float newXVelocity = prevXVelocity + walkDirection * PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f;
+    // Clamp the new x velocity to the max walk speed
+    newXVelocity = std::clamp<float>(newXVelocity, -PLAYER_WALK_SPEED, PLAYER_WALK_SPEED);
 
-        if ((prevWalkDirection <= 0 && walkDirection > 0) ||
-            (prevWalkDirection >= 0 && walkDirection < 0)) { // If the player is changing walking direction
-            setActiveAnimation((walkDirection < 0) ? 1 : 0); // Change the animation
-
-            // Give the player a little boost in the opposite direction
-            // In order to avoid to much sliding
-            newXVelocity += walkDirection * PLAYER_WALK_SPEED / 1.1;
+    if (walkDirection == 0) { // If the player is not walking
+        if (abs(newXVelocity) <= PLAYER_STOP_SPEED) { // If the player is slow enough to stop
+            newXVelocity = 0;
+        } else {
+            // Slow down the player over time
+            newXVelocity -= (newXVelocity > 0 ? 1 : -1) * PLAYER_STOP_SPEED * elapsedTimeInMilliseconds / 1000.0f / PLAYER_STOP_TIME;
         }
-
     }
+
+
     // Set the x velocity based on the move direction
     setXVelocity(newXVelocity);
+
+    if ((prevWalkDirection <= 0 && walkDirection > 0) ||
+        (prevWalkDirection >= 0 && walkDirection < 0)) { // If the player is changing walking direction
+        setActiveAnimation((walkDirection < 0) ? 1 : 0); // Change the animation
+    }
 
     // Remember the move direction
     prevWalkDirection = walkDirection;

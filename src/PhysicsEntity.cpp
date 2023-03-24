@@ -35,6 +35,9 @@ void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
         }
     }
 
+    // Apply friction
+    m_velocity *= 1 - m_friction * elapsedTimeInMilliseconds / 1000.0f;
+
     // Move the player
     move(velocity() * elapsedTimeInMilliseconds);
 }
@@ -93,12 +96,12 @@ void PhysicsEntity::move(QVector2D moveVector) {
 //! \return True if the entity is on the ground, false otherwise
 bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
-    QRectF newRect = sceneBoundingRect().translated(0, GROUND_DISTANCE);
+    QRectF newRect = sceneBoundingRect().translated(0, GROUNDED_DISTANCE);
     QList<Sprite*> collidingSprites = m_pParentScene->collidingSprites(newRect);
     collidingSprites.removeAll(this);
 
     if (!collidingSprites.empty() // If the player is colliding with another sprite at the bottom
-        || sceneBoundingRect().bottom() >= m_pParentScene->sceneRect().bottom() - GROUND_DISTANCE) { // Or if the player is at the bottom of the scene
+        || sceneBoundingRect().bottom() >= m_pParentScene->sceneRect().bottom() - GROUNDED_DISTANCE) { // Or if the player is at the bottom of the scene
         // The player is on the ground
         m_isOnGround = true;
     } else {
