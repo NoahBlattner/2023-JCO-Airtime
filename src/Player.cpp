@@ -49,6 +49,7 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
  ****************************/
 
 //! Makes the player jump
+//! Only works if the player is on the ground
 void Player::jump() {
     // If the player is on the ground
     if (isOnGround()) {

@@ -21,24 +21,22 @@ void PhysicsEntity::setParentScene(GameScene *pScene) {
 }
 
 //! Tick handler
-//! Applies gravity and moves the entity
+//! Applies gravity and moves the entity based on the velocity and the elapsed time
 //! \param elapsedTimeInMilliseconds The elapsed time in milliseconds
 void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
     // If gravity is enabled, apply it
     if (m_gravityEnabled) {
         if (m_isOnGround && m_velocity.y() > 0) { // If the player is on the ground and moving down
+            // Remove the y velocity
             m_velocity.setY(0);
         } else {
+            // Apply gravity
             m_velocity.setY(m_velocity . y() + GRAVITY * elapsedTimeInMilliseconds / 1000.0f);
         }
     }
 
-    // Calculate the move vector
-    QVector2D moveVector = velocity();
-    moveVector *= elapsedTimeInMilliseconds;
-
     // Move the player
-    move(moveVector);
+    move(velocity() * elapsedTimeInMilliseconds);
 }
 
 //! Move the entity by a given vector
