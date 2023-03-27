@@ -6,9 +6,9 @@
 
 #include "GameScene.h"
 
-PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : Sprite(pParent) {};
+PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {};
 
-PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) : Sprite(rImagePath, pParent) {};
+PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {};
 
 //! Set the parent scene
 //! Automatically registers the player for ticks when the scene is set
@@ -47,48 +47,19 @@ void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
 //! \param moveVector The vector to move the entity by
 void PhysicsEntity::move(QVector2D moveVector) {
     // Calculate the new position
-    newRect = sceneBoundingRect().translated(moveVector.x(), moveVector.y());
+    m_newRect = sceneBoundingRect().translated(moveVector.x(), moveVector.y());
 
     // Limit the rect to the scene
-    limitToSceneRect(newRect);
+    limitToSceneRect(m_newRect);
 
-    // Check if the new position is colliding with any other sprites than the entity
-    QList<Sprite*> collidingSprites = m_pParentScene->collidingSprites(newRect);
-    collidingSprites.removeAll(this);
-
-    if (!collidingSprites.empty()) { // If there are any colliding sprites
-        // Do collisions with the first colliding sprite
-        onCollision(collidingSprites.first());
-    }
+    // Check for intersections with other sprites
+    checkIntersects(m_newRect);
 
     // Set the new position
-    setPos(newRect.topLeft());
+    setPos(m_newRect.topLeft());
 
     // Reevaluate if the entity is on the ground
     reevaluateGrounded();
-}
-
-//! Aligns a RectF to a sprite
-//! \param newRect The reference to the RectF
-//! \param sprite The sprite to align to
-void PhysicsEntity::alignRectToSprite(QRectF &newRect, const Sprite* sprite) const {
-    if (sprite) { // If the sprite is not null
-        // Find the intersection between the new rect and the sprite
-        QRectF intersection = newRect.intersected(sprite->sceneBoundingRect());
-        if (intersection.width() < intersection.height()) { // If the intersection is wider than it is tall
-            if (x() < sprite->x()) { // If the entity is to the left of the sprite
-                newRect.setX(sprite->sceneBoundingRect().left() - newRect.width());
-            } else { // If the entity is to the right of the sprite
-                newRect.setX(sprite->sceneBoundingRect().right());
-            }
-        } else { // If the intersection is taller than it is wide
-            if (y() < sprite->y()) { // If the entity is above the sprite
-                newRect.setY(sprite->sceneBoundingRect().top() - newRect.height());
-            } else { // If the entity is below the sprite
-                newRect.setY(sprite->sceneBoundingRect().bottom());
-            }
-        }
-    }
 }
 
 //! Limits a RectF to the scene rect
@@ -105,6 +76,29 @@ void PhysicsEntity::limitToSceneRect(QRectF &rect) const {
         rect.setY(0);
     } else if (rect.bottom() > m_pParentScene ->sceneRect().bottom()) {
         rect.setY(m_pParentScene ->sceneRect().bottom() - rect.height());
+    }
+}
+
+//! Aligns a RectF to a sprite
+//! \param newRect The reference to the RectF
+//! \param sprite The sprite to align to
+void PhysicsEntity::alignRectToSprite(QRectF &rect, const Sprite* pSprite) {
+    if (pSprite) { // If the sprite is not null
+        // Find the intersection between the new rect and the sprite
+        QRectF intersection = m_newRect.intersected(pSprite->sceneBoundingRect());
+        if (intersection.width() < intersection.height()) { // If the intersection is wider than it is tall
+            if (x() < pSprite->x()) { // If the entity is to the left of the sprite
+                m_newRect.setX(pSprite->sceneBoundingRect().left() - m_newRect.width());
+            } else { // If the entity is to the right of the sprite
+                m_newRect.setX(pSprite->sceneBoundingRect().right());
+            }
+        } else { // If the intersection is taller than it is wide
+            if (y() < pSprite->y()) { // If the entity is above the sprite
+                m_newRect.setY(pSprite->sceneBoundingRect().top() - m_newRect.height());
+            } else { // If the entity is below the sprite
+                m_newRect.setY(pSprite->sceneBoundingRect().bottom());
+            }
+        }
     }
 }
 
@@ -131,10 +125,10 @@ bool PhysicsEntity::reevaluateGrounded() {
 }
 
 //! Called when the entity collides with another sprite
-//! Emits the notifyCollision signal
+//! Aligns the m_newRect to the other sprite
 //! \param pOther The other sprite
 void PhysicsEntity::onCollision(Sprite* pOther) {
-    emit notifyCollision(pOther);
+    AdvancedCollisionSprite::onCollision(pOther);
 
-    alignRectToSprite(newRect, pOther);
+    alignRectToSprite(m_newRect, pOther);
 }

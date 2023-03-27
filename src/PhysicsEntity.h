@@ -5,7 +5,7 @@
 #ifndef INC_2023_JCO_AIRTIME_PHYSICSENTITY_H
 #define INC_2023_JCO_AIRTIME_PHYSICSENTITY_H
 
-#include "sprite.h"
+#include "AdvancedCollisionSprite.h"
 
 #include <QVector2D>
 
@@ -24,7 +24,7 @@
 //!
 //! The isOnGround property is set to true if the entity is on the ground
 //! The entity is considered to be on the ground if the distance to the ground is less than GROUNDED_DISTANCE constant
-class PhysicsEntity : public Sprite {
+class PhysicsEntity : public AdvancedCollisionSprite {
 
     Q_OBJECT
 
@@ -57,7 +57,7 @@ private:
     const float GROUNDED_DISTANCE = 1;
     bool m_isOnGround = false;
 
-    QRectF newRect;
+    QRectF m_newRect;
 
 protected:
     QVector2D velocityVector = QVector2D(0, 0);
@@ -69,13 +69,9 @@ protected:
 
     void limitToSceneRect(QRectF &rect) const;
 
-    void alignRectToSprite(QRectF &newRect, const Sprite* sprite) const;
+    void alignRectToSprite(QRectF &rect, const Sprite* pSprite);
 
-    void onCollision(Sprite* pOther);
-
-signals:
-    void notifyCollision(Sprite* pOther);
-
+    void onCollision(Sprite* pOther) override;
 };
 
 
