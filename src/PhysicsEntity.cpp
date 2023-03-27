@@ -50,7 +50,7 @@ void PhysicsEntity::move(QVector2D moveVector) {
     m_newRect = sceneBoundingRect().translated(moveVector.x(), moveVector.y());
 
     // Limit the rect to the scene
-    limitToSceneRect(m_newRect);
+    limitRectToScene(m_newRect);
 
     // Check for intersections with other sprites
     checkIntersects(m_newRect);
@@ -64,8 +64,8 @@ void PhysicsEntity::move(QVector2D moveVector) {
 
 //! Limits a RectF to the scene rect
 //! \param rect The reference to the RectF
-void PhysicsEntity::limitToSceneRect(QRectF &rect) const {
-    // If the new position is outside the scene, move it back inside
+void PhysicsEntity::limitRectToScene(QRectF &rect) const {
+    // If the given rect is outside the scene, move it back inside
     if (rect.left() < 0) {
         rect.setX(0);
     } else if (rect.right() > m_pParentScene ->sceneRect().right()) {
