@@ -47,7 +47,7 @@ void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
 //! \param moveVector The vector to move the entity by
 void PhysicsEntity::move(QVector2D moveVector) {
     // Calculate the new position
-    QRectF newRect = sceneBoundingRect().translated(moveVector.x(), moveVector.y());
+    newRect = sceneBoundingRect().translated(moveVector.x(), moveVector.y());
 
     // Limit the rect to the scene
     limitToSceneRect(newRect);
@@ -56,9 +56,9 @@ void PhysicsEntity::move(QVector2D moveVector) {
     QList<Sprite*> collidingSprites = m_pParentScene->collidingSprites(newRect);
     collidingSprites.removeAll(this);
 
-    if (!collidingSprites.empty()) {
-        // If there are collisions, align the entity with the first colliding sprite
-        alignRectToSprite(newRect, collidingSprites.first());
+    if (!collidingSprites.empty()) { // If there are any colliding sprites
+        // Do collisions with the first colliding sprite
+        onCollision(collidingSprites.first());
     }
 
     // Set the new position
@@ -92,19 +92,19 @@ void PhysicsEntity::alignRectToSprite(QRectF &newRect, const Sprite* sprite) con
 }
 
 //! Limits a RectF to the scene rect
-//! \param newRect The reference to the RectF
-void PhysicsEntity::limitToSceneRect(QRectF &newRect) const {
+//! \param rect The reference to the RectF
+void PhysicsEntity::limitToSceneRect(QRectF &rect) const {
     // If the new position is outside the scene, move it back inside
-    if (newRect.left() < 0) {
-        newRect.setX(0);
-    } else if (newRect.right() > m_pParentScene ->sceneRect().right()) {
-        newRect.setX(m_pParentScene ->sceneRect().right() - newRect.width());
+    if (rect.left() < 0) {
+        rect.setX(0);
+    } else if (rect.right() > m_pParentScene ->sceneRect().right()) {
+        rect.setX(m_pParentScene ->sceneRect().right() - rect.width());
     }
 
-    if (newRect.top() < 0) {
-        newRect.setY(0);
-    } else if (newRect.bottom() > m_pParentScene ->sceneRect().bottom()) {
-        newRect.setY(m_pParentScene ->sceneRect().bottom() - newRect.height());
+    if (rect.top() < 0) {
+        rect.setY(0);
+    } else if (rect.bottom() > m_pParentScene ->sceneRect().bottom()) {
+        rect.setY(m_pParentScene ->sceneRect().bottom() - rect.height());
     }
 }
 
@@ -114,8 +114,8 @@ void PhysicsEntity::limitToSceneRect(QRectF &newRect) const {
 //! \return True if the entity is on the ground, false otherwise
 bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
-    QRectF newRect = sceneBoundingRect().translated(0, GROUNDED_DISTANCE);
-    QList<Sprite*> collidingSprites = m_pParentScene->collidingSprites(newRect);
+    QRectF groundRect = sceneBoundingRect().translated(0, GROUNDED_DISTANCE);
+    QList<Sprite*> collidingSprites = m_pParentScene->collidingSprites(groundRect);
     collidingSprites.removeAll(this);
 
     if (!collidingSprites.empty() // If the player is colliding with another sprite at the bottom
@@ -128,4 +128,13 @@ bool PhysicsEntity::reevaluateGrounded() {
     }
 
     return m_isOnGround;
+}
+
+//! Called when the entity collides with another sprite
+//! Emits the notifyCollision signal
+//! \param pOther The other sprite
+void PhysicsEntity::onCollision(Sprite* pOther) {
+    emit notifyCollision(pOther);
+
+    alignRectToSprite(newRect, pOther);
 }

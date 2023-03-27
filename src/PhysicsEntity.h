@@ -26,6 +26,8 @@
 //! The entity is considered to be on the ground if the distance to the ground is less than GROUNDED_DISTANCE constant
 class PhysicsEntity : public Sprite {
 
+    Q_OBJECT
+
 public:
     explicit PhysicsEntity(QGraphicsItem* pParent = nullptr);
     explicit PhysicsEntity(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
@@ -55,6 +57,8 @@ private:
     const float GROUNDED_DISTANCE = 1;
     bool m_isOnGround = false;
 
+    QRectF newRect;
+
 protected:
     QVector2D velocityVector = QVector2D(0, 0);
 
@@ -63,9 +67,15 @@ protected:
 
     float friction = .15;
 
-    void limitToSceneRect(QRectF &newRect) const;
+    void limitToSceneRect(QRectF &rect) const;
 
     void alignRectToSprite(QRectF &newRect, const Sprite* sprite) const;
+
+    void onCollision(Sprite* pOther);
+
+signals:
+    void notifyCollision(Sprite* pOther);
+
 };
 
 
