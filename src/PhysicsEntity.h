@@ -27,12 +27,13 @@
 class PhysicsEntity : public Sprite {
 
 public:
-    PhysicsEntity(QGraphicsItem* pParent = nullptr);
-    PhysicsEntity(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
+    explicit PhysicsEntity(QGraphicsItem* pParent = nullptr);
+    explicit PhysicsEntity(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
 
     void setParentScene(GameScene* pScene) override;
 
-    inline QVector2D velocity() const { return velocityVector; }
+    // Velocity
+    [[nodiscard]] inline QVector2D velocity() const { return velocityVector; }
     inline void addVelocity(QVector2D velocity) { velocityVector += velocity; }
     inline void setVelocity(QVector2D velocity) { velocityVector = velocity; }
     inline void setXVelocity(float xVelocity) { velocityVector.setX(xVelocity); }
@@ -40,11 +41,12 @@ public:
 
     void move(QVector2D moveVector);
 
-    inline bool isGravityEnabled() const { return gravityEnabled; }
+    // Gravity
+    [[nodiscard]] inline bool isGravityEnabled() const { return gravityEnabled; }
     inline void setGravityEnabled(bool enabled) { gravityEnabled = enabled; }
 
-    inline bool isOnGround() const { return m_isOnGround; }
-
+    // Ground check
+    [[nodiscard]] inline bool isOnGround() const { return m_isOnGround; }
     bool reevaluateGrounded();
 
     void tick(long long elapsedTimeInMilliseconds) override;
@@ -61,6 +63,9 @@ protected:
 
     float friction = .15;
 
+    void limitToSceneRect(QRectF &newRect) const;
+
+    void alignRectToSprite(QRectF &newRect, const Sprite* sprite) const;
 };
 
 

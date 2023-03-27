@@ -29,8 +29,9 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     connect(gameCore, &GameCore::notifyKeyReleased, this, &Player::onKeyReleased);
 }
 
-//! Player tick handler
-//! Makes the player move on x axis based on the move direction
+//! Player tick handler.
+//! Updates the player x velocity based on inputs to make it move
+//! Updates the animation of the player
 //! \param elapsedTimeInMilliseconds The elapsed time since the last tick
 void Player::tick(long long elapsedTimeInMilliseconds) {
     float prevXVelocity = velocity().x();
@@ -50,7 +51,6 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
         }
     }
 
-
     // Set the x velocity based on the move direction
     setXVelocity(newXVelocity);
 
@@ -62,7 +62,7 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
     // Remember the move direction
     prevWalkDirection = walkDirection;
 
-    // Call the parent tick handler
+    // Call the parent tick handler which applies the velocity
     PhysicsEntity::tick(elapsedTimeInMilliseconds);
 }
 

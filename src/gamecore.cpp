@@ -39,6 +39,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     player->setPos(500, 0);
     m_pScene->addSpriteToScene(player);
 
+    auto* plateforme1 = new Sprite(GameFramework::imagesPath() + "/plateform.png");
+    plateforme1->setPos(500, 700);
+    m_pScene->addSpriteToScene(plateforme1);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
