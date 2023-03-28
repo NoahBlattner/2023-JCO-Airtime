@@ -5,6 +5,7 @@
 #include "PhysicsEntity.h"
 
 #include "GameScene.h"
+#include "DirectionalEntityCollision.h"
 
 PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {};
 
@@ -53,7 +54,7 @@ void PhysicsEntity::move(QVector2D moveVector) {
     limitRectToScene(m_newRect);
 
     // Check for intersections with other sprites
-    checkIntersects(m_newRect);
+    reevaluateIntersects(m_newRect);
 
     // Set the new position
     setPos(m_newRect.topLeft());
@@ -109,8 +110,7 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, const Sprite* pSprite) {
 bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
     QRectF groundRect = sceneBoundingRect().translated(0, GROUNDED_DISTANCE);
-    QList<Sprite*> collidingSprites = m_pParentScene->collidingSprites(groundRect);
-    collidingSprites.removeAll(this);
+    QList<Sprite*> collidingSprites = getCollidingSprites(groundRect);
 
     if (!collidingSprites.empty() // If the player is colliding with another sprite at the bottom
         || sceneBoundingRect().bottom() >= m_pParentScene->sceneRect().bottom() - GROUNDED_DISTANCE) { // Or if the player is at the bottom of the scene
@@ -131,4 +131,28 @@ void PhysicsEntity::onCollision(Sprite* pOther) {
     AdvancedCollisionSprite::onCollision(pOther);
 
     alignRectToSprite(m_newRect, pOther);
+}
+
+//! Checks if the entity is intersecting with other sprites
+//! If the other sprite is a trigger, calls its onTrigger function
+//! If the other sprite is a collision, calls its onCollision function
+//! If the other sprite is a directional entity collider, checks if the entity is blocked by it
+//! \param rect The rect to check for intersections with
+void PhysicsEntity::reevaluateIntersects(QRectF rect) {
+    auto collidingSprites= getCollidingSprites(rect);
+
+    foreach (Sprite* pSprite, collidingSprites) { // For each colliding sprite
+        auto* pAdvancedCollisionSprite = dynamic_cast<AdvancedCollisionSprite*>(pSprite);
+        if (pAdvancedCollisionSprite != nullptr && pAdvancedCollisionSprite->getIsTrigger()) { // If the other sprite is a trigger
+            // Call its onTrigger function
+            pAdvancedCollisionSprite->onTrigger(this);
+        } else { // If the sprite is a collision
+            auto* directionalCollider = dynamic_cast<DirectionalEntityCollider*>(pSprite);
+            if (directionalCollider == nullptr ||
+                !directionalCollider->isEntityBlocked(this)) { // If the other sprite is not a directional collider or the entity is not blocked by the collider
+                // Call its onCollision function
+                onCollision(pSprite);
+            }
+        }
+    }
 }

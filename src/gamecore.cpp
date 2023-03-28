@@ -16,6 +16,7 @@
 #include "resources.h"
 #include "utilities.h"
 #include "Player.h"
+#include "DirectionalEntityCollision.h"
 
 const int SCENE_WIDTH = 1920;
 
@@ -40,8 +41,32 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     m_pScene->addSpriteToScene(player);
 
     auto* plateforme1 = new Sprite(GameFramework::imagesPath() + "/plateform.png");
-    plateforme1->setPos(500, 700);
+    plateforme1->setPos(100, 700);
+    plateforme1-> setScale(.35);
     m_pScene->addSpriteToScene(plateforme1);
+
+    auto* plateforme2 = new AdvancedCollisionSprite(GameFramework::imagesPath() + "/plateform.png");
+    plateforme2->setPos(500, 700);
+    plateforme2-> setScale(.35);
+    m_pScene->addSpriteToScene(plateforme2);
+
+    DirectionalEntityCollider::Directions directions = DirectionalEntityCollider::Directions();
+    directions.up = false;
+    auto* plateforme3 = new DirectionalEntityCollider(GameFramework::imagesPath() + "/plateform.png", directions);
+    plateforme3->setPos(1200, 700);
+    plateforme3->setScale(.35);
+    m_pScene->addSpriteToScene(plateforme3);
+
+    QGraphicsTextItem* text;
+    text = m_pScene->addText("Sprite", QFont("Arial", 30));
+    text -> setDefaultTextColor(Qt::white);
+    text->setPos(100, 600);
+    text = m_pScene->addText("AdvancedCollisionSprite", QFont("Arial", 30));
+    text -> setDefaultTextColor(Qt::white);
+    text->setPos(500, 600);
+    text = m_pScene->addText("Directional", QFont("Arial", 30));
+    text -> setDefaultTextColor(Qt::white);
+    text->setPos(1200, 600);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,

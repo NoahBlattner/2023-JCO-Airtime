@@ -7,8 +7,9 @@
 
 
 #include "AdvancedCollisionSprite.h"
+#include "PhysicsEntity.h"
 
-class DirectionalEntityCollision : public AdvancedCollisionSprite {
+class DirectionalEntityCollider : public AdvancedCollisionSprite {
 
     Q_OBJECT
 
@@ -20,14 +21,13 @@ public:
         bool right = true;
     };
 
-    explicit DirectionalEntityCollision(QGraphicsItem* pParent = nullptr);
-    explicit DirectionalEntityCollision(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
-    DirectionalEntityCollision(const QString& rImagePath, Directions directions, QGraphicsItem* pParent = nullptr);
+    explicit DirectionalEntityCollider(QGraphicsItem* pParent = nullptr);
+    explicit DirectionalEntityCollider(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
+    DirectionalEntityCollider(const QString& rImagePath, Directions directions, QGraphicsItem* pParent = nullptr);
 
     Directions m_directions;
 
-protected:
-    void onCollision(Sprite* pOther) override;
+    bool isEntityBlocked(PhysicsEntity* pEntity);
 
 };
 

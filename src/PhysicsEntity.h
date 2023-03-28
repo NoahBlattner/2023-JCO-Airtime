@@ -67,6 +67,8 @@ protected:
 
     float friction = .15;
 
+    void reevaluateIntersects(QRectF rect) override;
+
     void limitRectToScene(QRectF &rect) const;
 
     void alignRectToSprite(QRectF &rect, const Sprite* pSprite);

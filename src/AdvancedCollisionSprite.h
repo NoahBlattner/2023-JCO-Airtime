@@ -14,25 +14,32 @@ class AdvancedCollisionSprite : public Sprite {
 
 public:
     explicit AdvancedCollisionSprite(QGraphicsItem* pParent = nullptr);
-    AdvancedCollisionSprite(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
+    explicit AdvancedCollisionSprite(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
 
-protected:
-    bool isTrigger = false;
+    // Trigger
     inline void setTrigger(bool trigger) { isTrigger = trigger;};
-    [[nodiscard]] inline bool getTrigger() const { return isTrigger; };
+    [[nodiscard]] inline bool getIsTrigger() const { return isTrigger; };
 
-    // List of colliding classes
-    QList<QString> collidingClasses = {"Sprite"};
-    inline void addCollidingClass(const QString& className) { collidingClasses.append(className); };
+    // Colliding classes
+    void addCollidingClass(const QString& className);
     inline void removeCollidingClass(const QString& className) { collidingClasses.removeOne(className); };
+    void collideAll();
+    QList<Sprite*> getCollidingSprites(QRectF rect = QRectF());
 
-    void alignRectToSprite(QRectF newRect, const Sprite* sprite) const;
-
+    // Intersection events
     void onTrigger(Sprite* pOther);
     virtual void onCollision(Sprite* pOther);
 
-    void checkIntersects();
-    void checkIntersects(QRectF rect);
+    // Intersections checks
+    virtual void reevaluateIntersects();
+    virtual void reevaluateIntersects(QRectF rect);
+
+protected:
+    // Trigger
+    bool isTrigger = false;
+
+    // Colliding classes
+    QList<QString> collidingClasses = {"All"};
 
 signals:
     void notifyTrigger(Sprite* pOther);
