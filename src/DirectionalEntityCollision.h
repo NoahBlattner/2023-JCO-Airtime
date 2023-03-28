@@ -17,7 +17,7 @@
 //! This class is a subclass of AdvancedCollisionSprite,
 //! so it can be used to create advanced collision all while blocking entities from moving in certain directions.
 //!
-//! The class contains a struct called BlockingDirections that contains four bools.
+//! The class contains a struct called BlockingSides that contains four bools.
 //! These bools represent the four directions that the entity can move in.
 //! If the bool is true, the entity is blocked from moving through the Sprite in that direction.
 //! This field is public, so it can be accessed and modified directly.
@@ -30,18 +30,18 @@ class DirectionalEntityCollider : public AdvancedCollisionSprite {
     Q_OBJECT
 
 public:
-    struct BlockingDirections {
-        bool up = true;
-        bool down = true;
+    struct BlockingSides {
+        bool top = true;
+        bool bottom = true;
         bool left = true;
         bool right = true;
     };
 
     explicit DirectionalEntityCollider(QGraphicsItem* pParent = nullptr);
     explicit DirectionalEntityCollider(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
-    DirectionalEntityCollider(const QString& rImagePath, BlockingDirections directions, QGraphicsItem* pParent = nullptr);
+    DirectionalEntityCollider(const QString& rImagePath, BlockingSides blockingSides, QGraphicsItem* pParent = nullptr);
 
-    BlockingDirections m_directions;
+    BlockingSides m_blockingSides;
 
     bool isEntityBlocked(PhysicsEntity* pEntity) const;
 

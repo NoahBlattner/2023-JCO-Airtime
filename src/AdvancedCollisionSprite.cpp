@@ -57,7 +57,7 @@ void AdvancedCollisionSprite::reevaluateIntersects(QRectF rect) {
 //! Only returns sprites that are in the colliding classes list
 //! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite
 //! \return A list of sprites that the sprite is colliding with
-QList<Sprite*> AdvancedCollisionSprite::getCollidingSprites(QRectF rect) {
+QList<Sprite*> AdvancedCollisionSprite::getCollidingSprites(QRectF rect) const {
     auto collidingSprites = m_pParentScene->collidingSprites((rect.isEmpty()) ? sceneBoundingRect() : rect);
     collidingSprites.removeAll(this);
 

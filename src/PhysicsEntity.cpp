@@ -114,9 +114,20 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, const Sprite* pSprite) {
 bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
     QRectF groundRect = sceneBoundingRect().translated(0, GROUNDED_DISTANCE);
-    QList<Sprite*> collidingSprites = getCollidingSprites(groundRect);
+    QList<Sprite*> groundCheckCollisions = getCollidingSprites(groundRect);
 
-    if (!collidingSprites.empty() // If the player is colliding with another sprite at the bottom
+    // Ignore directional entity colliders that are not blocking the entity from the top
+    foreach (Sprite* pSprite, groundCheckCollisions) {
+        auto* directionalCollider = dynamic_cast<DirectionalEntityCollider*>(pSprite);
+        if (directionalCollider != nullptr &&
+            !directionalCollider->m_blockingSides.top) { // If the other sprite is a directional entity collider that is not blocking the entity from the top
+            // Ignore the collision
+            groundCheckCollisions.removeOne(pSprite);
+        }
+    }
+
+    // Determine if the player is on the ground
+    if (!groundCheckCollisions.empty() // If the player is colliding with another sprite at the bottom
         || sceneBoundingRect().bottom() >= m_pParentScene->sceneRect().bottom() - GROUNDED_DISTANCE) { // Or if the player is at the bottom of the scene
         // The player is on the ground
         m_isOnGround = true;

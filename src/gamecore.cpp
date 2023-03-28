@@ -39,6 +39,11 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     auto* player = new Player(this);
     player->setPos(500, 0);
     m_pScene->addSpriteToScene(player);
+    auto* player2 = new Player(this);
+    player2->setPos(1000, 0);
+    m_pScene->addSpriteToScene(player2);
+    player2 -> addCollidingClass("Sprite");
+    player2-> removeCollidingClass("AdvancedCollisionSprite");
 
     auto* plateforme1 = new Sprite(GameFramework::imagesPath() + "/plateform.png");
     plateforme1->setPos(100, 700);
@@ -50,9 +55,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     plateforme2-> setScale(.35);
     m_pScene->addSpriteToScene(plateforme2);
 
-    DirectionalEntityCollider::BlockingDirections directions = DirectionalEntityCollider::BlockingDirections();
-    directions.down = false;
-    auto* plateforme3 = new DirectionalEntityCollider(GameFramework::imagesPath() + "/plateform.png", directions);
+    DirectionalEntityCollider::BlockingSides blockingSides = DirectionalEntityCollider::BlockingSides();
+    blockingSides.top = false;
+    auto* plateforme3 = new DirectionalEntityCollider(GameFramework::imagesPath() + "/plateform.png", blockingSides);
     plateforme3->setPos(1200, 700);
     plateforme3->setScale(.35);
     m_pScene->addSpriteToScene(plateforme3);
@@ -63,7 +68,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     text->setPos(100, 600);
     text = m_pScene->addText("AdvancedCollisionSprite", QFont("Arial", 30));
     text -> setDefaultTextColor(Qt::white);
-    text->setPos(500, 600);
+    text->setPos(500, 600);a
     text = m_pScene->addText("Directional", QFont("Arial", 30));
     text -> setDefaultTextColor(Qt::white);
     text->setPos(1200, 600);
