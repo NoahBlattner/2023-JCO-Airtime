@@ -22,11 +22,10 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
 
     // Set friction
     friction = PLAYER_FRICTION;
-    gravity = PLAYER_GRAVITY;
+    gravity = PLAYER_GRAVITY_OVERRIDE;
 
     // Set collisons
     addCollidingClass("AdvancedCollisionSprite");
-    addCollidingClass("DirectionalEntityCollider");
 
     // Connect the key events to the player
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);

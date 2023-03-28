@@ -7,9 +7,13 @@
 #include "GameScene.h"
 #include "DirectionalEntityCollision.h"
 
-PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {};
+PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {
+    addCollidingClass("DirectionalEntityCollider");
+};
 
-PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {};
+PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
+    addCollidingClass("DirectionalEntityCollider");
+};
 
 //! Set the parent scene
 //! Automatically registers the player for ticks when the scene is set
@@ -125,34 +129,20 @@ bool PhysicsEntity::reevaluateGrounded() {
 }
 
 //! Called when the entity collides with another sprite
-//! Aligns the m_newRect to the other sprite
+//! If the collider is a directional entity collider and the entity is not blocked by it, the collision is ignored
+//! Otherwise, the parent onCollision function is called and the entity is aligned to the other sprite
 //! \param pOther The other sprite
 void PhysicsEntity::onCollision(Sprite* pOther) {
+    auto* directionalCollider = dynamic_cast<DirectionalEntityCollider*>(pOther);
+    if (directionalCollider != nullptr &&
+        !directionalCollider->isEntityBlocked(this)) { // If the other sprite is a directional entity collider and the entity is not blocked by it
+        // Ignore the collision
+        return;
+    }
+
+    // Call the parent onCollision function
     AdvancedCollisionSprite::onCollision(pOther);
 
+    // Align the m_newRect to the other sprite
     alignRectToSprite(m_newRect, pOther);
-}
-
-//! Checks if the entity is intersecting with other sprites
-//! If the other sprite is a trigger, calls its onTrigger function
-//! If the other sprite is a collision, calls its onCollision function
-//! If the other sprite is a directional entity collider, checks if the entity is blocked by it
-//! \param rect The rect to check for intersections with
-void PhysicsEntity::reevaluateIntersects(QRectF rect) {
-    auto collidingSprites= getCollidingSprites(rect);
-
-    foreach (Sprite* pSprite, collidingSprites) { // For each colliding sprite
-        auto* pAdvancedCollisionSprite = dynamic_cast<AdvancedCollisionSprite*>(pSprite);
-        if (pAdvancedCollisionSprite != nullptr && pAdvancedCollisionSprite->getIsTrigger()) { // If the other sprite is a trigger
-            // Call its onTrigger function
-            pAdvancedCollisionSprite->onTrigger(this);
-        } else { // If the sprite is a collision
-            auto* directionalCollider = dynamic_cast<DirectionalEntityCollider*>(pSprite);
-            if (directionalCollider == nullptr ||
-                !directionalCollider->isEntityBlocked(this)) { // If the other sprite is not a directional collider or the entity is not blocked by the collider
-                // Call its onCollision function
-                onCollision(pSprite);
-            }
-        }
-    }
 }

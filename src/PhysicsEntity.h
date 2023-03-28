@@ -20,10 +20,18 @@
 //! The velocity is affected by gravity and friction
 //! Gravity is applied by default, but can be disabled
 //!
-//! It also checks for collisions with other sprites and the scene boundaries
+//! On every tick, the entity is moved according to it's velocity vector
+//! Before moving, the entity checks for collisions with other sprites
+//! If a collision is detected, the entity is moved to the closest position to the collision point
+//! Collision detection is done using the parent AdvancedCollisionSprite class
 //!
 //! The isOnGround property is set to true if the entity is on the ground
 //! The entity is considered to be on the ground if the distance to the ground is less than GROUNDED_DISTANCE constant
+//! If needed, the isGrounded property can be reevaluated by calling the reevaluateGrounded function at any time
+//! This is normally not needed, as the isGrounded property is automatically reevaluated every time the entity moves
+//!
+//! The class always registers for collision events with the DirectionalEntityCollider class
+//! When a collision with a DirectionalEntityCollider is detected, the entity checks if the collisions is blocking the current direction of movement
 class PhysicsEntity : public AdvancedCollisionSprite {
 
     Q_OBJECT
@@ -66,8 +74,6 @@ protected:
     bool gravityEnabled = true;
 
     float friction = .15;
-
-    void reevaluateIntersects(QRectF rect) override;
 
     void limitRectToScene(QRectF &rect) const;
 

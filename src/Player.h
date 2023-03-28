@@ -20,14 +20,16 @@ class GameCore;
 //! The class manages the player's walk direction
 //! And allows the player to jump
 //!
-//! The player's animations are updated according to the properties of the player
+//! The player's animations are updated according to the current properties of the player
+//!
+//! The class contains a series of constants that can be used to tweak the player's movement
 class Player : public PhysicsEntity {
     Q_OBJECT
 
 public:
     explicit Player(GameCore* gamecore, QGraphicsItem* parent = nullptr);
 
-    const float PLAYER_GRAVITY = -12;
+    const float PLAYER_GRAVITY_OVERRIDE = -12;
     const float PLAYER_WALK_SPEED = 2;
     const float PLAYER_JUMP_SPEED = -4;
     const float PLAYER_STOP_SPEED = .5;

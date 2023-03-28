@@ -6,11 +6,11 @@
 
 DirectionalEntityCollider::DirectionalEntityCollider(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {}
 DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {}
-DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, Directions directions, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
+DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, BlockingDirections directions, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
     m_directions = directions;
 }
 
-bool DirectionalEntityCollider::isEntityBlocked(PhysicsEntity* pEntity) {
+bool DirectionalEntityCollider::isEntityBlocked(PhysicsEntity* pEntity) const {
     // Check if the entity is moving
     if (pEntity->velocity().isNull()) {
         return false;

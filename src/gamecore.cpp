@@ -50,8 +50,8 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     plateforme2-> setScale(.35);
     m_pScene->addSpriteToScene(plateforme2);
 
-    DirectionalEntityCollider::Directions directions = DirectionalEntityCollider::Directions();
-    directions.up = false;
+    DirectionalEntityCollider::BlockingDirections directions = DirectionalEntityCollider::BlockingDirections();
+    directions.down = false;
     auto* plateforme3 = new DirectionalEntityCollider(GameFramework::imagesPath() + "/plateform.png", directions);
     plateforme3->setPos(1200, 700);
     plateforme3->setScale(.35);
