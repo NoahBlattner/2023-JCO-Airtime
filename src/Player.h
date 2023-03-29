@@ -30,11 +30,11 @@ public:
     explicit Player(GameCore* gamecore, QGraphicsItem* parent = nullptr);
 
     const float PLAYER_GRAVITY_OVERRIDE = -12;
+    const float PLAYER_FRICTION_OVERRIDE = .75;
     const float PLAYER_WALK_SPEED = 2;
     const float PLAYER_JUMP_SPEED = -4;
     const float PLAYER_STOP_SPEED = .5;
     const float PLAYER_STOP_TIME = .2;
-    const float PLAYER_FRICTION = .75;
 
     void tick(long long int elapsedTimeInMilliseconds) override;
 

@@ -14,14 +14,14 @@
 //! \param gameCore The game core which sends the key events
 Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent) {
     // Set animations
-    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/player.png")));
+    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/base-player.png")));
     addAnimation();
     setActiveAnimation(1);
-    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/player-flip.png")));
+    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/base-player-flipped.png")));
     startAnimation();
 
     // Set friction
-    friction = PLAYER_FRICTION;
+    friction = PLAYER_FRICTION_OVERRIDE;
     gravity = PLAYER_GRAVITY_OVERRIDE;
 
     // Set collisons
@@ -67,6 +67,8 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
 
     // Call the parent tick handler which applies the velocity
     PhysicsEntity::tick(elapsedTimeInMilliseconds);
+
+    parentScene() -> centerViewOn(this);
 }
 
 /*****************************

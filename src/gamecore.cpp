@@ -18,7 +18,7 @@
 #include "Player.h"
 #include "DirectionalEntityCollision.h"
 
-const int SCENE_WIDTH = 1920;
+const int SCENE_WIDTH = 3500;
 
 //! Initialise le contrôleur de jeu.
 //! \param pGameCanvas  GameCanvas pour lequel cet objet travaille.
@@ -33,7 +33,7 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     pGameCanvas->setCurrentScene(m_pScene);
     
     // Trace un rectangle blanc tout autour des limites de la scène.
-    m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
+    // m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
     
     // Instancier et initialiser les sprite ici :
     auto* player = new Player(this);
@@ -46,37 +46,42 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     player2-> removeCollidingClass("AdvancedCollisionSprite");
 
     auto* plateforme1 = new Sprite(GameFramework::imagesPath() + "/plateform.png");
-    plateforme1->setPos(100, 700);
+    plateforme1->setPos(100, 1500);
     plateforme1-> setScale(.35);
     m_pScene->addSpriteToScene(plateforme1);
 
     auto* plateforme2 = new AdvancedCollisionSprite(GameFramework::imagesPath() + "/plateform.png");
-    plateforme2->setPos(500, 700);
+    plateforme2->setPos(500, 1500);
     plateforme2-> setScale(.35);
     m_pScene->addSpriteToScene(plateforme2);
 
     DirectionalEntityCollider::BlockingSides blockingSides = DirectionalEntityCollider::BlockingSides();
-    blockingSides.top = false;
+    blockingSides.bottom = false;
     auto* plateforme3 = new DirectionalEntityCollider(GameFramework::imagesPath() + "/plateform.png", blockingSides);
-    plateforme3->setPos(1200, 700);
+    plateforme3->setPos(1200, 1500);
     plateforme3->setScale(.35);
     m_pScene->addSpriteToScene(plateforme3);
 
     QGraphicsTextItem* text;
-    text = m_pScene->addText("Sprite", QFont("Arial", 30));
+    text = m_pScene->addText("Sprite", QFont("Arial", 20));
     text -> setDefaultTextColor(Qt::white);
-    text->setPos(100, 600);
-    text = m_pScene->addText("AdvancedCollisionSprite", QFont("Arial", 30));
+    text->setPos(100, 1500);
+    text = m_pScene->addText("AdvancedCollisionSprite", QFont("Arial", 20));
     text -> setDefaultTextColor(Qt::white);
-    text->setPos(500, 600);a
-    text = m_pScene->addText("Directional", QFont("Arial", 30));
+    text->setPos(500, 1500);
+    text = m_pScene->addText("Directional", QFont("Arial", 20));
     text -> setDefaultTextColor(Qt::white);
-    text->setPos(1200, 600);
+    text->setPos(1200, 1500);
+
+    QImage image(GameFramework::imagesPath() + "/city-background.png");
+    m_pScene->setBackgroundImage(image.scaled(SCENE_WIDTH, SCENE_WIDTH / GameFramework::screenRatio()));
+
+    m_pScene->centerViewOn(player);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
     // sinon le temps passé jusqu'au premier tick (ElapsedTime) peut être élevé et provoquer de gros
-    // déplacements, surtout si le déboggueur est démarré.
+    // déplacements, surtout si le débogueur est démarré.
     m_pGameCanvas->startTick();
 }
 
