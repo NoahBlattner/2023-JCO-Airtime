@@ -15,10 +15,11 @@ class GameCore;
 //! This class handles the player input and applies the appropriate velocity to the player
 //! The player is also affected by gravity and friction
 //!
-//! The player is always automatically registered for ticks when the parent scene is set
+//! On construction, the player is given a set of animations and a set of collision classes
+//! The player is also given a set of physics overrides
+//! Key events are connected to the player from a GameCore instance to allow the player to move
 //!
-//! The class manages the player's walk direction
-//! And allows the player to jump
+//! The player is always automatically registered for ticks when the parent scene is set
 //!
 //! The player's animations are updated according to the current properties of the player
 //!

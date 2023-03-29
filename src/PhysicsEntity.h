@@ -32,6 +32,8 @@
 //!
 //! The class always registers for collision events with the DirectionalEntityCollider class
 //! When a collision with a DirectionalEntityCollider is detected, the entity checks if the collisions is blocking the current direction of movement
+//! If collision isn't applied on the current direction of movement, the collision is ignored
+//! Else the collisions is treated as a normal collision
 class PhysicsEntity : public AdvancedCollisionSprite {
 
     Q_OBJECT

@@ -55,6 +55,9 @@ class SpriteTickHandler;
 //! d'apparence. Il est également possible de faire changer automatiquement ces
 //! images dans le but d'obtenir un sprite animé.
 //!
+//! La méthode createAnimation() permet de créer une animation à partir d'une image contenant plusieurs images.
+//! Si nécessaire, elle cré une nouvelle animation, sinon elle ajoute les images à l'animation actuelle.
+//!
 //! La méthode addAnimationFrame() permet d'ajouter une image au sprite.
 //! Si plusieurs images sont ajoutées, elles sont conservées dans une liste qui
 //! préserve l'ordre d'ajout des images.
