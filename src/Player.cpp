@@ -14,13 +14,9 @@
 //! \param gameCore The game core which sends the key events
 Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent) {
     // Create animations
-    // Idle animation
-    QImage image(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player.png"));
-    createAnimation(image, IDLE_ANIMATION_FRAME_DURATIONS);
+    initAnimations();
 
-    startAnimation();
-
-    // Set friction
+    // Apply physics overrides
     friction = PLAYER_FRICTION_OVERRIDE;
     gravity = PLAYER_GRAVITY_OVERRIDE;
 
@@ -30,6 +26,19 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     // Connect the key events to the player
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);
     connect(gameCore, &GameCore::notifyKeyReleased, this, &Player::onKeyReleased);
+}
+
+//! Initialize the player animations
+void Player::initAnimations() {
+    // Idle animation
+    QImage image(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player.png"));
+    createAnimation(image, QList<int>::fromReadOnlyData(IDLE_ANIMATION_FRAME_DURATIONS));
+
+    // Flipped idle animation
+    image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player-flipped.png"));
+    createAnimation(image, QList<int>::fromReadOnlyData(IDLE_ANIMATION_FRAME_DURATIONS));
+
+    startAnimation();
 }
 
 //! Player tick handler.

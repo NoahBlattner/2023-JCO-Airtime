@@ -413,10 +413,20 @@ void Sprite::onNextAnimationFrame() {
 }
 
 //! Create an animation from a spritesheet.
+//! If the current animation is empty, it is used. Otherwise, a new animation is created.
 //! \param spritesheet The spritesheet image.
 //! \param frameDurations The duration of each frame in the animation.
-void Sprite::createAnimation(QImage spritesheet, QList<int> frameDurations) {
+void Sprite::createAnimation(const QImage& spritesheet, QList<int> frameDurations) {
+    if (!m_animationList[m_currentAnimationIndex].empty()) { // If the current animation is not empty
+        // Create a new animation
+        addAnimation();
+        setActiveAnimation(m_animationList.count() - 1);
+    }
+
+    // Get the width of each frame
     int frameWidth = spritesheet.width() / frameDurations.count();
+
+    // Get the images from the spritesheet and add them to the animation
     for (int i = 0; i < frameDurations.count(); i++) {
         addAnimationFrame(QPixmap::fromImage(spritesheet.copy(i * frameWidth, 0, frameWidth, spritesheet.height())),
                           frameDurations[i]);

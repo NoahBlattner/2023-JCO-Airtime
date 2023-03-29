@@ -231,7 +231,7 @@ protected:
     QList<Sprite*> collidingSprites(const QPainterPath& rShape) const;
     GameScene* m_pParentScene;
 
-    void createAnimation(QImage spritesheet, QList<int> frameDurationList);
+    void createAnimation(const QImage& spritesheet, QList<int> frameDurationList);
 
 private:
     static int s_spriteCount;
