@@ -164,7 +164,7 @@ public:
     Sprite(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
     virtual ~Sprite() override;
 
-    void addAnimationFrame(const QPixmap& rPixmap);
+    void addAnimationFrame(const QPixmap& rPixmap, float duration);
     void setCurrentAnimationFrame(int frameIndex);
     int currentAnimationFrame() const;
     void clearAnimationFrames();
@@ -245,6 +245,7 @@ private:
     bool m_animationStopLater = false;
 
     QList<QList <QPixmap>> m_animationList;
+    QList<QList<float>> m_animationDurationList;
     int m_frameDuration;
     int m_currentAnimationFrame;
     int m_currentAnimationIndex;

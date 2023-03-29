@@ -57,8 +57,9 @@ Sprite::~Sprite() {
 
 //! Ajoute une image au cycle d'animation.
 //! \param rPixmap  Image à ajouter.
-void Sprite::addAnimationFrame(const QPixmap& rPixmap) {
+void Sprite::addAnimationFrame(const QPixmap& rPixmap, float duration) {
     m_animationList[m_currentAnimationIndex] << rPixmap;
+    m_animationDurationList[m_currentAnimationIndex] << duration;
     onNextAnimationFrame();
 }
 
@@ -74,6 +75,7 @@ void Sprite::setCurrentAnimationFrame(int frameIndex) {
 
     m_currentAnimationFrame = frameIndex;
     setPixmap(m_animationList[m_currentAnimationIndex][frameIndex]);
+    setAnimationSpeed(m_animationDurationList[m_currentAnimationIndex][frameIndex]);
 }
 
 //! \return l'index de l'image d'animation actuellement affichée.
@@ -85,6 +87,7 @@ int Sprite::currentAnimationFrame() const {
 //! Le sprite devient invisible.
 void Sprite::clearAnimationFrames() {
     m_animationList[m_currentAnimationIndex].clear();
+    m_animationDurationList[m_currentAnimationIndex].clear();
     m_currentAnimationFrame = NO_CURRENT_FRAME;
     setPixmap(QPixmap()); // On enlève l'image du sprite afin d'éviter toute confusion.
 }
@@ -148,12 +151,13 @@ bool Sprite::isAnimationRunning() const {
 //! \see animationCount()
 void Sprite::addAnimation() {
     m_animationList.append(QList<QPixmap>());
-
+    m_animationDurationList.append(QList<float>());
 }
 
 //! Efface toutes les animations d'un sprite mais en préserve une vide.
 void Sprite::clearAnimations() {
     m_animationList.clear();
+    m_animationDurationList.clear();
     addAnimation();
     m_currentAnimationIndex = 0;
 }
@@ -389,6 +393,7 @@ void Sprite::onNextAnimationFrame() {
         return;
     }
 
+
     int PreviousAnimationFrame = m_currentAnimationFrame;
     ++m_currentAnimationFrame;
     if (m_currentAnimationFrame >= m_animationList[m_currentAnimationIndex].count()) {
@@ -402,6 +407,7 @@ void Sprite::onNextAnimationFrame() {
     }
     if (PreviousAnimationFrame != m_currentAnimationFrame) {
         setPixmap(m_animationList[m_currentAnimationIndex][m_currentAnimationFrame]);
+        setAnimationSpeed(m_animationDurationList[m_currentAnimationIndex][m_currentAnimationFrame]);
         update();
     }
 }
