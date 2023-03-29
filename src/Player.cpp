@@ -16,11 +16,7 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     // Create animations
     // Idle animation
     QImage image(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player.png"));
-    int frameWidth = image.width() / IDLE_ANIMATION_FRAME_COUNT;
-    for (int i = 0; i < IDLE_ANIMATION_FRAME_COUNT; i++) {
-        addAnimationFrame(QPixmap::fromImage(image.copy(i * frameWidth, 0, frameWidth, image.height())),
-                          IDLE_ANIMATION_FRAME_DURATIONS[i]);
-    }
+    createAnimation(image, IDLE_ANIMATION_FRAME_DURATIONS);
 
     startAnimation();
 

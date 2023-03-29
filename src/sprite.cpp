@@ -412,6 +412,17 @@ void Sprite::onNextAnimationFrame() {
     }
 }
 
+//! Create an animation from a spritesheet.
+//! \param spritesheet The spritesheet image.
+//! \param frameDurations The duration of each frame in the animation.
+void Sprite::createAnimation(QImage spritesheet, QList<int> frameDurations) {
+    int frameWidth = spritesheet.width() / frameDurations.count();
+    for (int i = 0; i < frameDurations.count(); i++) {
+        addAnimationFrame(QPixmap::fromImage(spritesheet.copy(i * frameWidth, 0, frameWidth, spritesheet.height())),
+                          frameDurations[i]);
+    }
+}
+
 #ifdef QT_DEBUG
 QDebug operator<<(QDebug dbg, const Sprite& sprite) {
     QDebugStateSaver saver(dbg);
