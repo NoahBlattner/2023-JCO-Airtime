@@ -30,7 +30,7 @@ Sprite::Sprite(QGraphicsItem* pParent) : QGraphicsPixmapItem(pParent) {
 //! \param pParent   Pointeur sur le parent (afin d'obtenir une destruction automatique de cet objet).
 Sprite::Sprite(const QPixmap& rPixmap, QGraphicsItem* pParent) : QGraphicsPixmapItem(pParent) {
     init();
-    addAnimationFrame(rPixmap);
+    addAnimationFrame(rPixmap,0);
 }
 
 //! Construit un sprite et l'initialise.

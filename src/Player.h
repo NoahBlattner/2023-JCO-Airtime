@@ -42,6 +42,10 @@ private:
     float prevWalkDirection = 0;
     float walkDirection = 0;
 
+    // Array of animation frame durations for the idle animation
+    static const int IDLE_ANIMATION_FRAME_COUNT = 8;
+    const int IDLE_ANIMATION_FRAME_DURATIONS[IDLE_ANIMATION_FRAME_COUNT] = {2000, 2000, 1500, 125, 125, 2500, 125, 125};
+
     void jump();
 
 private slots:

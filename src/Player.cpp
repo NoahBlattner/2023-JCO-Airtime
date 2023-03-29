@@ -13,18 +13,22 @@
 //! Constructor
 //! \param gameCore The game core which sends the key events
 Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent) {
-    // Set animations
-    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/base-player.png")));
-    addAnimation();
-    setActiveAnimation(1);
-    addAnimationFrame(QPixmap(QDir::toNativeSeparators(GameFramework::resourcesPath() + "/images/base-player-flipped.png")));
+    // Create animations
+    // Idle animation
+    QImage image(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player.png"));
+    int frameWidth = image.width() / IDLE_ANIMATION_FRAME_COUNT;
+    for (int i = 0; i < IDLE_ANIMATION_FRAME_COUNT; i++) {
+        addAnimationFrame(QPixmap::fromImage(image.copy(i * frameWidth, 0, frameWidth, image.height())),
+                          IDLE_ANIMATION_FRAME_DURATIONS[i]);
+    }
+
     startAnimation();
 
     // Set friction
     friction = PLAYER_FRICTION_OVERRIDE;
     gravity = PLAYER_GRAVITY_OVERRIDE;
 
-    // Set collisons
+    // Set collisions
     addCollidingClass("AdvancedCollisionSprite");
 
     // Connect the key events to the player
