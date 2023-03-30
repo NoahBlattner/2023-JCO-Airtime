@@ -414,8 +414,10 @@ void Sprite::onNextAnimationFrame() {
 
 //! Create an animation from a spritesheet.
 //! If the current animation is empty, it is used. Otherwise, a new animation is created.
+//! The spritesheet is divided into frames of equal width. The height of each frame is the height of the spritesheet.
+//! The length of the frameDurations list determines the number of frames.
 //! \param spritesheet The spritesheet image.
-//! \param frameDurations The duration of each frame in the animation.
+//! \param frameDurations The duration of each frame in the animation. The size of the list must be equal to the number of frames.
 void Sprite::createAnimation(const QImage& spritesheet, QList<int> frameDurations) {
     if (!m_animationList[m_currentAnimationIndex].empty()) { // If the current animation is not empty
         // Create a new animation
