@@ -44,7 +44,7 @@ private:
     float walkDirection = 0;
 
     // Array of animation frame durations for the idle animation
-    const int IDLE_ANIMATION_FRAME_DURATIONS[8] = {2000, 2000, 1500, 125, 125, 2500, 125, 125};
+    const int IDLE_ANIMATION_FRAME_DURATIONS[10] = {2000, 100,1500, 100, 1500, 100, 100, 2500, 100, 100};
 
     void jump();
 
