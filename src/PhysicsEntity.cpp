@@ -126,12 +126,14 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
             } else { // If the entity is to the right of the sprite
                 rect.setX(otherCollisionRect.right());
             }
+            setVelocity(QVector2D(0, velocity().y()));
         } else { // If the intersection is taller than it is wide
             if (y() < pSprite->y()) { // If the entity is above the sprite
                 rect.setY(otherCollisionRect.top() - rect.height());
             } else { // If the entity is below the sprite
                 rect.setY(otherCollisionRect.bottom());
             }
+            setVelocity(QVector2D(velocity().x(), 0));
         }
     }
 }

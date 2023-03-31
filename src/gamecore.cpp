@@ -39,11 +39,13 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     auto* player = new Player(this);
     player->setPos(500, 0);
     m_pScene->addSpriteToScene(player);
+    /*
     auto* player2 = new Player(this);
     player2->setPos(1000, 0);
     m_pScene->addSpriteToScene(player2);
     player2 -> addCollidingClass("Sprite");
     player2-> removeCollidingClass("AdvancedCollisionSprite");
+     */
 
     auto* plateforme1 = new Sprite(GameFramework::imagesPath() + "/plateform.png");
     plateforme1->setPos(100, 1500);

@@ -78,7 +78,7 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
     // Call the parent tick handler which applies the velocity
     PhysicsEntity::tick(elapsedTimeInMilliseconds);
 
-    parentScene() -> centerViewOn(this);
+    parentScene()->centerViewOn(this);
 }
 
 /*****************************
