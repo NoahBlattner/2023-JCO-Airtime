@@ -52,7 +52,7 @@ void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
 //! \param moveVector The vector to move the entity by
 void PhysicsEntity::move(QVector2D moveVector) {
     // Calculate the new position
-    m_newRect = sceneBoundingRect().translated(moveVector.x(), moveVector.y());
+    m_newRect = collisionRect().translated(moveVector.x(), moveVector.y());
 
     // Limit the rect to the scene
     limitRectToScene(m_newRect);
@@ -60,11 +60,32 @@ void PhysicsEntity::move(QVector2D moveVector) {
     // Check for intersections with other sprites
     reevaluateIntersects(m_newRect);
 
-    // Set the new position
-    setPos(m_newRect.topLeft());
+    // Translate the entity to the new position
+    setPos(pos() + m_newRect.topLeft() - collisionRect().topLeft());
 
     // Reevaluate if the entity is on the ground
     reevaluateGrounded();
+}
+
+//! Returns a list of sprites that the sprite is colliding with
+//! Only returns sprites that are in the colliding classes list
+//! And only returns directional entity colliders that are currently blocking the entity
+//! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite
+//! \return A list of sprites that the sprite is colliding with
+QList<Sprite*> PhysicsEntity::getCollidingSprites(QRectF rectF) const {
+    auto collidingSprites = AdvancedCollisionSprite::getCollidingSprites(rectF);
+
+    // Remove directional entity colliders that are not blocking the entity
+    foreach (auto* pSprite, collidingSprites) {
+        auto pCollider = dynamic_cast<DirectionalEntityCollider*>(pSprite);
+
+        // If the collider is not blocking the entity, remove it from the list
+        if (pCollider && !pCollider->isEntityBlocked(this)) {
+            collidingSprites.removeOne(pSprite);
+        }
+    }
+
+    return collidingSprites;
 }
 
 //! Limits a RectF to the scene rect
@@ -87,21 +108,29 @@ void PhysicsEntity::limitRectToScene(QRectF &rect) const {
 //! Aligns a RectF to a sprite
 //! \param newRect The reference to the RectF
 //! \param sprite The sprite to align to
-void PhysicsEntity::alignRectToSprite(QRectF &rect, const Sprite* pSprite) {
+void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
     if (pSprite) { // If the sprite is not null
+        QRectF otherCollisionRect = pSprite->sceneBoundingRect();
+
+        auto* pAdvancedCollisionSprite = dynamic_cast<AdvancedCollisionSprite*>(pSprite);
+        if (pAdvancedCollisionSprite) { // If the sprite is an advanced collision sprite
+            // Use the collision rect instead of the scene bounding rect
+            otherCollisionRect = pAdvancedCollisionSprite->collisionRect();
+        }
+
         // Find the intersection between the new rect and the sprite
-        QRectF intersection = m_newRect.intersected(pSprite->sceneBoundingRect());
+        QRectF intersection = rect.intersected(otherCollisionRect);
         if (intersection.width() < intersection.height()) { // If the intersection is wider than it is tall
             if (x() < pSprite->x()) { // If the entity is to the left of the sprite
-                m_newRect.setX(pSprite->sceneBoundingRect().left() - m_newRect.width());
+                rect.setX(otherCollisionRect.left() - rect.width());
             } else { // If the entity is to the right of the sprite
-                m_newRect.setX(pSprite->sceneBoundingRect().right());
+                rect.setX(otherCollisionRect.right());
             }
         } else { // If the intersection is taller than it is wide
             if (y() < pSprite->y()) { // If the entity is above the sprite
-                m_newRect.setY(pSprite->sceneBoundingRect().top() - m_newRect.height());
+                rect.setY(otherCollisionRect.top() - rect.height());
             } else { // If the entity is below the sprite
-                m_newRect.setY(pSprite->sceneBoundingRect().bottom());
+                rect.setY(otherCollisionRect.bottom());
             }
         }
     }
@@ -113,22 +142,12 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, const Sprite* pSprite) {
 //! \return True if the entity is on the ground, false otherwise
 bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
-    QRectF groundRect = sceneBoundingRect().translated(0, GROUNDED_DISTANCE);
+    QRectF groundRect = collisionRect().translated(0, GROUNDED_DISTANCE);
     QList<Sprite*> groundCheckCollisions = getCollidingSprites(groundRect);
-
-    // Ignore directional entity colliders that are not blocking the entity from the top
-    foreach (Sprite* pSprite, groundCheckCollisions) {
-        auto* directionalCollider = dynamic_cast<DirectionalEntityCollider*>(pSprite);
-        if (directionalCollider != nullptr &&
-            !directionalCollider->m_blockingSides.top) { // If the other sprite is a directional entity collider that is not blocking the entity from the top
-            // Ignore the collision
-            groundCheckCollisions.removeOne(pSprite);
-        }
-    }
 
     // Determine if the player is on the ground
     if (!groundCheckCollisions.empty() // If the player is colliding with another sprite at the bottom
-        || sceneBoundingRect().bottom() >= m_pParentScene->sceneRect().bottom() - GROUNDED_DISTANCE) { // Or if the player is at the bottom of the scene
+        || collisionRect().bottom() >= m_pParentScene->sceneRect().bottom() - GROUNDED_DISTANCE) { // Or if the player is at the bottom of the scene
         // The player is on the ground
         m_isOnGround = true;
     } else {

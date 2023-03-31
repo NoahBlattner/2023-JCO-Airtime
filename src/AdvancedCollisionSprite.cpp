@@ -8,6 +8,39 @@
 
 AdvancedCollisionSprite::AdvancedCollisionSprite(QGraphicsItem* pParent) : Sprite(pParent) {}
 AdvancedCollisionSprite::AdvancedCollisionSprite(const QString& rImagePath, QGraphicsItem* pParent) : Sprite(rImagePath, pParent) {}
+AdvancedCollisionSprite::AdvancedCollisionSprite(const QString& rImagePath, QRectF collisionOverride, QGraphicsItem* pParent) : Sprite(rImagePath, pParent) {
+    setCollisionOverride(collisionOverride);
+}
+
+//! Sets the collision override
+//! The collision override is used instead of the scene bounding rect for collision detection
+//! \param rect The rect to use as the new collision override
+void AdvancedCollisionSprite::setCollisionOverride(QRectF rect) {
+    collisionOverrideRect = rect;
+}
+
+//! Removes the collision override
+void AdvancedCollisionSprite::removeCollisionOverride() {
+    collisionOverrideRect = QRectF();
+}
+
+//! Returns the collision rect
+//! \return The collision rect. If the collision override is empty, returns the scene bounding rect
+QRectF AdvancedCollisionSprite::collisionRect() const {
+    if (collisionOverrideRect.isEmpty()) { // If the collision override is empty
+        return sceneBoundingRect();
+    } else {
+        // Base the collision rect on the collision override
+        QRectF collisionRect = QRectF(0, 0 , collisionOverrideRect.width(), collisionOverrideRect.height());
+
+        // Center the collision rect on the sprite
+        collisionRect.moveCenter(sceneBoundingRect().center());
+
+        // Move the collision rect to the collision override position
+        collisionRect.translate(collisionOverrideRect.x(), collisionOverrideRect.y());
+        return collisionRect;
+    }
+}
 
 //! Adds a class to the colliding classes list
 //! If the class is "All", the list will be cleared and "All" will be added
@@ -31,9 +64,10 @@ void AdvancedCollisionSprite::collideAll() {
 }
 
 //! Checks for intersections with other sprites
-//! Uses the current scene bounding rect of the sprite
+//! Uses the current collision rect if it is not empty
+//! Else uses the current scene bounding rect
 void AdvancedCollisionSprite::reevaluateIntersects() {
-    reevaluateIntersects(sceneBoundingRect());
+    reevaluateIntersects(collisionRect());
 }
 
 //! Checks for intersections with other sprites
@@ -58,7 +92,7 @@ void AdvancedCollisionSprite::reevaluateIntersects(QRectF rect) {
 //! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite
 //! \return A list of sprites that the sprite is colliding with
 QList<Sprite*> AdvancedCollisionSprite::getCollidingSprites(QRectF rect) const {
-    auto collidingSprites = m_pParentScene->collidingSprites((rect.isEmpty()) ? sceneBoundingRect() : rect);
+    auto collidingSprites = m_pParentScene->collidingSprites((rect.isEmpty()) ? collisionRect() : rect);
     collidingSprites.removeAll(this);
 
     if (collidingClasses.contains("All")) { // If the sprite collides with all sprites

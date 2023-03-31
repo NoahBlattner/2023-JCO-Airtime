@@ -22,6 +22,7 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
 
     // Set collisions
     addCollidingClass("AdvancedCollisionSprite");
+    setCollisionOverride(PLAYER_COLLISION_RECT);
 
     // Connect the key events to the player
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);

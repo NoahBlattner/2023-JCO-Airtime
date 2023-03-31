@@ -13,10 +13,10 @@ DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, 
 //! Checks if an entity is blocked from moving in the direction it is moving by this Sprite
 //! @param pEntity A pointer to the entity to check
 //! @return True if the entity is blocked from moving in the direction it is moving by this Sprite
-bool DirectionalEntityCollider::isEntityBlocked(PhysicsEntity* pEntity) const {
+bool DirectionalEntityCollider::isEntityBlocked(const PhysicsEntity* pEntity) const {
     // Check if the entity is moving
     if (pEntity->velocity().isNull()) {
-        return false;
+        return true;
     }
 
     // Check if the entity is moving top

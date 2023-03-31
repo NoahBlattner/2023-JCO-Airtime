@@ -30,6 +30,7 @@ class Player : public PhysicsEntity {
 public:
     explicit Player(GameCore* gamecore, QGraphicsItem* parent = nullptr);
 
+    const QRectF PLAYER_COLLISION_RECT = QRectF(0, 0, 56, 150);
     const float PLAYER_GRAVITY_OVERRIDE = -12;
     const float PLAYER_FRICTION_OVERRIDE = .75;
     const float PLAYER_WALK_SPEED = 2;

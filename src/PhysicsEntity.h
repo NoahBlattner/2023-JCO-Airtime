@@ -61,6 +61,8 @@ public:
     [[nodiscard]] inline bool isOnGround() const { return m_isOnGround; }
     bool reevaluateGrounded();
 
+    QList<Sprite*> getCollidingSprites(QRectF rect = QRectF()) const override;
+
     void tick(long long elapsedTimeInMilliseconds) override;
 
 private:
@@ -79,7 +81,7 @@ protected:
 
     void limitRectToScene(QRectF &rect) const;
 
-    void alignRectToSprite(QRectF &rect, const Sprite* pSprite);
+    void alignRectToSprite(QRectF &rect, Sprite* pSprite);
 
     void onCollision(Sprite* pOther) override;
 };

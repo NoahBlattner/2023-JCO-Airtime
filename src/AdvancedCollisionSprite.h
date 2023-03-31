@@ -15,6 +15,12 @@
 //!
 //! When colliding with another sprite, the AdvancedCollisionSprite will emit a signal and call the onCollide function on itself.
 //!
+//! By default the intersection rect is the scene bounding rect.
+//! This can be changed by using the setCollisionOverride function.
+//! This function allows the user to specify a custom rect that will be used as the intersection rect.
+//! This can be useful for creating more precise collisions.
+//! The collision override can be removed with the removeCollisionOverride function.
+//!
 //! This class also allows the creation of triggers.
 //! A AdvancedCollisionSprite can be set to be a trigger with the setTrigger function.
 //! Triggers are a special type of collision that don't block other sprites from intersecting with them.
@@ -43,6 +49,7 @@ class AdvancedCollisionSprite : public Sprite {
 public:
     explicit AdvancedCollisionSprite(QGraphicsItem* pParent = nullptr);
     explicit AdvancedCollisionSprite(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
+    AdvancedCollisionSprite(const QString& rImagePath, QRectF collisionOverride, QGraphicsItem* pParent = nullptr);
 
     // Trigger
     inline void setTrigger(bool trigger) { isTrigger = trigger;};
@@ -63,9 +70,16 @@ public:
     virtual void reevaluateIntersects();
     virtual void reevaluateIntersects(QRectF rect);
 
+    [[nodiscard]] QRectF collisionRect() const;
+
 protected:
     // Trigger
     bool isTrigger = false;
+
+    // Collision override
+    QRectF collisionOverrideRect = QRectF();
+    void setCollisionOverride(QRectF rect);
+    void removeCollisionOverride();
 
     // Colliding classes
     QList<QString> collidingClasses = {"All"};

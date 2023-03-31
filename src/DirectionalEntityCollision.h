@@ -43,7 +43,7 @@ public:
 
     BlockingSides m_blockingSides;
 
-    bool isEntityBlocked(PhysicsEntity* pEntity) const;
+    bool isEntityBlocked(const PhysicsEntity* pEntity) const;
 
 };
 
