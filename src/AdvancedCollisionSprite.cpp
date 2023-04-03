@@ -42,6 +42,21 @@ QRectF AdvancedCollisionSprite::collisionRect() const {
     }
 }
 
+//! Get the collision rect of any sprite
+//! If the sprite is an advanced collision sprite, use the collision rect instead of the scene bounding rect
+//! \param pSprite The sprite to get the collision rect of
+//! \return The collision rect of the sprite
+QRectF AdvancedCollisionSprite::getCollisionRect(Sprite* pSprite) {
+    QRectF otherCollisionRect = pSprite->sceneBoundingRect();
+
+    auto* pAdvancedCollisionSprite = dynamic_cast<AdvancedCollisionSprite*>(pSprite);
+    if (pAdvancedCollisionSprite) { // If the sprite is an advanced collision sprite
+        // Use the collision rect instead of the scene bounding rect
+        otherCollisionRect = pAdvancedCollisionSprite->collisionRect();
+    }
+    return otherCollisionRect;
+}
+
 //! Adds a class to the colliding classes list
 //! If the class is "All", the list will be cleared and "All" will be added
 //! If the list contains "All", it will be cleared and the class will be added

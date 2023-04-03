@@ -60,7 +60,7 @@ public:
     inline void removeCollidingClass(const QString& className) { collidingClasses.removeOne(className); };
     void collideAll();
 
-    virtual QList<Sprite*> getCollidingSprites(QRectF rect = QRectF()) const;
+    [[nodiscard]] virtual QList<Sprite*> getCollidingSprites(QRectF rect) const;
 
     // Intersection events
     virtual void onTrigger(Sprite* pOther);
@@ -71,6 +71,7 @@ public:
     virtual void reevaluateIntersects(QRectF rect);
 
     [[nodiscard]] QRectF collisionRect() const;
+    [[nodiscard]] static QRectF getCollisionRect(Sprite* sprite);
 
 protected:
     // Trigger

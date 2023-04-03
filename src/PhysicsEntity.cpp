@@ -110,13 +110,7 @@ void PhysicsEntity::limitRectToScene(QRectF &rect) const {
 //! \param sprite The sprite to align to
 void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
     if (pSprite) { // If the sprite is not null
-        QRectF otherCollisionRect = pSprite->sceneBoundingRect();
-
-        auto* pAdvancedCollisionSprite = dynamic_cast<AdvancedCollisionSprite*>(pSprite);
-        if (pAdvancedCollisionSprite) { // If the sprite is an advanced collision sprite
-            // Use the collision rect instead of the scene bounding rect
-            otherCollisionRect = pAdvancedCollisionSprite->collisionRect();
-        }
+        QRectF otherCollisionRect = getCollisionRect(pSprite);
 
         // Find the intersection between the new rect and the sprite
         QRectF intersection = rect.intersected(otherCollisionRect);
@@ -126,6 +120,7 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
             } else { // If the entity is to the right of the sprite
                 rect.setX(otherCollisionRect.right());
             }
+            // Remove the x velocity
             setVelocity(QVector2D(0, velocity().y()));
         } else { // If the intersection is taller than it is wide
             if (y() < pSprite->y()) { // If the entity is above the sprite
@@ -133,6 +128,7 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
             } else { // If the entity is below the sprite
                 rect.setY(otherCollisionRect.bottom());
             }
+            // Remove the y velocity
             setVelocity(QVector2D(velocity().x(), 0));
         }
     }
