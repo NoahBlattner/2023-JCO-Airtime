@@ -39,29 +39,24 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     auto* player = new Player(this);
     player->setPos(500, 0);
     m_pScene->addSpriteToScene(player);
-    /*
     auto* player2 = new Player(this);
     player2->setPos(1000, 0);
     m_pScene->addSpriteToScene(player2);
     player2 -> addCollidingClass("Sprite");
     player2-> removeCollidingClass("AdvancedCollisionSprite");
-     */
 
     auto* plateforme1 = new Sprite(GameFramework::imagesPath() + "/plateform.png");
     plateforme1->setPos(100, 1500);
-    plateforme1-> setScale(.35);
     m_pScene->addSpriteToScene(plateforme1);
 
     auto* plateforme2 = new AdvancedCollisionSprite(GameFramework::imagesPath() + "/plateform.png");
     plateforme2->setPos(500, 1500);
-    plateforme2-> setScale(.35);
     m_pScene->addSpriteToScene(plateforme2);
 
     DirectionalEntityCollider::BlockingSides blockingSides = DirectionalEntityCollider::BlockingSides();
     blockingSides.bottom = false;
     auto* plateforme3 = new DirectionalEntityCollider(GameFramework::imagesPath() + "/plateform.png", blockingSides);
     plateforme3->setPos(1200, 1500);
-    plateforme3->setScale(.35);
     m_pScene->addSpriteToScene(plateforme3);
 
     QGraphicsTextItem* text;
