@@ -21,6 +21,7 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     gravity = PLAYER_GRAVITY_OVERRIDE;
 
     // Set collisions
+    collisionTag = "Player";
     setCollisionOverride(PLAYER_COLLISION_RECT);
 
     // Connect the key events to the player

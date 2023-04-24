@@ -58,13 +58,13 @@ QRectF AdvancedCollisionSprite::getCollisionRect(Sprite* pSprite) {
 }
 
 //! Adds a tag to the colliding tags list
-//! If the tag is "All", the list will be cleared and "All" will be added
-//! If the list contains "All", it will be cleared and the tag will be added
+//! If the tag is "BlockAll", the list will be cleared and "BlockAll" will be added
+//! If the list contains "BlockAll", it will be cleared and the tag will be added
 //! \param tagName The tag name to add to the colliding tags list
 void AdvancedCollisionSprite::addCollidingTag(const QString &tagName) {
-    if (tagName == "All") { // If the tag is "All"
+    if (tagName == "BlockAll") { // If the tag is "BlockAll"
         collideAll();
-    } else if (collidingTags.contains("All")) { // If the list contains "All"
+    } else if (collidingTags.contains("All")) { // If the list contains "BlockAll"
         collidingTags.clear();
         collidingTags.append(tagName);
     } else {
@@ -72,10 +72,10 @@ void AdvancedCollisionSprite::addCollidingTag(const QString &tagName) {
     }
 }
 
-//! Sets the colliding tags list to contain only "All"
+//! Sets the colliding tags list to contain only "BlockAll"
 void AdvancedCollisionSprite::collideAll() {
     collidingTags.clear();
-    collidingTags.append("All");
+    collidingTags.append("BlockAll");
 }
 
 //! Checks for intersections with other sprites
@@ -119,7 +119,7 @@ QList<AdvancedCollisionSprite*> AdvancedCollisionSprite::getCollidingSprites(QRe
         }
     }
 
-    if (collidingTags.contains("All")) { // If the sprite collides with all sprites
+    if (collidingTags.contains("BlockAll")) { // If the sprite collides with all sprites
         return advCollidingSprites;
     }
 

@@ -120,15 +120,17 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
 
         // Create a directional collider
         sprite = new DirectionalEntityCollider(imagePath, blockingSides);
-    } else if (tag == "BlockAll") {
-        // Create an all-blocking collider
-        auto* advSprite = new AdvancedCollisionSprite(imagePath);
-        advSprite->collideAll();
-
-        sprite = advSprite;
-    } else {
+    } else if (tag.isEmpty()) {
         // Create a simple sprite
         sprite = new Sprite(imagePath);
+    } else {
+        // Create an AdvancedCollisionSprite
+        auto* advSprite = new AdvancedCollisionSprite(imagePath);
+
+        // Set the tag of the sprite as the collision tag
+        advSprite->collisionTag = tag;
+
+        sprite = advSprite;
     }
 
     // On applique les transformations

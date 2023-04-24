@@ -5,8 +5,10 @@
 #include "DirectionalEntityCollider.h"
 
 DirectionalEntityCollider::DirectionalEntityCollider(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {}
-DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {}
-DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, BlockingSides blockingSides, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
+DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
+    collisionTag = "BlockAll";
+}
+DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, BlockingSides blockingSides, QGraphicsItem* pParent) : DirectionalEntityCollider(rImagePath, pParent) {
     m_blockingSides = blockingSides;
 }
 

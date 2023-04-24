@@ -84,7 +84,7 @@ protected:
     void removeCollisionOverride();
 
     // Collision tags
-    QList<QString> collidingTags = {"All"};
+    QList<QString> collidingTags = {"BlockAll"};
 
 signals:
     void notifyTrigger(Sprite* pOther);

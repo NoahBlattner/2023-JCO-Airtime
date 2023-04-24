@@ -72,7 +72,7 @@ void PhysicsEntity::move(QVector2D moveVector) {
 //! And only returns directional entity colliders that are currently blocking the entity
 //! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite
 //! \return A list of sprites that the sprite is colliding with
-QList<Sprite*> PhysicsEntity::getCollidingSprites(QRectF rectF) const {
+QList<AdvancedCollisionSprite*> PhysicsEntity::getCollidingSprites(QRectF rectF) const {
     auto collidingSprites = AdvancedCollisionSprite::getCollidingSprites(rectF);
 
     // Remove directional entity colliders that are not blocking the entity
@@ -141,7 +141,7 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
 bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
     QRectF groundRect = collisionRect().translated(0, GROUNDED_DISTANCE);
-    QList<Sprite*> groundCheckCollisions = getCollidingSprites(groundRect);
+    auto groundCheckCollisions = getCollidingSprites(groundRect);
 
     // Determine if the player is on the ground
     if (!groundCheckCollisions.empty() // If the player is colliding with another sprite at the bottom
