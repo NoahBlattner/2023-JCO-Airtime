@@ -34,6 +34,8 @@ public:
 
     void tick(long long elapsedTimeInMilliseconds);
 
+    inline GameScene* scene() const { return m_pScene; }
+
 signals:
     void notifyMouseMoved(QPointF newMousePosition);
     void notifyMouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);

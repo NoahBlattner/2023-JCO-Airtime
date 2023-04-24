@@ -34,7 +34,8 @@ add_executable(2023-JCO-Airtime
         src/Player.cpp src/Player.h
         src/PhysicsEntity.cpp src/PhysicsEntity.h
         src/AdvancedCollisionSprite.cpp src/AdvancedCollisionSprite.h
-        src/DirectionalEntityCollider.cpp src/DirectionalEntityCollision.h src/LevelLoader.cpp)
+        src/DirectionalEntityCollider.cpp src/DirectionalEntityCollider.h
+        src/LevelLoader.cpp src/LevelLoader.h)
 
 target_link_libraries(2023-JCO-Airtime
         Qt::Core

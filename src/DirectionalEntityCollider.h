@@ -2,8 +2,8 @@
 // Created by blatnoa on 27.03.2023.
 //
 
-#ifndef INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLISION_H
-#define INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLISION_H
+#ifndef INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLIDER_H
+#define INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLIDER_H
 
 
 #include "AdvancedCollisionSprite.h"
@@ -31,10 +31,10 @@ class DirectionalEntityCollider : public AdvancedCollisionSprite {
 
 public:
     struct BlockingSides {
-        bool top = true;
-        bool bottom = true;
-        bool left = true;
-        bool right = true;
+        bool top = false;
+        bool bottom = false;
+        bool left = false;
+        bool right = false;
     };
 
     explicit DirectionalEntityCollider(QGraphicsItem* pParent = nullptr);
@@ -48,4 +48,4 @@ public:
 };
 
 
-#endif //INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLISION_H
+#endif //INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLIDER_H

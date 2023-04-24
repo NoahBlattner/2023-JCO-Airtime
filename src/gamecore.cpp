@@ -16,7 +16,7 @@
 #include "resources.h"
 #include "utilities.h"
 #include "Player.h"
-#include "DirectionalEntityCollision.h"
+#include "LevelLoader.h"
 
 const int SCENE_WIDTH = 3500;
 
@@ -34,46 +34,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     
     // Trace un rectangle blanc tout autour des limites de la scène.
     // m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
-    
-    // Instancier et initialiser les sprite ici :
-    auto* player = new Player(this);
-    player->setPos(500, 0);
-    m_pScene->addSpriteToScene(player);
-    auto* player2 = new Player(this);
-    player2->setPos(1000, 0);
-    m_pScene->addSpriteToScene(player2);
-    player2 -> addCollidingClass("Sprite");
-    player2-> removeCollidingClass("AdvancedCollisionSprite");
 
-    auto* plateforme1 = new Sprite(GameFramework::imagesPath() + "/plateform.png");
-    plateforme1->setPos(100, 1500);
-    m_pScene->addSpriteToScene(plateforme1);
-
-    auto* plateforme2 = new AdvancedCollisionSprite(GameFramework::imagesPath() + "/plateform.png");
-    plateforme2->setPos(500, 1500);
-    m_pScene->addSpriteToScene(plateforme2);
-
-    DirectionalEntityCollider::BlockingSides blockingSides = DirectionalEntityCollider::BlockingSides();
-    blockingSides.bottom = false;
-    auto* plateforme3 = new DirectionalEntityCollider(GameFramework::imagesPath() + "/plateform.png", blockingSides);
-    plateforme3->setPos(1200, 1500);
-    m_pScene->addSpriteToScene(plateforme3);
-
-    QGraphicsTextItem* text;
-    text = m_pScene->addText("Sprite", QFont("Arial", 20));
-    text -> setDefaultTextColor(Qt::white);
-    text->setPos(100, 1500);
-    text = m_pScene->addText("AdvancedCollisionSprite", QFont("Arial", 20));
-    text -> setDefaultTextColor(Qt::white);
-    text->setPos(500, 1500);
-    text = m_pScene->addText("Directional", QFont("Arial", 20));
-    text -> setDefaultTextColor(Qt::white);
-    text->setPos(1200, 1500);
-
-    QImage image(GameFramework::imagesPath() + "/city-background.png");
-    m_pScene->setBackgroundImage(image.scaled(SCENE_WIDTH, SCENE_WIDTH / GameFramework::screenRatio()));
-
-    m_pScene->centerViewOn(player);
+    LevelLoader levelLoader(this, GameFramework::resourcesPath() + "/levels");
+    levelLoader.loadLevel("mainLevel");
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,

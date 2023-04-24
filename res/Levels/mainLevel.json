@@ -1,0 +1,52 @@
+{
+    "background": "city-background-streets.png",
+    "sceneHeight": 1080,
+    "sceneWidth": 4000,
+    "sprites": [
+        {
+            "rotation": 0,
+            "scale": 1,
+            "tag": "Player",
+            "textureName": "base-player.png",
+            "x": 69.34306569343065,
+            "y": 925.1824817518246
+        },
+        {
+            "rotation": 0,
+            "scale": 1,
+            "tag": "DirectionalCollider-Top",
+            "textureName": "oneside-platform.png",
+            "x": 0,
+            "y": 859.4890510948903
+        },
+        {
+            "rotation": 0,
+            "scale": 1,
+            "tag": "DirectionalCollider-Top",
+            "textureName": "oneside-platform.png",
+            "x": 200,
+            "y": 859.4890510948903
+        },
+        {
+            "rotation": 0,
+            "scale": 1,
+            "tag": "DirectionalCollider-Top",
+            "textureName": "oneside-platform.png",
+            "x": 400,
+            "y": 859.4890510948903
+        },
+        {
+            "rotation": 0,
+            "scale": 1.7,
+            "tag": "BlockAll",
+            "textureName": "dumpster-flipped.png",
+            "x": 660,
+            "y": 908
+        }
+    ],
+    "tags": [
+        "DirectionalCollider-Top",
+        "BlockAll",
+        "Player"
+    ]
+}

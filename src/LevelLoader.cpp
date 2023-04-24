@@ -14,12 +14,15 @@
 #include "gamescene.h"
 #include "sprite.h"
 #include "resources.h"
+#include "Player.h"
+#include "DirectionalEntityCollider.h"
+#include "AdvancedCollisionSprite.h"
 
 //! Constructeur
-//! \param scene La scène dans laquelle charger les niveaux
+//! \param core Le gamecore
 //! \param levelsPath Le chemin des niveaux
-LevelLoader::LevelLoader(GameScene* scene, QString levelsPath) {
-    m_pScene = scene;
+LevelLoader::LevelLoader(GameCore* core, QString levelsPath) {
+    m_pCore = core;
     m_levelsPath = std::move(levelsPath);
 }
 
@@ -58,7 +61,10 @@ QList<Sprite *> LevelLoader::loadLevel(const QString& levelName) {
     QJsonObject levelObject = jsonDocument.object();
 
     // On charge l'arrière-plan
-    m_pScene->setBackgroundImage(QImage(GameFramework::resourcesPath() + levelObject["background"].toString()));
+    m_pCore->scene()->setBackgroundImage(QImage(GameFramework::imagesPath() + levelObject["background"].toString()));
+
+    // On adapte la taille de la scène
+    m_pCore->scene()->setSceneRect(0, 0, levelObject["sceneWidth"].toInt(), levelObject["sceneHeight"].toInt());
 
     // On charge les sprites
     return loadSprites(levelObject["sprites"].toArray());
@@ -72,30 +78,74 @@ QList<Sprite*> LevelLoader::loadSprites(const QJsonArray& spritesArray) {
 
     // Pour chaque sprite
     for (QJsonValue spriteValue : spritesArray) {
-        // On récupère l'objet JSON
-        QJsonObject spriteJson = spriteValue.toObject();
-
-        // On crée la sprite avec son image
-        auto* sprite = new Sprite(QDir::toNativeSeparators(GameFramework::resourcesPath() + spriteJson["texturePath"].toString()));
-        sprites.append(sprite); // On ajoute la sprite à la liste
-
-        // On applique les transformations
-        sprite->setPos(spriteJson["x"].toDouble(), spriteJson["y"].toDouble());
-        sprite->setRotation(spriteJson["rotation"].toInt());
-        sprite->setScale(spriteJson["scale"].toDouble());
-
-        m_pScene->addSpriteToScene(sprite); // On ajoute la sprite à la scène
+        // On charge la sprite
+        Sprite* sprite = loadSprite(spriteValue.toObject());
+        sprites.append(sprite);
     }
 
     return sprites;
 }
 
+/**
+ * Load a sprite from a JSON object.
+ * Loads a subclass of Sprite if specified in the tag.
+ * @param spriteObject The JSON object containing the sprite data.
+ * @return The loaded sprite.
+ */
+Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
+    // On crée la sprite avec son image
+    Sprite* sprite = nullptr;
+
+    QString tag = spriteObject["tag"].toString();
+    QString imagePath = QDir::toNativeSeparators(GameFramework::imagesPath() +
+            spriteObject["textureName"].toString());
+
+    qDebug() << "Loading sprite " << imagePath << " with tag " << tag;
+
+    if (tag == "Player") {
+        // On crée une sprite de type Player
+        sprite = new Player(m_pCore);
+    } else if (tag.startsWith("DirectionalCollider")) {
+        DirectionalEntityCollider::BlockingSides blockingSides;
+
+        // Define the blocking sides
+        if (tag.contains("Top"))
+            blockingSides.top = true;
+        if (tag.contains("Bottom"))
+            blockingSides.bottom = true;
+        if (tag.contains("Left"))
+            blockingSides.left = true;
+        if (tag.contains("Right"))
+            blockingSides.right = true;
+
+        // Create a directional collider
+        sprite = new DirectionalEntityCollider(imagePath, blockingSides);
+    } else if (tag == "BlockAll") {
+        // Create an all-blocking collider
+        auto* advSprite = new AdvancedCollisionSprite(imagePath);
+        advSprite->collideAll();
+
+        sprite = advSprite;
+    } else {
+        // Create a simple sprite
+        sprite = new Sprite(imagePath);
+    }
+
+    // On applique les transformations
+    sprite->setTransformOriginPoint(sprite->globalBoundingRect().center());
+    sprite->setPos(spriteObject["x"].toDouble(), spriteObject["y"].toDouble());
+    sprite->setScale(spriteObject["scale"].toDouble());
+    sprite->setRotation(spriteObject["rotation"].toInt());
+
+    m_pCore->scene()->addSpriteToScene(sprite); // On ajoute la sprite à la scène
+
+    return sprite;
+}
+
 //! Décharge un niveau de la scène
 void LevelLoader::unloadLevel() {
-    for (Sprite* sprite : m_pScene->sprites()) {
-        m_pScene->removeSpriteFromScene(sprite);
+    for (Sprite* sprite : m_pCore->scene()->sprites()) {
+        m_pCore->scene()->removeSpriteFromScene(sprite);
         delete sprite;
     }
 }
-
-

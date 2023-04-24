@@ -2,7 +2,7 @@
 // Created by blatnoa on 27.03.2023.
 //
 
-#include "DirectionalEntityCollision.h"
+#include "DirectionalEntityCollider.h"
 
 DirectionalEntityCollider::DirectionalEntityCollider(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {}
 DirectionalEntityCollider::DirectionalEntityCollider(const QString& rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {}

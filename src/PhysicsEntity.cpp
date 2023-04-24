@@ -5,7 +5,7 @@
 #include "PhysicsEntity.h"
 
 #include "GameScene.h"
-#include "DirectionalEntityCollision.h"
+#include "DirectionalEntityCollider.h"
 
 PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {
     addCollidingClass("DirectionalEntityCollider");

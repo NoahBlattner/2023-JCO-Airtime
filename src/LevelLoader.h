@@ -10,6 +10,7 @@
 
 #include <QString>
 #include <QList>
+#include "gamecore.h"
 
 class QJsonArray;
 class Sprite;
@@ -17,15 +18,16 @@ class GameScene;
 
 class LevelLoader {
 public:
-    explicit LevelLoader(GameScene* scene, QString levelsPath);
+    explicit LevelLoader(GameCore* core, QString levelsPath);
 
     QList<Sprite*> loadLevel(const QString& levelName);
     void unloadLevel();
 
 private:
-    GameScene* m_pScene;
+    GameCore* m_pCore;
     QString m_levelsPath;
 
+    Sprite* loadSprite(const QJsonObject& spriteObject);
     QList<Sprite*> loadSprites(const QJsonArray& spritesArray);
 };
 
