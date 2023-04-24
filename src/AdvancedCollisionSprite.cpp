@@ -57,25 +57,25 @@ QRectF AdvancedCollisionSprite::getCollisionRect(Sprite* pSprite) {
     return otherCollisionRect;
 }
 
-//! Adds a class to the colliding classes list
-//! If the class is "All", the list will be cleared and "All" will be added
-//! If the list contains "All", it will be cleared and the class will be added
-//! \param className The class name to add to the colliding classes list
-void AdvancedCollisionSprite::addCollidingClass(const QString &className) {
-    if (className == "All") { // If the class is "All"
+//! Adds a tag to the colliding tags list
+//! If the tag is "All", the list will be cleared and "All" will be added
+//! If the list contains "All", it will be cleared and the tag will be added
+//! \param tagName The tag name to add to the colliding tags list
+void AdvancedCollisionSprite::addCollidingTag(const QString &tagName) {
+    if (tagName == "All") { // If the tag is "All"
         collideAll();
-    } else if (collidingClasses.contains("All")) { // If the list contains "All"
-        collidingClasses.clear();
-        collidingClasses.append(className);
+    } else if (collidingTags.contains("All")) { // If the list contains "All"
+        collidingTags.clear();
+        collidingTags.append(tagName);
     } else {
-        collidingClasses.append(className);
+        collidingTags.append(tagName);
     }
 }
 
-//! Sets the colliding classes list to contain only "All"
+//! Sets the colliding tags list to contain only "All"
 void AdvancedCollisionSprite::collideAll() {
-    collidingClasses.clear();
-    collidingClasses.append("All");
+    collidingTags.clear();
+    collidingTags.append("All");
 }
 
 //! Checks for intersections with other sprites
@@ -102,26 +102,36 @@ void AdvancedCollisionSprite::reevaluateIntersects(QRectF rect) {
     }
 }
 
-//! Returns a list of sprites that the sprite is colliding with
-//! Only returns sprites that are in the colliding classes list
+//! Returns a list of AdvancedCollisionSprites that the sprite is colliding with
+//! Only returns AdvancedCollisionSprites that have the same collision tag as this sprite
 //! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite
-//! \return A list of sprites that the sprite is colliding with
-QList<Sprite*> AdvancedCollisionSprite::getCollidingSprites(QRectF rect) const {
+//! \return A list of AdvancedCollisionSprites that the sprite is colliding with
+QList<AdvancedCollisionSprite*> AdvancedCollisionSprite::getCollidingSprites(QRectF rect) const {
     auto collidingSprites = m_pParentScene->collidingSprites((rect.isEmpty()) ? collisionRect() : rect);
     collidingSprites.removeAll(this);
 
-    if (collidingClasses.contains("All")) { // If the sprite collides with all sprites
-        return collidingSprites;
-    }
+    QList<AdvancedCollisionSprite*> advCollidingSprites;
 
-    // Remove sprites that are not in the colliding classes list
-    for (int i = 0; i < collidingSprites.size(); i++) {
-        if (!collidingClasses.contains(collidingSprites[i]->metaObject()->className())) {
-            collidingSprites.removeAt(i);
+    foreach (Sprite* pSprite, collidingSprites) { // For each colliding sprite
+        auto* pAdvancedCollisionSprite = dynamic_cast<AdvancedCollisionSprite*>(pSprite);
+        if (pAdvancedCollisionSprite) { // If the sprite is an advanced collision sprite
+            advCollidingSprites << pAdvancedCollisionSprite;
         }
     }
 
-    return collidingSprites;
+    if (collidingTags.contains("All")) { // If the sprite collides with all sprites
+        return advCollidingSprites;
+    }
+
+    // Remove sprites that are not in the colliding classes list
+    for (int i = 0; i < advCollidingSprites.size(); i++) {
+        auto* advSprite = dynamic_cast<AdvancedCollisionSprite*>(advCollidingSprites[i]);
+        if (!advSprite || !collidingTags.contains(collisionTag)) {
+            advCollidingSprites.removeAt(i);
+        }
+    }
+
+    return advCollidingSprites;
 }
 
 //! Called when the sprites intersects with another sprite as a trigger

@@ -28,16 +28,16 @@
 //! This allows for the creation of zones that can be used to trigger events.
 //! For example a trigger can be used to trigger a level transition when the player enters a certain area.
 //!
-//! The class allows the user to specify which classes of sprites can collide with the AdvancedCollisionSprite.
-//! This is done with the addCollidingClass and removeCollidingClass functions.
-//! A class can be added with these functions, and then the AdvancedCollisionSprite will only collide with sprites that are of that class.
-//! If no classes are in the list, the AdvancedCollisionSprite won't collide with any sprites.
-//! If the list contains the string "All", the AdvancedCollisionSprite will collide with all sprites. This can be done with the collideAll function.
+//! The class allows the user to specify which AdvancedCollisionSprites it should collide with.
+//! This is done with the addCollidingTag and removeCollidingTag functions.
+//! A tag can be added with these functions, and then the AdvancedCollisionSprite will only collide with sprites that have the same tag.
+//! If no tags are in the list, the AdvancedCollisionSprite won't collide with any sprites. (This is not recommended. Use a Sprite instead)
+//! If the list contains the string "All", the AdvancedCollisionSprite will collide with all other AdvancedCollisionSprite. This can be done with the collideAll function.
 //!
 //! The class also contains a function called getCollidingSprites.
 //! This function returns a list of all sprites that are colliding with the AdvancedCollisionSprite.
-//! This list only contains sprites that are of a class that is in the collidingClasses list.
-//! If the list is empty, the AdvancedCollisionSprite is not colliding with any sprites.
+//! This list only contains sprites that are of a tag that is in the collidingTags list.
+//! If the list is empty, the AdvancedCollisionSprite is not colliding with any other AdvancedCollisionSprites.
 //!
 //! The onTrigger and onCollide functions can be overridden to create custom behavior when a collision or trigger occurs.
 //! This is especially useful for creating custom triggers.
@@ -55,12 +55,13 @@ public:
     inline void setTrigger(bool trigger) { isTrigger = trigger;};
     [[nodiscard]] inline bool getIsTrigger() const { return isTrigger; };
 
-    // Colliding classes
-    void addCollidingClass(const QString& className);
-    inline void removeCollidingClass(const QString& className) { collidingClasses.removeOne(className); };
+    // Colliding tag
+    QString collisionTag = "";
+    void addCollidingTag(const QString& tagName);
+    inline void removeCollidingTag(const QString& tagName) { collidingTags.removeOne(tagName); };
     void collideAll();
 
-    [[nodiscard]] virtual QList<Sprite*> getCollidingSprites(QRectF rect) const;
+    [[nodiscard]] virtual QList<AdvancedCollisionSprite*> getCollidingSprites(QRectF rect) const;
 
     // Intersection events
     virtual void onTrigger(Sprite* pOther);
@@ -82,8 +83,8 @@ protected:
     void setCollisionOverride(QRectF rect);
     void removeCollisionOverride();
 
-    // Colliding classes
-    QList<QString> collidingClasses = {"All"};
+    // Collision tags
+    QList<QString> collidingTags = {"All"};
 
 signals:
     void notifyTrigger(Sprite* pOther);

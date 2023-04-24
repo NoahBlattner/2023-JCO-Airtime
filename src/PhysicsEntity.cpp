@@ -8,11 +8,11 @@
 #include "DirectionalEntityCollider.h"
 
 PhysicsEntity::PhysicsEntity(QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {
-    addCollidingClass("DirectionalEntityCollider");
+
 };
 
 PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
-    addCollidingClass("DirectionalEntityCollider");
+
 };
 
 //! Set the parent scene
