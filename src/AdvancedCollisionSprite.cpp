@@ -91,11 +91,10 @@ void AdvancedCollisionSprite::reevaluateIntersects() {
 void AdvancedCollisionSprite::reevaluateIntersects(QRectF rect) {
     auto collidingSprites= getCollidingSprites(rect);
 
-    foreach (Sprite* pSprite, collidingSprites) { // For each colliding sprite
-        auto* pAdvancedCollisionSprite = dynamic_cast<AdvancedCollisionSprite*>(pSprite);
-        if (pAdvancedCollisionSprite != nullptr && pAdvancedCollisionSprite->isTrigger) { // If the other sprite is a trigger
+    foreach (AdvancedCollisionSprite* pSprite, collidingSprites) { // For each colliding sprite
+        if (pSprite->isTrigger) { // If the other sprite is a trigger
             // Call its onTrigger function
-            pAdvancedCollisionSprite->onTrigger(this);
+            pSprite->onTrigger(this);
         } else { // If the sprite is a collision
             onCollision(pSprite);
         }
@@ -137,13 +136,13 @@ QList<AdvancedCollisionSprite*> AdvancedCollisionSprite::getCollidingSprites(QRe
 //! Called when the sprites intersects with another sprite as a trigger
 //! Emits the notifyTrigger signal
 //! \param pOther The other sprite
-void AdvancedCollisionSprite::onTrigger(Sprite* pOther) {
+void AdvancedCollisionSprite::onTrigger(AdvancedCollisionSprite* pOther) {
     emit notifyTrigger(pOther);
 }
 
 //! Called when the sprites intersects with another sprite as a collision
 //! Emits the notifyCollision signal
 //! \param pOther The other sprite
-void AdvancedCollisionSprite::onCollision(Sprite* pOther) {
+void AdvancedCollisionSprite::onCollision(AdvancedCollisionSprite* pOther) {
     emit notifyCollision(pOther);
 }

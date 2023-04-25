@@ -9,10 +9,11 @@
 
 #include <QObject>
 #include <QPointF>
-
+#include "resources.h"
 
 class GameCanvas;
 class GameScene;
+class LevelLoader;
 
 //! \brief Classe qui gère la logique du jeu.
 //!
@@ -44,11 +45,17 @@ signals:
     void notifyKeyReleased(int key);
 
 private:
-
     GameCanvas* m_pGameCanvas = nullptr;
     GameScene* m_pScene = nullptr;
 
-private slots:
+    LevelLoader* levelLoader = nullptr;
+
+    bool playerHasDied = false;
+
+    void reset();
+
+public slots:
+    void onPlayerDeath();
 
 };
 

@@ -21,9 +21,9 @@
 //! Constructeur
 //! \param core Le gamecore
 //! \param levelsPath Le chemin des niveaux
-LevelLoader::LevelLoader(GameCore* core, QString levelsPath) {
-    m_pCore = core;
-    m_levelsPath = std::move(levelsPath);
+LevelLoader::LevelLoader(GameCore* pCore, const QString& levelsPath) {
+    m_pCore = pCore;
+    m_levelsPath = levelsPath;
 }
 
 //! Charge un niveau dans la scène
@@ -33,6 +33,7 @@ LevelLoader::LevelLoader(GameCore* core, QString levelsPath) {
 QList<Sprite *> LevelLoader::loadLevel(const QString& levelName) {
     // Concaténation du chemin du niveau avec le nom du niveau
     QString levelPath = m_levelsPath + "/" + levelName;
+    qDebug() << "Chargement du niveau " << levelPath;
 
     if (!levelName.endsWith(".json")) { // Si le nom du niveau ne finit pas par .json
         levelPath += ".json";
@@ -60,11 +61,18 @@ QList<Sprite *> LevelLoader::loadLevel(const QString& levelName) {
     // On récupère l'objet JSON
     QJsonObject levelObject = jsonDocument.object();
 
-    // On charge l'arrière-plan
-    m_pCore->scene()->setBackgroundImage(QImage(GameFramework::imagesPath() + levelObject["background"].toString()));
+    // Remember the current level's name
+    m_currentLevel = levelName;
 
     // On adapte la taille de la scène
-    m_pCore->scene()->setSceneRect(0, 0, levelObject["sceneWidth"].toInt(), levelObject["sceneHeight"].toInt());
+    int sceneWidth = levelObject["sceneWidth"].toInt();
+    int sceneHeight = levelObject["sceneHeight"].toInt();
+    m_pCore->scene()->setSceneRect(0, 0, sceneWidth, sceneHeight);
+
+    // On charge l'arrière-plan
+    QImage backgroundImage = QImage(GameFramework::imagesPath() + levelObject["background"].toString());
+    backgroundImage = backgroundImage.scaled(sceneWidth, sceneHeight);
+    m_pCore->scene()->setBackgroundImage(backgroundImage);
 
     // On charge les sprites
     return loadSprites(levelObject["sprites"].toArray());
@@ -102,9 +110,9 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
 
     qDebug() << "Loading sprite " << imagePath << " with tag " << tag;
 
-    if (tag == "Player") {
-        // On crée une sprite de type Player
-        sprite = new Player(m_pCore);
+    if (tag.isEmpty()) {
+        // Create a simple sprite
+        sprite = new Sprite(imagePath);
     } else if (tag.startsWith("DirectionalCollider")) {
         DirectionalEntityCollider::BlockingSides blockingSides;
 
@@ -120,9 +128,9 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
 
         // Create a directional collider
         sprite = new DirectionalEntityCollider(imagePath, blockingSides);
-    } else if (tag.isEmpty()) {
-        // Create a simple sprite
-        sprite = new Sprite(imagePath);
+    } else if (tag == "Player") {
+        // Create a player
+        sprite = new Player(m_pCore);
     } else {
         // Create an AdvancedCollisionSprite
         auto* advSprite = new AdvancedCollisionSprite(imagePath);
@@ -146,8 +154,22 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
 
 //! Décharge un niveau de la scène
 void LevelLoader::unloadLevel() {
+    m_currentLevel = "";
+
+    // Delete all sprites
     for (Sprite* sprite : m_pCore->scene()->sprites()) {
         m_pCore->scene()->removeSpriteFromScene(sprite);
         delete sprite;
     }
 }
+
+/**
+ * Reloads the current level.
+ * This also functions as a "reset" function.
+ */
+void LevelLoader::reloadCurrentLevel() {
+    QString level = m_currentLevel;
+    unloadLevel();
+    loadLevel(level);
+}
+

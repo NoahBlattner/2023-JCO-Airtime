@@ -14,18 +14,19 @@
 
 class QJsonArray;
 class Sprite;
-class GameScene;
 
 class LevelLoader {
 public:
-    explicit LevelLoader(GameCore* core, QString levelsPath);
+    explicit LevelLoader(GameCore* pCore, const QString& levelsPath);
 
     QList<Sprite*> loadLevel(const QString& levelName);
     void unloadLevel();
+    void reloadCurrentLevel();
 
 private:
     GameCore* m_pCore;
     QString m_levelsPath;
+    QString m_currentLevel;
 
     Sprite* loadSprite(const QJsonObject& spriteObject);
     QList<Sprite*> loadSprites(const QJsonArray& spritesArray);

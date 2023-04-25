@@ -51,6 +51,10 @@ void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
 //! This movement is blocked by other sprites and the scene boundaries
 //! \param moveVector The vector to move the entity by
 void PhysicsEntity::move(QVector2D moveVector) {
+    if (moveVector.isNull()) { // If the move vector is null, do nothing
+        return;
+    }
+
     // Calculate the new position
     m_newRect = collisionRect().translated(moveVector.x(), moveVector.y());
 
@@ -160,7 +164,7 @@ bool PhysicsEntity::reevaluateGrounded() {
 //! If the collider is a directional entity collider and the entity is not blocked by it, the collision is ignored
 //! Otherwise, the parent onCollision function is called and the entity is aligned to the other sprite
 //! \param pOther The other sprite
-void PhysicsEntity::onCollision(Sprite* pOther) {
+void PhysicsEntity::onCollision(AdvancedCollisionSprite* pOther) {
     auto* directionalCollider = dynamic_cast<DirectionalEntityCollider*>(pOther);
     if (directionalCollider != nullptr &&
         !directionalCollider->isEntityBlocked(this)) { // If the other sprite is a directional entity collider and the entity is not blocked by it

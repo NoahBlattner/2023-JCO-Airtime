@@ -40,6 +40,8 @@ public:
 
     void tick(long long int elapsedTimeInMilliseconds) override;
 
+    virtual void onCollision(AdvancedCollisionSprite* pOther) override;
+
 private:
     float prevWalkDirection = 0;
     float walkDirection = 0;
@@ -48,6 +50,10 @@ private:
     const int IDLE_ANIMATION_FRAME_DURATIONS[10] = {2000, 100,1500, 100, 1500, 100, 100, 2500, 100, 100};
 
     void jump();
+    void die();
+
+signals:
+    void notifyPlayerDied();
 
 private slots:
     void onKeyPressed(int key);

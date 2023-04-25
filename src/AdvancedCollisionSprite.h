@@ -64,8 +64,8 @@ public:
     [[nodiscard]] virtual QList<AdvancedCollisionSprite*> getCollidingSprites(QRectF rect) const;
 
     // Intersection events
-    virtual void onTrigger(Sprite* pOther);
-    virtual void onCollision(Sprite* pOther);
+    virtual void onTrigger(AdvancedCollisionSprite* pOther);
+    virtual void onCollision(AdvancedCollisionSprite* pOther);
 
     // Intersections checks
     virtual void reevaluateIntersects();

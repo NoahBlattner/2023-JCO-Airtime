@@ -27,6 +27,7 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     // Connect the key events to the player
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);
     connect(gameCore, &GameCore::notifyKeyReleased, this, &Player::onKeyReleased);
+    connect(this, &Player::notifyPlayerDied, gameCore, &GameCore::onPlayerDeath);
 }
 
 //! Initialize the player animations
@@ -79,6 +80,28 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
     PhysicsEntity::tick(elapsedTimeInMilliseconds);
 
     parentScene()->centerViewOn(this);
+}
+
+/**
+ * Override of the onCollision method
+ * Handles the different event caused by a collision within the player
+ * @param other The other sprite that collided with this one
+ */
+void Player::onCollision(AdvancedCollisionSprite* other) {
+    PhysicsEntity::onCollision(other);
+
+    // If the other is a death zone
+    if (other->collisionTag == "KillZone") {
+        // Kill the player
+        die();
+    }
+}
+
+/**
+ * Causes the player to die
+ */
+void Player::die() {
+    emit notifyPlayerDied();
 }
 
 /*****************************

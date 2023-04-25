@@ -83,7 +83,7 @@ protected:
 
     void alignRectToSprite(QRectF &rect, Sprite* pSprite);
 
-    void onCollision(Sprite* pOther) override;
+    void onCollision(AdvancedCollisionSprite* pOther) override;
 };
 
 
