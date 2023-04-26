@@ -29,9 +29,11 @@ public:
     void keyPressed(int key);
     void keyReleased(int key);
     inline QList<int> pressedKeys() const { return m_pressedKeys; }
+    void resetKeys();
 
     void mouseMoved(QPointF newMousePosition);
     void mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);
+
     void mouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 
     void tick(long long elapsedTimeInMilliseconds);

@@ -69,12 +69,32 @@ GameCanvas::~GameCanvas()
     m_pGameCore = nullptr;
 }
 
+/**
+ * Slot appelé lorsque l'application change d'état
+ * @param state
+ */
+void GameCanvas::onWindowFocusChanged(Qt::ApplicationState state) {
+    // If the application has lost focus
+    if (state != Qt::ApplicationState::ApplicationActive) {
+        // Pause the game
+        stopTick();
+        // Reset the keys to avoid duplicates when the application regains focus
+        m_pGameCore->resetKeys();
+    } else {
+        // If the game is not running
+        if (!m_keepTicking) {
+            // Start the game
+            startTick();
+        }
+    }
+}
+
 //! Construit une scène de jeu et lui installe un filtre d'événements pour intercepter les
 //! événements clavier et souris.
 //! La scène créée n'est pas automatiquement affichée.
 //! \see setCurrentScene()
 GameScene* GameCanvas::createScene() {
-    GameScene* pScene = new GameScene(this);
+    auto* pScene = new GameScene(this);
     pScene->installEventFilter(this);
     return pScene;
 }
@@ -293,7 +313,6 @@ void GameCanvas::onInit() {
 
     m_pGameCore = new GameCore(this, this);
 }
-
 
 //! Traite le tick : le temps exact écoulé entre ce tick et le tick précédent
 //! est mesuré et l'objet GameCore est lui-même informé du tick.

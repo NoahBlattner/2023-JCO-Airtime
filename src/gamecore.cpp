@@ -67,6 +67,17 @@ void GameCore::reset() {
     playerHasDied = false;
 }
 
+/**
+ * Resets the registered keys
+ * All currently pressed keys are forced to be released
+ */
+void GameCore::resetKeys() {
+    foreach (int key, m_pressedKeys) {
+        keyReleased(key);
+    }
+    m_pressedKeys.clear();
+}
+
 //! Traite la pression d'une touche.
 //! \param key Numéro de la touche (voir les constantes Qt)
 //!
