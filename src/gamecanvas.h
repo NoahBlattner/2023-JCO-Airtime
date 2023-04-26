@@ -80,10 +80,13 @@ public:
     void stopMouseTracking();
     QPointF currentMousePosition() const;
 
+    void resetKeys();
+
 signals:
     void requestToCloseApp();
 
 public slots:
+    void onWindowFocusChanged(Qt::ApplicationState state);
 
 protected:
     bool eventFilter(QObject* pObject, QEvent* pEvent) override;
