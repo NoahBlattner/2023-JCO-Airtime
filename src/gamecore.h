@@ -28,6 +28,7 @@ public:
 
     void keyPressed(int key);
     void keyReleased(int key);
+    inline QList<int> pressedKeys() const { return m_pressedKeys; }
 
     void mouseMoved(QPointF newMousePosition);
     void mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);
@@ -47,6 +48,8 @@ signals:
 private:
     GameCanvas* m_pGameCanvas = nullptr;
     GameScene* m_pScene = nullptr;
+
+    QList<int> m_pressedKeys;
 
     LevelLoader* levelLoader = nullptr;
 

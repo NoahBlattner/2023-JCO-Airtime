@@ -72,12 +72,16 @@ void GameCore::reset() {
 //!
 void GameCore::keyPressed(int key) {
     emit notifyKeyPressed(key);
+
+    m_pressedKeys.append(key);
 }
 
 //! Traite le relâchement d'une touche.
 //! \param key Numéro de la touche (voir les constantes Qt)
 void GameCore::keyReleased(int key) {
     emit notifyKeyReleased(key);
+
+    m_pressedKeys.removeAll(key);
 }
 
 //! Cadence.

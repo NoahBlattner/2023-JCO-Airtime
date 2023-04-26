@@ -51,6 +51,8 @@ private:
     float prevWalkDirection = 0;
     QVector2D inputDirection = QVector2D(0, 0);
 
+    void applyPressedKeys(GameCore* gamecore);
+
     // Array of animation frame durations for the idle animation
     const int IDLE_ANIMATION_FRAME_DURATIONS[10] = {2000, 100,1500, 100, 1500, 100, 100, 2500, 100, 100};
 

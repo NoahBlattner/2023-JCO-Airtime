@@ -33,6 +33,20 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     connect(gameCore, &GameCore::notifyKeyPressed, this, &Player::onKeyPressed);
     connect(gameCore, &GameCore::notifyKeyReleased, this, &Player::onKeyReleased);
     connect(this, &Player::notifyPlayerDied, gameCore, &GameCore::onPlayerDeath);
+
+    // Apply the already pressed keys
+    applyPressedKeys(gameCore);
+}
+
+/**
+ * Apply the pressed keys to the player
+ * This method can be used to apply the already pressed keys when the player is created
+ * @param gameCore The game core which sends the key events
+ */
+void Player::applyPressedKeys(GameCore* gameCore) {
+    foreach (int key, gameCore->pressedKeys()) {
+        onKeyPressed(key);
+    }
 }
 
 //! Initialize the player animations
