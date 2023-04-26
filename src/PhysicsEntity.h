@@ -59,9 +59,9 @@ public:
 
     // Ground check
     [[nodiscard]] inline bool isOnGround() const { return m_isOnGround; }
-    bool reevaluateGrounded();
+    virtual bool reevaluateGrounded();
 
-    QList<AdvancedCollisionSprite*> getCollidingSprites(QRectF rect = QRectF()) const override;
+    [[nodiscard]] QList<AdvancedCollisionSprite*> getCollidingSprites(QRectF rect = QRectF()) const override;
 
     void tick(long long elapsedTimeInMilliseconds) override;
 

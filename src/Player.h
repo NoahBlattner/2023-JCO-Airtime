@@ -30,11 +30,14 @@ class Player : public PhysicsEntity {
 public:
     explicit Player(GameCore* gamecore, QGraphicsItem* parent = nullptr);
 
+    // Player constants
     const QRectF PLAYER_COLLISION_RECT = QRectF(0, 5, 56, 150);
     const float PLAYER_GRAVITY_OVERRIDE = -12;
     const float PLAYER_FRICTION_OVERRIDE = .75;
     const float PLAYER_WALK_SPEED = 2;
     const float PLAYER_JUMP_SPEED = -4;
+    const float PLAYER_DASH_SPEED = 4;
+    const float PLAYER_DASH_TIME = .1;
     const float PLAYER_STOP_SPEED = .5;
     const float PLAYER_STOP_TIME = .2;
 
@@ -42,14 +45,27 @@ public:
 
     virtual void onCollision(AdvancedCollisionSprite* pOther) override;
 
+    bool reevaluateGrounded() override;
+
 private:
     float prevWalkDirection = 0;
-    float walkDirection = 0;
+    QVector2D inputDirection = QVector2D(0, 0);
 
     // Array of animation frame durations for the idle animation
     const int IDLE_ANIMATION_FRAME_DURATIONS[10] = {2000, 100,1500, 100, 1500, 100, 100, 2500, 100, 100};
 
+    // Movement
     void jump();
+    // Dash
+    QTimer dashTimer;
+    QVector2D currentDashVector = QVector2D(0, 0);
+    bool dashEnabled = true;
+    bool isDashing = false;
+    void dash(QVector2D direction);
+    void endDash();
+
+    int playerFaceDirection = 1;
+
     void die();
 
 signals:
@@ -60,6 +76,8 @@ private slots:
     void onKeyReleased(int key);
 
     void initAnimations();
+
+    void walk(long long int elapsedTimeInMilliseconds);
 };
 
 
