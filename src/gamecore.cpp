@@ -84,6 +84,15 @@ void GameCore::resetKeys() {
 void GameCore::keyPressed(int key) {
     emit notifyKeyPressed(key);
 
+    switch (key) {
+        case Qt::Key_Escape:
+            m_pGameCanvas->stopTick();
+            break;
+        case Qt::Key_R:
+            reset();
+            break;
+    }
+
     m_pressedKeys.append(key);
 }
 

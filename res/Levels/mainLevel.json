@@ -13,43 +13,27 @@
         },
         {
             "rotation": 0,
-            "scale": 1,
+            "scale": 2,
             "tag": "DirectionalCollider-Top",
             "textureName": "oneside-platform.png",
-            "x": 0,
-            "y": 859.4890510948903
+            "x": 104.62287104622874,
+            "y": 891.119221411192
         },
         {
             "rotation": 0,
-            "scale": 1,
-            "tag": "DirectionalCollider-Top",
-            "textureName": "oneside-platform.png",
-            "x": 200,
-            "y": 859.4890510948903
-        },
-        {
-            "rotation": 0,
-            "scale": 1,
-            "tag": "DirectionalCollider-Top",
-            "textureName": "oneside-platform.png",
-            "x": 400,
-            "y": 859.4890510948903
-        },
-        {
-            "rotation": 0,
-            "scale": 1.7,
+            "scale": 1.5,
             "tag": "BlockAll",
             "textureName": "dumpster-flipped.png",
-            "x": 660,
-            "y": 908
+            "x": 450,
+            "y": 915.2992700729927
         },
         {
-            "rotation": 0,
-            "scale": 1,
+            "rotation": 90,
+            "scale": 0.25,
             "tag": "KillZone",
             "textureName": "kill-zone.png",
-            "x": 1200,
-            "y": 850
+            "x": 982.9683698296835,
+            "y": 751.8248175182483
         }
     ],
     "tags": [

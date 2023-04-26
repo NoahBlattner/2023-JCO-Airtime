@@ -21,17 +21,17 @@ bool DirectionalEntityCollider::isEntityBlocked(const PhysicsEntity* pEntity) co
         return true;
     }
 
-    // Check if the entity is moving top
+    // Check if the entity is moving up
     if (pEntity->velocity().y() > 0) {
-        // Check if the entity is blocked from moving top
+        // Check if the entity is blocked from moving up
         if (!m_blockingSides.bottom) {
             return true;
         }
     }
 
-    // Check if the entity is moving bottom
+    // Check if the entity is moving down
     if (pEntity->velocity().y() < 0) {
-        // Check if the entity is blocked from moving bottom
+        // Check if the entity is blocked from moving down
         if (!m_blockingSides.top) {
             return true;
         }
@@ -40,7 +40,7 @@ bool DirectionalEntityCollider::isEntityBlocked(const PhysicsEntity* pEntity) co
     // Check if the entity is moving left
     if (pEntity->velocity().x() < 0) {
         // Check if the entity is blocked from moving left
-        if (!m_blockingSides.left) {
+        if (!m_blockingSides.right) {
             return true;
         }
     }
@@ -48,7 +48,7 @@ bool DirectionalEntityCollider::isEntityBlocked(const PhysicsEntity* pEntity) co
     // Check if the entity is moving right
     if (pEntity->velocity().x() > 0) {
         // Check if the entity is blocked from moving right
-        if (!m_blockingSides.right) {
+        if (!m_blockingSides.left) {
             return true;
         }
     }
