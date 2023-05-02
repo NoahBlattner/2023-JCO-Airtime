@@ -255,12 +255,12 @@ void Player::endDash() {
     // (The player has less speed than the dash added, for example if the player hit a wall)
 
     // If newVelocity x is inverted, set it to 0
-    if (newVelocity.x() * velocity().x() < 0) {
+    if (newVelocity.x() * velocity().x() <= 0) {
         newVelocity.setX(0);
     }
 
     // If newVelocity y is inverted, set it to 0
-    if (newVelocity.y() * velocity().y() < 0) {
+    if (newVelocity.y() * velocity().y() <= 0) {
         newVelocity.setY(0);
     }
 
