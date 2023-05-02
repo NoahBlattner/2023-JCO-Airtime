@@ -177,6 +177,10 @@ void Sprite::setActiveAnimation(int index) {
     if (index < 0 || index >= m_animationList.count())
         index = 0;
 
+    if (index == m_currentAnimationIndex) // Pas de changement.
+        // On ne change pas l'animation pour éviter de la reset.
+        return;
+
     m_currentAnimationIndex = index;
     setCurrentAnimationFrame(0);
 }

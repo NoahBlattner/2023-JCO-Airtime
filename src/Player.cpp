@@ -59,6 +59,14 @@ void Player::initAnimations() {
     image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player-flipped.png"));
     createAnimation(image, QList<int>::fromReadOnlyData(IDLE_ANIMATION_FRAME_DURATIONS));
 
+    // Walk animation
+    image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/walk-player.png"));
+    createAnimation(image, QList<int>::fromReadOnlyData(WALK_ANIMATION_FRAME_DURATIONS));
+
+    // Flipped walk animation
+    image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/walk-player-flipped.png"));
+    createAnimation(image, QList<int>::fromReadOnlyData(WALK_ANIMATION_FRAME_DURATIONS));
+
     startAnimation();
 }
 
@@ -115,6 +123,57 @@ void Player::die() {
     emit notifyPlayerDied();
 }
 
+/**
+ * Set the current animation
+ * @param state The animation state to set
+ */
+void Player::setAnimation(Player::AnimationState state) {
+    if (state == AnimationState::IDLE) {
+        setActiveAnimation(playerFaceDirection > 0 ? 0 : 1);
+    } else if (state == AnimationState::WALK) {
+        setActiveAnimation(playerFaceDirection > 0 ? 2 : 3);
+    } else if (state == AnimationState::JUMP) {
+        setActiveAnimation(playerFaceDirection > 0 ? 4 : 5);
+    } else if (state == AnimationState::DASH) {
+        setActiveAnimation(playerFaceDirection > 0 ? 6 : 7);
+    }
+}
+
+/**
+ * Apply the walk input to the player according to the elapsed time
+ * @param elapsedTimeInMilliseconds The elapsed time since the last tick
+ */
+void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
+    float prevXVelocity = velocity().x();
+
+    // Calculate the new x velocity based on the move direction and the elapsed time
+    float newXVelocity = prevXVelocity + inputDirection .x() * PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f;
+    // Clamp the new x velocity to the max walk speed
+    newXVelocity = std::clamp<float>(newXVelocity, -PLAYER_WALK_SPEED, PLAYER_WALK_SPEED);
+
+    // Adapt velocity
+    if (inputDirection.x() == 0 || // If the player is not walking
+        inputDirection.x() * velocity().x() < 0) { // Or if the player is walking in the opposite direction
+        if (isOnGround()) { // If the player is on the ground
+            // Slow down the player over time
+            if (abs(newXVelocity) <= PLAYER_STOP_SPEED) { // If the player is slow enough to stop
+                newXVelocity = 0;
+                setAnimation(IDLE);
+            } else {
+                // Slow down the player over time
+                newXVelocity -= (newXVelocity > 0 ? 1 : -1) * PLAYER_STOP_SPEED * elapsedTimeInMilliseconds / 1000.0f /
+                                PLAYER_STOP_TIME;
+            }
+        }
+    } else {
+        // Set the animation to walking
+        setAnimation(WALK);
+    }
+
+    // Set the x velocity based on the move direction
+    setXVelocity(newXVelocity);
+}
+
 /*****************************
  * MOUVEMENT
  ****************************/
@@ -124,37 +183,17 @@ void Player::die() {
  * @param elapsedTimeInMilliseconds
  */
 void Player::walk(long long int elapsedTimeInMilliseconds) {
-    float prevXVelocity = velocity().x();
-
-    // Calculate the new x velocity based on the move direction and the elapsed time
-    float newXVelocity = prevXVelocity + inputDirection .x() * PLAYER_WALK_SPEED * elapsedTimeInMilliseconds / 1000.0f;
-    // Clamp the new x velocity to the max walk speed
-    newXVelocity = std::clamp<float>(newXVelocity, -PLAYER_WALK_SPEED, PLAYER_WALK_SPEED);
-
-    // Adapt velocity
-    if (inputDirection .x() == 0 && isOnGround()) { // If the player is not walking
-        if (abs(newXVelocity) <= PLAYER_STOP_SPEED) { // If the player is slow enough to stop
-            newXVelocity = 0;
-        } else {
-            // Slow down the player over time
-            newXVelocity -= (newXVelocity > 0 ? 1 : -1) * PLAYER_STOP_SPEED * elapsedTimeInMilliseconds / 1000.0f /
-                            PLAYER_STOP_TIME;
-        }
-    }
-
-    // Set the x velocity based on the move direction
-    setXVelocity(newXVelocity);
-
-    if ((prevWalkDirection <= 0 && inputDirection.x() > 0) ||
-        (prevWalkDirection >= 0 && inputDirection.x() < 0)) { // If the player is changing walking direction
+    // Get the new face direction if it changed
+    if (prevWalkDirection * inputDirection.x() <= 0) { // If the player is changing walking direction
         if (inputDirection.x() < 0) {
             playerFaceDirection = -1;
-            setActiveAnimation(1); // Change the animation
         } else {
             playerFaceDirection = 1;
-            setActiveAnimation(0); // Change the animation
         }
     }
+
+    // Apply the walk input
+    applyWalkInput(elapsedTimeInMilliseconds);
 
     // Remember the move direction
     prevWalkDirection = inputDirection.x();
@@ -194,7 +233,7 @@ void Player::dash(QVector2D direction) {
 
     // Apply the dash velocity
     currentDashVector = direction.normalized() * PLAYER_DASH_SPEED;
-    setVelocity(currentDashVector);
+    addVelocity(currentDashVector);
 
     // Disable gravity and friction
     setGravityEnabled(false);
@@ -224,6 +263,9 @@ void Player::endDash() {
     if (newVelocity.y() * velocity().y() < 0) {
         newVelocity.setY(0);
     }
+
+    // Set the new velocity
+    setVelocity(newVelocity);
 
     currentDashVector = QVector2D(0, 0);
 
