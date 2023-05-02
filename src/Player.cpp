@@ -231,8 +231,9 @@ void Player::dash(QVector2D direction) {
         direction = QVector2D(playerFaceDirection, 0);
     }
 
+    // Get the dash velocity
+    currentDashVector = direction.normalized() * PLAYER_DASH_SPEED - velocity();
     // Apply the dash velocity
-    currentDashVector = direction.normalized() * PLAYER_DASH_SPEED;
     addVelocity(currentDashVector);
 
     // Disable gravity and friction
