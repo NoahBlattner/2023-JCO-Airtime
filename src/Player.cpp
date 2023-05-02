@@ -210,8 +210,21 @@ void Player::dash(QVector2D direction) {
 void Player::endDash() {
     isDashing = false;
 
-    // Remove the dash velocity
-    addVelocity(-currentDashVector);
+    QVector2D newVelocity = velocity() - currentDashVector;
+
+    // Verify that the new velocity is not inverted
+    // (The player has less speed than the dash added, for example if the player hit a wall)
+
+    // If newVelocity x is inverted, set it to 0
+    if (newVelocity.x() * velocity().x() < 0) {
+        newVelocity.setX(0);
+    }
+
+    // If newVelocity y is inverted, set it to 0
+    if (newVelocity.y() * velocity().y() < 0) {
+        newVelocity.setY(0);
+    }
+
     currentDashVector = QVector2D(0, 0);
 
     // Re-enable gravity and friction

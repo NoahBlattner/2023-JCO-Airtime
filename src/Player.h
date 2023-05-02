@@ -54,7 +54,7 @@ private:
     void applyPressedKeys(GameCore* gamecore);
 
     // Array of animation frame durations for the idle animation
-    const int IDLE_ANIMATION_FRAME_DURATIONS[10] = {2000, 100,1500, 100, 1500, 100, 100, 2500, 100, 100};
+    const int IDLE_ANIMATION_FRAME_DURATIONS[12] = {2000, 100,1500, 100, 1500, 100, 100, 100, 2500, 100, 100, 100};
 
     // Movement
     void jump();
