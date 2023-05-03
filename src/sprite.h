@@ -178,6 +178,9 @@ public:
     void startAnimation(int frameDuration);
     bool isAnimationRunning() const;
 
+    void showFrameFor(const QPixmap& pixmap, int durationMS);
+    bool showingFrame = false;
+
     void addAnimation();
     void clearAnimations();
     int animationCount() const;
@@ -261,6 +264,7 @@ private:
 
 private slots:
     void onNextAnimationFrame();
+    void endShowFrame();
 
 };
 

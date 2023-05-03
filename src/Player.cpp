@@ -51,6 +51,10 @@ void Player::applyPressedKeys(GameCore* gameCore) {
 
 //! Initialize the player animations
 void Player::initAnimations() {
+    // Transitions
+    startRunFrame = QPixmap(QDir::toNativeSeparators(GameFramework::imagesPath() + "/start-run.png"));
+    startRunFrameFlipped = startRunFrame.transformed(QTransform().scale(-1, 1));
+
     // Idle animation
     QImage image(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player.png"));
     createAnimation(image, QList<int>::fromReadOnlyData(IDLE_ANIMATION_FRAME_DURATIONS));
@@ -128,15 +132,34 @@ void Player::die() {
  * @param state The animation state to set
  */
 void Player::setAnimation(Player::AnimationState state) {
-    if (state == AnimationState::IDLE) {
-        setActiveAnimation(playerFaceDirection > 0 ? 0 : 1);
-    } else if (state == AnimationState::WALK) {
-        setActiveAnimation(playerFaceDirection > 0 ? 2 : 3);
-    } else if (state == AnimationState::JUMP) {
-        setActiveAnimation(playerFaceDirection > 0 ? 4 : 5);
-    } else if (state == AnimationState::DASH) {
-        setActiveAnimation(playerFaceDirection > 0 ? 6 : 7);
+    int newAnimIndex = 0;
+
+    // Get the animation index according to the state
+    switch (state) {
+        case IDLE:
+            newAnimIndex = playerFaceDirection > 0 ? 0 : 1;
+            break;
+        case WALK:
+            if (currentAnimationState == IDLE) { // If the player was idle
+                // Show the start run frame for a short duration to make the transition smoother
+                showFrameFor(playerFaceDirection > 0 ? startRunFrame : startRunFrameFlipped, START_RUN_DURATION);
+            }
+            newAnimIndex = playerFaceDirection > 0 ? 2 : 3;
+            break;
+        case JUMP:
+            newAnimIndex = playerFaceDirection > 0 ? 4 : 5;
+            break;
+        case DASH:
+            newAnimIndex = playerFaceDirection > 0 ? 6 : 7;
+            break;
+        case DIE:
+            newAnimIndex = playerFaceDirection > 0 ? 8 : 9;
+            break;
     }
+
+    // Set the new animation
+    currentAnimationState = state;
+    setActiveAnimation(newAnimIndex);
 }
 
 /**

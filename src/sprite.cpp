@@ -182,7 +182,34 @@ void Sprite::setActiveAnimation(int index) {
         return;
 
     m_currentAnimationIndex = index;
-    setCurrentAnimationFrame(0);
+
+    if (!showingFrame) {
+        setCurrentAnimationFrame(0);
+    }
+}
+
+/**
+ * Shows a sprite frame for a given duration.
+ * This overrides any animation for the duration.
+ * Automatically resumes animations after the duration.
+ * This can be useful to show a transition frame in between 2 animations.
+ * @param pixmap  The pixmap to show.
+ * @param duration The duration in milliseconds.
+ */
+void Sprite::showFrameFor(const QPixmap& pixmap, int duration) {
+    showingFrame = true;
+    stopAnimation();
+    setPixmap(pixmap);
+    QTimer::singleShot(duration, this, SLOT(endShowFrame()));
+}
+
+/**
+ * Called by showFrameFor() after the duration has elapsed.
+ * Restarts animations.
+ */
+void Sprite::endShowFrame() {
+    showingFrame = false;
+    startAnimation();
 }
 
 //! Choisi si le signal animationFinished() doit être émis chaque fois que l'animation
