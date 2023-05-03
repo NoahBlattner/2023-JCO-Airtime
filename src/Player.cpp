@@ -165,6 +165,7 @@ void Player::setAnimation(Player::AnimationState state) {
             newAnimIndex = playerFaceDirection > 0 ? 2 : 3;
             break;
         case JUMP:
+            stopAnimation(END_OF_CYCLE_STOP);
             newAnimIndex = playerFaceDirection > 0 ? 4 : 5;
             break;
         case DASH:
@@ -173,6 +174,11 @@ void Player::setAnimation(Player::AnimationState state) {
         case DIE:
             newAnimIndex = playerFaceDirection > 0 ? 8 : 9;
             break;
+    }
+
+    if (currentAnimationState != state) { // If the animation state changed
+        // Start the animation (in case it was stopped by JUMP animation)
+        startAnimation();
     }
 
     // Set the new animation

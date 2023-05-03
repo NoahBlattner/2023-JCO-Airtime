@@ -182,6 +182,10 @@ void Sprite::setActiveAnimation(int index) {
         return;
 
     m_currentAnimationIndex = index;
+    m_currentAnimationFrame = NO_CURRENT_FRAME;
+
+    // Override stop later flag.
+    m_animationStopLater = false;
 
     if (!showingFrame) {
         setCurrentAnimationFrame(0);
@@ -424,17 +428,17 @@ void Sprite::onNextAnimationFrame() {
         return;
     }
 
-
     int PreviousAnimationFrame = m_currentAnimationFrame;
     ++m_currentAnimationFrame;
     if (m_currentAnimationFrame >= m_animationList[m_currentAnimationIndex].count()) {
-        m_currentAnimationFrame = 0;
         if (m_emitSignalEOA)
             emit animationFinished();
         if (m_animationStopLater) {
             m_animationStopLater = false;
             stopAnimation(IMMEDIATE_STOP);
+            return;
         }
+        m_currentAnimationFrame = 0;
     }
     if (PreviousAnimationFrame != m_currentAnimationFrame) {
         setPixmap(m_animationList[m_currentAnimationIndex][m_currentAnimationFrame]);

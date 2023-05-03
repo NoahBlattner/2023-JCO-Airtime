@@ -67,7 +67,7 @@ private:
     // Array of animation frame durations for the idle animation
     const int IDLE_ANIMATION_FRAME_DURATIONS[12] = {2000, 100,1500, 100, 1500, 100, 100, 100, 2500, 100, 100, 100};
     const int WALK_ANIMATION_FRAME_DURATIONS[8] = {50, 50, 50, 50, 50, 50, 50, 50};
-    const int JUMP_ANIMATION_FRAME_DURATIONS[5] = {50, 100, 100, 100, 200};
+    const int JUMP_ANIMATION_FRAME_DURATIONS[5] = {100, 100, 100, 100, 200};
     const int DUST_FRAME_DURATIONS[3] = {50, 100, 50};
 
     // Movement
