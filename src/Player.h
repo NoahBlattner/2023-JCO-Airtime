@@ -36,7 +36,7 @@ public:
     const float PLAYER_FRICTION_OVERRIDE = .75;
     const float PLAYER_WALK_SPEED = 2;
     const float PLAYER_JUMP_SPEED = -2.5;
-    const float PLAYER_DASH_SPEED = 4;
+    const float PLAYER_DASH_SPEED = 3;
     const float PLAYER_DASH_TIME = .1;
     const float PLAYER_STOP_SPEED = .75;
     const float PLAYER_STOP_TIME = .3;
@@ -62,9 +62,13 @@ private:
     QPixmap startRunFrame;
     QPixmap startRunFrameFlipped;
     const int START_RUN_DURATION = 100;
+    // Other frames
+    QPixmap dustParticles;
     // Array of animation frame durations for the idle animation
     const int IDLE_ANIMATION_FRAME_DURATIONS[12] = {2000, 100,1500, 100, 1500, 100, 100, 100, 2500, 100, 100, 100};
     const int WALK_ANIMATION_FRAME_DURATIONS[8] = {50, 50, 50, 50, 50, 50, 50, 50};
+    const int JUMP_ANIMATION_FRAME_DURATIONS[5] = {50, 100, 100, 100, 200};
+    const int DUST_FRAME_DURATIONS[3] = {50, 100, 50};
 
     // Movement
     void jump();
@@ -92,6 +96,8 @@ private slots:
     void walk(long long int elapsedTimeInMilliseconds);
 
     void applyWalkInput(long long int elapsedTimeInMilliseconds);
+
+    void showDustParticles() const;
 };
 
 

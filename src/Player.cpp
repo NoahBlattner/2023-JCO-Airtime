@@ -7,6 +7,7 @@
 #include "resources.h"
 #include "GameCore.h"
 #include "GameScene.h"
+#include "AnimatedSprite.h"
 #include <QDir>
 #include <QKeyEvent>
 
@@ -55,6 +56,9 @@ void Player::initAnimations() {
     startRunFrame = QPixmap(QDir::toNativeSeparators(GameFramework::imagesPath() + "/start-run.png"));
     startRunFrameFlipped = startRunFrame.transformed(QTransform().scale(-1, 1));
 
+    // Other frames
+    dustParticles = QPixmap(QDir::toNativeSeparators(GameFramework::imagesPath() + "/dust.png"));
+
     // Idle animation
     QImage image(QDir::toNativeSeparators(GameFramework::imagesPath() + "/idle-player.png"));
     createAnimation(image, QList<int>::fromReadOnlyData(IDLE_ANIMATION_FRAME_DURATIONS));
@@ -70,6 +74,14 @@ void Player::initAnimations() {
     // Flipped walk animation
     image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/walk-player-flipped.png"));
     createAnimation(image, QList<int>::fromReadOnlyData(WALK_ANIMATION_FRAME_DURATIONS));
+
+    // Jump animation
+    image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/jump-player.png"));
+    createAnimation(image, QList<int>::fromReadOnlyData(JUMP_ANIMATION_FRAME_DURATIONS));
+
+    // Flipped jump animation
+    image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/jump-player-flipped.png"));
+    createAnimation(image, QList<int>::fromReadOnlyData(JUMP_ANIMATION_FRAME_DURATIONS));
 
     startAnimation();
 }
@@ -110,11 +122,17 @@ void Player::onCollision(AdvancedCollisionSprite* other) {
  * @return
  */
 bool Player::reevaluateGrounded() {
+    bool previousGrounded = isOnGround();
     PhysicsEntity::reevaluateGrounded();
 
     if (isOnGround() && !isDashing) { // If the player is on the ground and not dashing
         // Reset the dash
         dashEnabled = true;
+
+        if (!previousGrounded) { // If the player was not on the ground before
+            // Show the dust particles
+            showDustParticles();
+        }
     }
 
     return isOnGround();
@@ -175,26 +193,41 @@ void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
     newXVelocity = std::clamp<float>(newXVelocity, -PLAYER_WALK_SPEED, PLAYER_WALK_SPEED);
 
     // Adapt velocity
-    if (inputDirection.x() == 0 || // If the player is not walking
-        inputDirection.x() * velocity().x() < 0) { // Or if the player is walking in the opposite direction
-        if (isOnGround()) { // If the player is on the ground
-            // Slow down the player over time
-            if (abs(newXVelocity) <= PLAYER_STOP_SPEED) { // If the player is slow enough to stop
-                newXVelocity = 0;
-                setAnimation(IDLE);
-            } else {
+    if (isOnGround()) { // If the player is on the ground
+        if (inputDirection.x() == 0 || // If the player is not walking
+            inputDirection.x() * velocity().x() < 0) { // Or if the player is walking in the opposite direction
+
                 // Slow down the player over time
-                newXVelocity -= (newXVelocity > 0 ? 1 : -1) * PLAYER_STOP_SPEED * elapsedTimeInMilliseconds / 1000.0f /
-                                PLAYER_STOP_TIME;
-            }
+                if (abs(newXVelocity) <= PLAYER_STOP_SPEED) { // If the player is slow enough to stop
+                    newXVelocity = 0;
+                    setAnimation(IDLE);
+                } else {
+                    // Slow down the player over time
+                    newXVelocity -= (newXVelocity > 0 ? 1 : -1) * PLAYER_STOP_SPEED * elapsedTimeInMilliseconds / 1000.0f /
+                                    PLAYER_STOP_TIME;
+                }
+        } else {
+            // Set the animation to walking
+            setAnimation(WALK);
         }
-    } else {
-        // Set the animation to walking
-        setAnimation(WALK);
+    } else { // If the player is in the air
+        // Set the animation to jumping
+        setAnimation(JUMP);
     }
 
     // Set the x velocity based on the move direction
     setXVelocity(newXVelocity);
+}
+
+/**
+ * Shows dust particles at the bottom of the player
+ */
+void Player::showDustParticles() const {
+    QPoint playerBottomCenter = QPoint(sceneBoundingRect().center().x(), sceneBoundingRect().bottom());
+
+    auto* dust = new AnimatedSprite(dustParticles .toImage(), QList<int>::fromReadOnlyData(DUST_FRAME_DURATIONS));
+    dust->setPos(playerBottomCenter - QPoint(dust->boundingRect().width() / 2, dust->boundingRect().height()));
+    scene()->addItem(dust);
 }
 
 /*****************************
@@ -217,9 +250,6 @@ void Player::walk(long long int elapsedTimeInMilliseconds) {
 
     // Apply the walk input
     applyWalkInput(elapsedTimeInMilliseconds);
-
-    // Remember the move direction
-    prevWalkDirection = inputDirection.x();
 }
 
 /**
@@ -229,8 +259,12 @@ void Player::walk(long long int elapsedTimeInMilliseconds) {
 void Player::jump() {
     // If the player is on the ground
     if (isOnGround()) {
+        setAnimation(JUMP);
         // Set the y velocity to make the player jump
         setYVelocity(PLAYER_JUMP_SPEED);
+
+        // Show dust particles
+        showDustParticles();
     }
 }
 
