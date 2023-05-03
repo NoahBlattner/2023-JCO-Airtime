@@ -207,7 +207,7 @@ void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
  */
 void Player::walk(long long int elapsedTimeInMilliseconds) {
     // Get the new face direction if it changed
-    if (prevWalkDirection * inputDirection.x() <= 0) { // If the player is changing walking direction
+    if (playerFaceDirection * inputDirection.x() < 0) { // If the player is changing walking direction
         if (inputDirection.x() < 0) {
             playerFaceDirection = -1;
         } else {

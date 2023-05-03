@@ -48,7 +48,6 @@ public:
     bool reevaluateGrounded() override;
 
 private:
-    float prevWalkDirection = 0;
     QVector2D inputDirection = QVector2D(0, 0);
 
     void applyPressedKeys(GameCore* gamecore);
