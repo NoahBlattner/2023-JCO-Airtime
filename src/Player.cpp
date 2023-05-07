@@ -27,6 +27,7 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
 
     // Init timer
     dashTimer.setSingleShot(true);
+    dashTimer.setTimerType(Qt::PreciseTimer);
     dashTimer.setInterval(PLAYER_DASH_TIME * 1000);
     connect(&dashTimer, &QTimer::timeout, this, &Player::endDash);
 
@@ -82,6 +83,12 @@ void Player::initAnimations() {
     // Flipped jump animation
     image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/jump-player-flipped.png"));
     createAnimation(image, QList<int>::fromReadOnlyData(JUMP_ANIMATION_FRAME_DURATIONS));
+
+    // Dash animation
+    image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/dash.png"));
+    QList<int> dashFrameDurations;
+    dashFrameDurations.append(PLAYER_DASH_TIME);
+    createAnimation(image, dashFrameDurations);
 
     startAnimation();
 }
@@ -169,7 +176,7 @@ void Player::setAnimation(Player::AnimationState state) {
             newAnimIndex = playerFaceDirection > 0 ? 4 : 5;
             break;
         case DASH:
-            newAnimIndex = playerFaceDirection > 0 ? 6 : 7;
+            newAnimIndex = 6;
             break;
         case DIE:
             newAnimIndex = playerFaceDirection > 0 ? 8 : 9;
@@ -289,6 +296,9 @@ void Player::dash(QVector2D direction) {
     isDashing = true;
     dashEnabled = false;
 
+    // Set the animation to dash
+    setAnimation(DASH);
+
     if (direction.isNull()) { // If the direction is null
         // Dash in the directionRotation the player is facing
         direction = QVector2D(playerFaceDirection, 0);
@@ -298,6 +308,12 @@ void Player::dash(QVector2D direction) {
     currentDashVector = direction.normalized() * PLAYER_DASH_SPEED - velocity();
     // Apply the dash velocity
     addVelocity(currentDashVector);
+
+    // get angle of vector
+    float angle = atan2(direction.y(), direction.x()) * 180 / M_PI;
+
+    // Rotate player for animation
+    setRotation(angle);
 
     // Disable gravity and friction
     setGravityEnabled(false);
@@ -312,6 +328,8 @@ void Player::dash(QVector2D direction) {
  */
 void Player::endDash() {
     isDashing = false;
+
+    setRotation(0);
 
     QVector2D newVelocity = velocity() - currentDashVector;
 

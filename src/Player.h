@@ -58,11 +58,12 @@ private:
     };
     AnimationState currentAnimationState = IDLE;
     void setAnimation(AnimationState state);
-    // Transmission frames
+    // Transition frames
     QPixmap startRunFrame;
     QPixmap startRunFrameFlipped;
     const int START_RUN_DURATION = 100;
     // Other frames
+    QPixmap dashFrame;
     QPixmap dustParticles;
     // Array of animation frame durations for the idle animation
     const int IDLE_ANIMATION_FRAME_DURATIONS[12] = {2000, 100,1500, 100, 1500, 100, 100, 100, 2500, 100, 100, 100};
