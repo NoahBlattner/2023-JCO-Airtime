@@ -52,6 +52,14 @@ GameCore::~GameCore() {
 }
 
 /**
+ * Changes the current level
+ * @param levelName The name of the level to load
+ */
+void GameCore::loadLevel(QString levelName) {
+    levelLoader->loadLevel(levelName);
+}
+
+/**
  * Called when the player dies
  */
 void GameCore::onPlayerDeath() {

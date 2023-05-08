@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "DirectionalEntityCollider.h"
 #include "AdvancedCollisionSprite.h"
+#include "LevelTrigger.h"
 
 //! Constructeur
 //! \param core Le gamecore
@@ -53,6 +54,8 @@ QList<Sprite *> LevelLoader::loadLevel(const QString& levelName) {
         QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier de niveau " + levelName + ".");
         return {};
     }
+
+    unloadLevel(); // On décharge le niveau actuel
 
     // On prend les données du fichier et on le ferme
     QJsonDocument jsonDocument = QJsonDocument::fromJson(file.readAll());
@@ -115,6 +118,9 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
     if (tag.isEmpty()) {
         // Create a simple sprite
         sprite = new Sprite(imagePath);
+    } else if (tag.startsWith("LevelTrigger")) {
+        // Create a level trigger
+        sprite = new LevelTrigger(m_pCore, tag.split("-")[1]);
     } else if (tag.startsWith("DirectionalCollider")) {
         DirectionalEntityCollider::BlockingSides blockingSides;
 
@@ -166,7 +172,7 @@ void LevelLoader::unloadLevel() {
     // Delete all sprites
     for (Sprite* sprite : m_pCore->scene()->sprites()) {
         m_pCore->scene()->removeSpriteFromScene(sprite);
-        delete sprite;
+        sprite->deleteLater();
     }
 }
 

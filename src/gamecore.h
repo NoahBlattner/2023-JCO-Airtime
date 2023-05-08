@@ -40,6 +40,8 @@ public:
 
     inline GameScene* scene() const { return m_pScene; }
 
+    void loadLevel(QString levelName);
+
 signals:
     void notifyMouseMoved(QPointF newMousePosition);
     void notifyMouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);

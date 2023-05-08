@@ -130,6 +130,14 @@
             "textureName": "plateforme.png",
             "x": 3600,
             "y": 200
+        },
+        {
+            "rotation": 0,
+            "scale": 0.2,
+            "tag": "LevelTrigger-level2",
+            "textureName": "kill-zone.png",
+            "x": 3517,
+            "y": 0
         }
     ],
     "tags": [
@@ -137,6 +145,7 @@
         "BlockAll",
         "Player",
         "KillZone",
-        "KillZone?Anim:50,50"
+        "KillZone?Anim:50,50",
+        "LevelTrigger-level2"
     ]
 }
