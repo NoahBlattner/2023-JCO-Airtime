@@ -32,7 +32,7 @@ public:
 
     // Player constants
     const QRectF PLAYER_COLLISION_RECT = QRectF(0, 5, 56, 150);
-    const float PLAYER_GRAVITY_OVERRIDE = -12;
+    const float PLAYER_GRAVITY_OVERRIDE = -11;
     const float PLAYER_FRICTION_OVERRIDE = .75;
     const float PLAYER_WALK_SPEED = 2;
     const float PLAYER_JUMP_SPEED = -2.5;
@@ -68,7 +68,7 @@ private:
     // Array of animation frame durations for the idle animation
     const int IDLE_ANIMATION_FRAME_DURATIONS[12] = {2000, 100,1500, 100, 1500, 75, 75, 75, 2500, 75, 75, 75};
     const int WALK_ANIMATION_FRAME_DURATIONS[8] = {50, 50, 50, 50, 50, 50, 50, 50};
-    const int JUMP_ANIMATION_FRAME_DURATIONS[5] = {100, 100, 100, 100, 200};
+    const int JUMP_ANIMATION_FRAME_DURATIONS[5] = {100, 100, 100, 100, 100};
     const int DASH_ANIMATION_FRAME_DURATIONS[2] = {25, 25};
     const int DUST_FRAME_DURATIONS[3] = {50, 100, 50};
 

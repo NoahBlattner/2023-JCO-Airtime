@@ -185,6 +185,7 @@ public:
     void clearAnimations();
     int animationCount() const;
     void setActiveAnimation(int index);
+    void createAnimation(const QImage& spritesheet, QList<int> frameDurationList);
 
     void setEmitSignalEndOfAnimationEnabled(bool enabled);
     bool isEmitSignalEndOfAnimationEnabled() const;
@@ -236,8 +237,6 @@ protected:
     QList<Sprite*> collidingSprites(const QRectF& rRect) const;
     QList<Sprite*> collidingSprites(const QPainterPath& rShape) const;
     GameScene* m_pParentScene;
-
-    void createAnimation(const QImage& spritesheet, QList<int> frameDurationList);
 
 private:
     static int s_spriteCount;

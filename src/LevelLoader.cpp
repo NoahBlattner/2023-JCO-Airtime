@@ -104,10 +104,12 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
     // On crée la sprite avec son image
     Sprite* sprite = nullptr;
 
-    QString tag = spriteObject["tag"].toString();
     QString imagePath = QDir::toNativeSeparators(GameFramework::imagesPath() +
             spriteObject["textureName"].toString());
 
+    // Get the tag
+    QList<QString> tagInfos = spriteObject["tag"].toString().split("?");
+    QString tag = tagInfos[0];
     qDebug() << "Loading sprite " << imagePath << " with tag " << tag;
 
     if (tag.isEmpty()) {
@@ -128,7 +130,7 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
 
         // Create a directional collider
         sprite = new DirectionalEntityCollider(imagePath, blockingSides);
-    } else if (tag == "Player") {
+    } else if (tag.startsWith("Player")) {
         // Create a player
         sprite = new Player(m_pCore);
     } else {
@@ -146,6 +148,11 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
     sprite->setPos(spriteObject["x"].toDouble(), spriteObject["y"].toDouble());
     sprite->setScale(spriteObject["scale"].toDouble());
     sprite->setRotation(spriteObject["rotation"].toInt());
+
+    // If additional parameters are specified, apply them
+    if (tagInfos.size() > 1) {
+        applyParameters(sprite, tagInfos[1]);
+    }
 
     m_pCore->scene()->addSpriteToScene(sprite); // On ajoute la sprite à la scène
 
@@ -171,5 +178,32 @@ void LevelLoader::reloadCurrentLevel() {
     QString level = m_currentLevel;
     unloadLevel();
     loadLevel(level);
+}
+
+/**
+ * Applies parameters to a sprite.
+ * Such as an animation to play.
+ * @param pSprite The sprite to apply the parameters to.
+ * @param params The string containing the parameters to apply.
+ */
+void LevelLoader::applyParameters(Sprite* pSprite, const QString params) {
+    QList<QString> parameterList = params.split("&");
+
+    for (const QString& parameter : parameterList) {
+        if (parameter.startsWith("Anim:")) {
+            // Get animation times
+            QList<QString> timesInString = parameter.split(":")[1].split(",");
+            QList<int> times;
+
+            // Convert to ints
+            foreach (QString time, timesInString) {
+                times.append(time.toInt());
+            }
+
+            // Create the animation in the sprite
+            pSprite->createAnimation(pSprite->pixmap().toImage(), times);
+            pSprite->startAnimation();
+        }
+    }
 }
 
