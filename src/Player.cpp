@@ -86,9 +86,7 @@ void Player::initAnimations() {
 
     // Dash animation
     image = QImage(QDir::toNativeSeparators(GameFramework::imagesPath() + "/dash.png"));
-    QList<int> dashFrameDurations;
-    dashFrameDurations.append(PLAYER_DASH_TIME);
-    createAnimation(image, dashFrameDurations);
+    createAnimation(image, QList<int>::fromReadOnlyData(DASH_ANIMATION_FRAME_DURATIONS));
 
     startAnimation();
 }
