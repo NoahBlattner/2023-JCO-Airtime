@@ -31,7 +31,7 @@ private:
     Sprite* loadSprite(const QJsonObject& spriteObject);
     QList<Sprite*> loadSprites(const QJsonArray& spritesArray);
 
-    void applyParameters(Sprite* pSprite, const QString params);
+    void applyParameters(Sprite* pSprite, QString params);
 };
 
 

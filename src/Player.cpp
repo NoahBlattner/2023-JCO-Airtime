@@ -181,14 +181,15 @@ void Player::setAnimation(Player::AnimationState state) {
             break;
     }
 
+    // Set the new animation
+    setActiveAnimation(newAnimIndex);
+
     if (currentAnimationState != state) { // If the animation state changed
         // Start the animation (in case it was stopped by JUMP animation)
         startAnimation();
     }
 
-    // Set the new animation
     currentAnimationState = state;
-    setActiveAnimation(newAnimIndex);
 }
 
 /**
@@ -231,7 +232,7 @@ void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
 }
 
 /**
- * Shows dust particles at the bottom of the player
+ * Shows dust particles at the feet of the player
  */
 void Player::showDustParticles() const {
     QPoint playerBottomCenter = QPoint(sceneBoundingRect().center().x(), sceneBoundingRect().bottom());
@@ -294,9 +295,6 @@ void Player::dash(QVector2D direction) {
     isDashing = true;
     dashEnabled = false;
 
-    // Set the animation to dash
-    setAnimation(DASH);
-
     if (direction.isNull()) { // If the direction is null
         // Dash in the directionRotation the player is facing
         direction = QVector2D(playerFaceDirection, 0);
@@ -310,6 +308,8 @@ void Player::dash(QVector2D direction) {
     // get angle of vector
     float angle = atan2(direction.y(), direction.x()) * 180 / M_PI;
 
+    // Set the animation to dash
+    setAnimation(DASH);
     // Rotate player for animation
     setRotation(angle);
 

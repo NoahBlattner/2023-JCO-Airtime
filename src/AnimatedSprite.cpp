@@ -6,8 +6,8 @@
 
 #include <utility>
 
-AnimatedSprite::AnimatedSprite(const QImage& animation, QList<int> frameDurations, bool loop) : Sprite(){
-    createAnimation(animation, std::move(frameDurations));
+AnimatedSprite::AnimatedSprite(const QImage& animationSpriteSheet, QList<int> frameDurations, bool loop) : Sprite(){
+    createAnimation(animationSpriteSheet, std::move(frameDurations));
 
     if (!loop) { // If the animation is not supposed to loop
         // Connect the animationFinished signal to the deleteLater slot

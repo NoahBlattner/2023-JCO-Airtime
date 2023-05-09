@@ -25,7 +25,7 @@ class QImage;
 class AnimatedSprite : public Sprite {
 
 public:
-    AnimatedSprite(const QImage& animation, QList<int> frameDurations, bool loop = false);
+    AnimatedSprite(const QImage& animationSpriteSheet, QList<int> frameDurations, bool loop = false);
 };
 
 

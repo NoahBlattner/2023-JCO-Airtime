@@ -264,7 +264,6 @@ private:
 private slots:
     void onNextAnimationFrame();
     void endShowFrame();
-
 };
 
 #ifdef QT_DEBUG

@@ -59,7 +59,7 @@ private:
 
     bool playerHasDied = false;
 
-    void reset();
+    void resetLevel();
 
 public slots:
     void onPlayerDeath();

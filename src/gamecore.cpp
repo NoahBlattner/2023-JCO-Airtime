@@ -70,7 +70,7 @@ void GameCore::onPlayerDeath() {
 /**
  * Resets the game
  */
-void GameCore::reset() {
+void GameCore::resetLevel() {
     levelLoader->reloadCurrentLevel();
     playerHasDied = false;
 }
@@ -97,7 +97,7 @@ void GameCore::keyPressed(int key) {
             m_pGameCanvas->stopTick();
             break;
         case Qt::Key_R:
-            reset();
+            resetLevel();
             break;
     }
 
@@ -117,7 +117,7 @@ void GameCore::keyReleased(int key) {
 void GameCore::tick(long long elapsedTimeInMilliseconds) {
     if (playerHasDied) { // If the player has died during the last tick,
         // Reset the game
-        reset();
+        resetLevel();
     }
 }
 
