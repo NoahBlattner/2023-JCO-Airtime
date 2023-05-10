@@ -7,7 +7,6 @@ Différents obstacles se trouvant dans le niveau réinitialise le niveau lorsque
 
 Les niveaux sont complétments généré depuis des fichiers JSON.
 Il est donc possible de modifier ou même d'ajouté de divers niveaux et ainsi personnalisé complétement son experience de jeu.
-Vous trouverez un tutoriel pour ceci dans le wiki.
 Un wiki décrivant ce procès peut être trouvé [ici](https://github.com/divtec-cejef/2023-JCO-Airtime/wiki).
 
 ## Contrôles
