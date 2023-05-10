@@ -15,9 +15,9 @@ PhysicsEntity::PhysicsEntity(const QString &rImagePath, QGraphicsItem* pParent) 
 
 };
 
-//! Set the parent scene
-//! Automatically registers the player for ticks when the scene is set
-//! \param pScene The parent scene
+//! Set the parent scene.
+//! Automatically registers the player for ticks when the scene is set.
+//! \param pScene The parent scene.
 void PhysicsEntity::setParentScene(GameScene *pScene) {
     Sprite::setParentScene(pScene);
 
@@ -25,9 +25,9 @@ void PhysicsEntity::setParentScene(GameScene *pScene) {
     registerForTick();
 }
 
-//! Tick handler
-//! Applies gravity and moves the entity based on the velocity and the elapsed time
-//! \param elapsedTimeInMilliseconds The elapsed time in milliseconds
+//! Tick handler :
+//! Applies gravity and moves the entity based on the velocity and the elapsed time.
+//! \param elapsedTimeInMilliseconds The elapsed time in milliseconds.
 void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
     // If gravity is enabled, apply it
     if (gravityEnabled) {
@@ -47,9 +47,9 @@ void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
     move(velocity() * elapsedTimeInMilliseconds);
 }
 
-//! Move the entity by a given vector
-//! This movement is blocked by other sprites and the scene boundaries
-//! \param moveVector The vector to move the entity by
+//! Move the entity by a given vector.
+//! This movement is blocked by other sprites and the scene boundaries.
+//! \param moveVector The vector to move the entity by.
 void PhysicsEntity::move(QVector2D moveVector) {
     if (moveVector.isNull()) { // If the move vector is null, do nothing
         return;
@@ -71,11 +71,11 @@ void PhysicsEntity::move(QVector2D moveVector) {
     reevaluateGrounded();
 }
 
-//! Returns a list of sprites that the sprite is colliding with
-//! Only returns sprites that are in the colliding classes list
-//! And only returns directional entity colliders that are currently blocking the entity
-//! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite
-//! \return A list of sprites that the sprite is colliding with
+//! Returns a list of sprites that the sprite is colliding with.
+//! Only returns sprites that are in the colliding classes list.
+//! And only returns directional entity colliders that are currently blocking the entity.
+//! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite.
+//! \return A list of sprites that the sprite is colliding with.
 QList<AdvancedCollisionSprite*> PhysicsEntity::getCollidingSprites(QRectF rectF) const {
     auto collidingSprites = AdvancedCollisionSprite::getCollidingSprites(rectF);
 
@@ -92,8 +92,8 @@ QList<AdvancedCollisionSprite*> PhysicsEntity::getCollidingSprites(QRectF rectF)
     return collidingSprites;
 }
 
-//! Limits a RectF to the scene rect
-//! \param rect The reference to the RectF
+//! Limits a RectF to the scene rect.
+//! \param rect The reference to the RectF.
 void PhysicsEntity::limitRectToScene(QRectF &rect) const {
     // If the given rect is outside the scene, move it back inside
     if (rect.left() < 0) {
@@ -109,9 +109,9 @@ void PhysicsEntity::limitRectToScene(QRectF &rect) const {
     }
 }
 
-//! Aligns a RectF to a sprite
-//! \param newRect The reference to the RectF
-//! \param sprite The sprite to align to
+//! Aligns a RectF to a sprite.
+//! \param newRect The reference to the RectF.
+//! \param sprite The sprite to align to.
 void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
     if (pSprite) { // If the sprite is not null
         QRectF otherCollisionRect = getCollisionRect(pSprite);
@@ -138,10 +138,10 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
     }
 }
 
-//! Reevaluate if the entity is on the ground
-//! This is done by checking if the entity is colliding with another sprite at the bottom
-//! And if the entity is at the bottom of the scene
-//! \return True if the entity is on the ground, false otherwise
+//! Reevaluate if the entity is on the ground.
+//! This is done by checking if the entity is colliding with another sprite at the bottom.
+//! And if the entity is at the bottom of the scene.
+//! \return True if the entity is on the ground, false otherwise.
 bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
     QRectF groundRect = collisionRect().translated(0, GROUNDED_DISTANCE);
@@ -160,10 +160,10 @@ bool PhysicsEntity::reevaluateGrounded() {
     return m_isOnGround;
 }
 
-//! Called when the entity collides with another sprite
-//! If the collider is a directional entity collider and the entity is not blocked by it, the collision is ignored
-//! Otherwise, the parent onCollision function is called and the entity is aligned to the other sprite
-//! \param pOther The other sprite
+//! Called when the entity collides with another sprite.
+//! If the collider is a directional entity collider and the entity is not blocked by it, the collision is ignored.
+//! Otherwise, the parent onCollision function is called and the entity is aligned to the other sprite.
+//! \param pOther The other sprite.
 void PhysicsEntity::onCollision(AdvancedCollisionSprite* pOther) {
     auto* directionalCollider = dynamic_cast<DirectionalEntityCollider*>(pOther);
     if (directionalCollider != nullptr &&

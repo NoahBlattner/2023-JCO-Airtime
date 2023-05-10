@@ -6,7 +6,7 @@
 
 #include "GameCore.h"
 #include <QDir>
-LevelTrigger::LevelTrigger(GameCore* gameCore, QString levelName) {
+LevelTrigger::LevelTrigger(GameCore* gameCore, QString levelName, QGraphicsItem* pParent) : AdvancedCollisionSprite(pParent) {
     m_pCore = gameCore;
     m_levelName = levelName;
 
@@ -17,9 +17,9 @@ LevelTrigger::LevelTrigger(GameCore* gameCore, QString levelName) {
     isTrigger = true;
 }
 
-//! Override of the onTrigger method
-//! Loads the level when the player collides with the trigger
-//! \param pOther The other sprite
+//! Override of the onTrigger method :
+//! Loads the level when the player collides with the trigger.
+//! \param pOther The other sprite.
 void LevelTrigger::onTrigger(AdvancedCollisionSprite* pOther) {
     AdvancedCollisionSprite::onTrigger(pOther);
 

@@ -11,8 +11,8 @@
 #include <QDir>
 #include <QKeyEvent>
 
-//! Constructor
-//! \param gameCore The game core which sends the key events
+//! Constructor :
+//! \param gameCore The game core which sends the key events.
 Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent) {
     // Create animations
     initAnimations();
@@ -40,16 +40,16 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     applyPressedKeys(gameCore);
 }
 
-//! Apply the pressed keys to the player
-//! This method can be used to apply the already pressed keys when the player is created
-//! \param gameCore The game core which sends the key events
+//! Apply the pressed keys to the player.
+//! This method can be used to apply the already pressed keys when the player is created.
+//! \param gameCore The game core which sends the key events.
 void Player::applyPressedKeys(GameCore* gameCore) {
     foreach (int key, gameCore->pressedKeys()) {
         onKeyPressed(key);
     }
 }
 
-//! Initialize the player animations
+//! Initialize the player animations.
 void Player::initAnimations() {
     // Transitions
     startRunFrame = QPixmap(QDir::toNativeSeparators(GameFramework::imagesPath() + "/start-run.png"));
@@ -90,9 +90,9 @@ void Player::initAnimations() {
 }
 
 //! Player tick handler.
-//! Updates the player x velocity based on inputs to make it move
-//! Updates the animation of the player
-//! \param elapsedTimeInMilliseconds The elapsed time since the last tick
+//! Updates the player x velocity based on inputs to make it move.
+//! Updates the animation of the player.
+//! \param elapsedTimeInMilliseconds The elapsed time since the last tick.
 void Player::tick(long long elapsedTimeInMilliseconds) {
     if (!isDashing) {
         walk(elapsedTimeInMilliseconds);
@@ -104,9 +104,9 @@ void Player::tick(long long elapsedTimeInMilliseconds) {
     parentScene()->centerViewOn(this);
 }
 
-//! Override of the onCollision method
-//! Handles the different event caused by a collision within the player
-//! \param other The other sprite that collided with this one
+//! Override of the onCollision method.
+//! Handles the different event caused by a collision within the player.
+//! \param other The other sprite that collided with this one.
 void Player::onCollision(AdvancedCollisionSprite* other) {
     PhysicsEntity::onCollision(other);
 
@@ -117,9 +117,9 @@ void Player::onCollision(AdvancedCollisionSprite* other) {
     }
 }
 
-//! Reevaluate the grounded state of the player
-//! Reset the dash if the player is grounded
-//! \return True if the player is on the ground
+//! Reevaluate the grounded state of the player.
+//! Reset the dash if the player is grounded.
+//! \return True if the player is on the ground.
 bool Player::reevaluateGrounded() {
     bool previousGrounded = isOnGround();
     PhysicsEntity::reevaluateGrounded();
@@ -142,8 +142,8 @@ void Player::die() {
     emit notifyPlayerDied();
 }
 
-//! Set the current animation
-//! \param state The animation state to set
+//! Set the current animation.
+//! \param state The animation state to set.
 void Player::setAnimation(Player::AnimationState state) {
     int newAnimIndex = 0;
 
@@ -182,8 +182,8 @@ void Player::setAnimation(Player::AnimationState state) {
     currentAnimationState = state;
 }
 
-//! Apply the walk input to the player according to the elapsed time
-//! \param elapsedTimeInMilliseconds The elapsed time since the last tick
+//! Apply the walk input to the player according to the elapsed time.
+//! \param elapsedTimeInMilliseconds The elapsed time since the last tick.
 void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
     float prevXVelocity = velocity().x();
 
@@ -219,7 +219,7 @@ void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
     setXVelocity(newXVelocity);
 }
 
-//! Shows dust particles at the feet of the player
+//! Shows dust particles at the feet of the player.
 void Player::showDustParticles() const {
     QPoint playerBottomCenter = QPoint(sceneBoundingRect().center().x(), sceneBoundingRect().bottom());
 
@@ -232,8 +232,8 @@ void Player::showDustParticles() const {
  * MOUVEMENT
  ****************************/
 
-//! Make the player walk based on the input direction and the elapsed time
-//! @param elapsedTimeInMilliseconds
+//! Make the player walk based on the input direction and the elapsed time.
+//! @param elapsedTimeInMilliseconds The elapsed time since the last tick.
 void Player::walk(long long int elapsedTimeInMilliseconds) {
     // Get the new face direction if it changed
     if (playerFaceDirection * inputDirection.x() < 0) { // If the player is changing walking direction
@@ -248,8 +248,8 @@ void Player::walk(long long int elapsedTimeInMilliseconds) {
     applyWalkInput(elapsedTimeInMilliseconds);
 }
 
-//! Makes the player jump
-//! Only works if the player is on the ground
+//! Makes the player jump.
+//! Only works if the player is on the ground.
 void Player::jump() {
     // If the player is on the ground
     if (isOnGround()) {
@@ -262,11 +262,11 @@ void Player::jump() {
     }
 }
 
-//! Makes the player dash in a directionRotation
-//! This temporarily disables gravity and friction
-//! The dash is ended after PLAYER_DASH_TIME seconds
-//! The dash is not allowed if the player is already dashing or if the dash is not enabled
-//! \param directionRotation The directionRotation to dash in
+//! Makes the player dash in a directionRotation.
+//! This temporarily disables gravity and friction.
+//! The dash is automatically ends after PLAYER_DASH_TIME seconds.
+//! The dash is not allowed if the player is already dashing or if the dash is not enabled.
+//! \param directionRotation The directionRotation to dash in.
 void Player::dash(QVector2D direction) {
     if (isDashing || !dashEnabled) { // Do not allow dashing if already dashing
         return;
@@ -301,7 +301,7 @@ void Player::dash(QVector2D direction) {
     dashTimer.start();
 }
 
-//! Ends the dash by removing the dash velocity and re-enabling gravity and friction
+//! Ends the dash by removing the dash velocity and re-enabling gravity and friction.
 void Player::endDash() {
     isDashing = false;
 
@@ -336,8 +336,8 @@ void Player::endDash() {
  * SLOTS
  ****************************/
 
-//! Slot for key pressed events
-//! \param event The key event
+//! Slot for key pressed events.
+//! \param event The key event.
 void Player::onKeyPressed(int key) {
     switch (key) {
         // Adapt the move direction based on the key pressed
@@ -362,8 +362,8 @@ void Player::onKeyPressed(int key) {
     }
 }
 
-//! Slot for key released events
-//! \param event The key event
+//! Slot for key released events.
+//! \param event The key event.
 void Player::onKeyReleased(int key) {
     switch (key) {
         // Adapt the move direction based on the key released

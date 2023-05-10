@@ -23,11 +23,11 @@ class GameCore;
 //! It simply awaits a collision with an Player entity to trigger a level change.
 class LevelTrigger : public AdvancedCollisionSprite {
 
-public :
-    LevelTrigger(GameCore* gameCore, QString levelName);
+public:
+    LevelTrigger(GameCore* gameCore, QString levelName, QGraphicsItem* pParent = nullptr);
 
 protected:
-    virtual void onTrigger(AdvancedCollisionSprite* pOther) override;
+    void onTrigger(AdvancedCollisionSprite* pOther) override;
 
 private:
     GameCore* m_pCore;

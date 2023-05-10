@@ -18,71 +18,68 @@
 #include "AdvancedCollisionSprite.h"
 #include "LevelTrigger.h"
 
-//! Constructeur
-//! \param core Le gamecore
-//! \param levelsPath Le chemin des niveaux
+//! Constructor :
+//! \param core The game core managing the scene in which the level will be loaded.
+//! \param levelsPath Le chemin des niveaux.
 LevelLoader::LevelLoader(GameCore* pCore, const QString& levelsPath) {
     m_pCore = pCore;
     m_levelsPath = levelsPath;
 }
 
-//! Charge un niveau dans la scène
-//! \param scene La scène dans laquelle charger le niveau
-//! \param levelName Le nom du niveau
-//! \return La liste des sprites chargés
+//! Loads a level in the scene.
+//! \param levelName The name of the level to load.
+//! \return The list of sprites loaded.
 QList<Sprite *> LevelLoader::loadLevel(const QString& levelName) {
     // Concaténation du chemin du niveau avec le nom du niveau
     QString levelPath = m_levelsPath + "/" + levelName;
     qDebug() << "Chargement du niveau " << levelPath;
 
-    if (!levelName.endsWith(".json")) { // Si le nom du niveau ne finit pas par .json
+    if (!levelName.endsWith(".json")) { // If the level name doesn't end with ".json"
         levelPath += ".json";
     }
 
     levelPath = QDir::toNativeSeparators(levelPath);
 
-    if (!QFile::exists(levelPath)) { // Si le fichier n'existe pas
+    if (!QFile::exists(levelPath)) { // SIf the file doesn't exist
         // On affiche une erreur
         QMessageBox::critical(nullptr, "Erreur", "Le fichier de niveau " + levelName + " n'existe pas.");
         return {};
     }
 
     QFile file(levelPath);
-    if (!file.open(QIODevice::ReadOnly)) { // Si on ne peut pas ouvrir le fichier
+    if (!file.open(QIODevice::ReadOnly)) { // If the file can't be opened
         // On affiche une erreur
         QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier de niveau " + levelName + ".");
         return {};
     }
 
-    unloadLevel(); // On décharge le niveau actuel
+    unloadLevel(); // Unload the current level
 
-    // On prend les données du fichier et on le ferme
+    // Load the data from the JSON file
     QJsonDocument jsonDocument = QJsonDocument::fromJson(file.readAll());
     file.close();
 
-    // On récupère l'objet JSON
     QJsonObject levelObject = jsonDocument.object();
 
     // Remember the current level's name
     m_currentLevel = levelName;
 
-    // On adapte la taille de la scène
+    // Adapt scene size
     int sceneWidth = levelObject["sceneWidth"].toInt();
     int sceneHeight = levelObject["sceneHeight"].toInt();
     m_pCore->scene()->setSceneRect(0, 0, sceneWidth, sceneHeight);
 
-    // On charge l'arrière-plan
+    // Load the background image
     QImage backgroundImage = QImage(GameFramework::imagesPath() + levelObject["background"].toString());
     backgroundImage = backgroundImage.scaled(sceneWidth, sceneHeight);
     m_pCore->scene()->setBackgroundImage(backgroundImage);
 
-    // On charge les sprites
+    // Load the sprites
     return loadSprites(levelObject["sprites"].toArray());
 }
 
-//! Charge les sprites dans la scène
-//! \param scene La scène dans laquelle charger les sprites
-//! \param spritesArray Le tableau JSON des sprites
+//! Loads sprites into the scene.
+//! \param spritesArray The JSON array containing the sprites data.
 QList<Sprite*> LevelLoader::loadSprites(const QJsonArray& spritesArray) {
     QList<Sprite*> sprites;
 
@@ -101,7 +98,6 @@ QList<Sprite*> LevelLoader::loadSprites(const QJsonArray& spritesArray) {
 //! \param spriteObject The JSON object containing the sprite data.
 //! \return The loaded sprite.
 Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
-    // On crée la sprite avec son image
     Sprite* sprite = nullptr;
 
     QString imagePath = QDir::toNativeSeparators(GameFramework::imagesPath() +
@@ -117,7 +113,7 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
         sprite = new Sprite(imagePath);
     } else if (tag.startsWith("LevelTrigger")) {
         // Create a level trigger
-        sprite = new LevelTrigger(m_pCore, tag.split("-")[1]);
+        sprite = new LevelTrigger(m_pCore, tag . split("-")[1]);
     } else if (tag.startsWith("DirectionalCollider")) {
         DirectionalEntityCollider::BlockingSides blockingSides;
 
@@ -146,7 +142,7 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
         sprite = advSprite;
     }
 
-    // On applique les transformations
+    // Apply transformations
     sprite->setTransformOriginPoint(sprite->globalBoundingRect().center());
     sprite->setPos(spriteObject["x"].toDouble(), spriteObject["y"].toDouble());
     sprite->setScale(spriteObject["scale"].toDouble());
@@ -157,12 +153,12 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
         applyParameters(sprite, tagInfos[1]);
     }
 
-    m_pCore->scene()->addSpriteToScene(sprite); // On ajoute la sprite à la scène
+    m_pCore->scene()->addSpriteToScene(sprite); // Add the sprite to the scene
 
     return sprite;
 }
 
-//! Décharge un niveau de la scène
+//! Unloads the current level.
 void LevelLoader::unloadLevel() {
     m_currentLevel = "";
 

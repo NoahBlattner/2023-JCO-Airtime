@@ -1,8 +1,8 @@
 /**
-\file     Player.h
-\brief    Déclaration de la classe Player
-\author   Blattner Noah
-\date     avril 2023
+  \file     Player.h
+  \brief    Déclaration de la classe Player
+  \author   Blattner Noah
+  \date     avril 2023
 */
 
 #ifndef INC_2023_JCO_AIRTIME_PLAYER_H

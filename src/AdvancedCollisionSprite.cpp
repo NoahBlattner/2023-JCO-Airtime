@@ -12,20 +12,20 @@ AdvancedCollisionSprite::AdvancedCollisionSprite(const QString& rImagePath, QRec
     setCollisionOverride(collisionOverride);
 }
 
-//! Sets the collision override
-//! The collision override is used instead of the scene bounding rect for collision detection
-//! \param rect The rect to use as the new collision override
+//! Sets the collision override.
+//! The collision override is used instead of the scene bounding rect for collision detection.
+//! \param rect The rect to use as the new collision override.
 void AdvancedCollisionSprite::setCollisionOverride(QRectF rect) {
     collisionOverrideRect = rect;
 }
 
-//! Removes the collision override
+//! Removes the collision override.
 void AdvancedCollisionSprite::removeCollisionOverride() {
     collisionOverrideRect = QRectF();
 }
 
-//! Returns the collision rect
-//! \return The collision rect. If the collision override is empty, returns the scene bounding rect
+//! Returns the collision rect.
+//! \return The collision rect. If the collision override is empty, returns the scene bounding rect.
 QRectF AdvancedCollisionSprite::collisionRect() const {
     if (collisionOverrideRect.isEmpty()) { // If the collision override is empty
         return sceneBoundingRect();
@@ -42,10 +42,10 @@ QRectF AdvancedCollisionSprite::collisionRect() const {
     }
 }
 
-//! Get the collision rect of any sprite
-//! If the sprite is an advanced collision sprite, use the collision rect instead of the scene bounding rect
-//! \param pSprite The sprite to get the collision rect of
-//! \return The collision rect of the sprite
+//! Get the collision rect of any sprite.
+//! If the sprite is an advanced collision sprite, use the collision rect instead of the scene bounding rect.
+//! \param pSprite The sprite to get the collision rect of.
+//! \return The collision rect of the sprite.
 QRectF AdvancedCollisionSprite::getCollisionRect(Sprite* pSprite) {
     QRectF otherCollisionRect = pSprite->sceneBoundingRect();
 
@@ -57,10 +57,10 @@ QRectF AdvancedCollisionSprite::getCollisionRect(Sprite* pSprite) {
     return otherCollisionRect;
 }
 
-//! Adds a tag to the colliding tags list
-//! If the tag is "BlockAll", the list will be cleared and "BlockAll" will be added
-//! If the list contains "BlockAll", it will be cleared and the tag will be added
-//! \param tagName The tag name to add to the colliding tags list
+//! Adds a tag to the colliding tags list.
+//! If the tag is "BlockAll", the list will be cleared and "BlockAll" will be added.
+//! If the list contains "BlockAll", it will be cleared and the tag will be added.
+//! \param tagName The tag name to add to the colliding tags list.
 void AdvancedCollisionSprite::addCollidingTag(const QString &tagName) {
     if (tagName == "BlockAll") { // If the tag is "BlockAll"
         collideAll();
@@ -72,22 +72,22 @@ void AdvancedCollisionSprite::addCollidingTag(const QString &tagName) {
     }
 }
 
-//! Sets the colliding tags list to contain only "BlockAll"
+//! Sets the colliding tags list to contain only "BlockAll".
 void AdvancedCollisionSprite::collideAll() {
     collidingTags.clear();
     collidingTags.append("BlockAll");
 }
 
-//! Checks for intersections with other sprites
-//! Uses the current collision rect if it is not empty
-//! Else uses the current scene bounding rect
+//! Checks for intersections with other sprites.
+//! Uses the current collision rect if it is not empty.
+//! Else uses the current scene bounding rect.
 void AdvancedCollisionSprite::reevaluateIntersects() {
     reevaluateIntersects(collisionRect());
 }
 
-//! Checks for intersections with other sprites
-//! Uses the given rect
-//! \param rect The rect to check for intersections with
+//! Checks for intersections with other sprites.
+//! Uses the given rect.
+//! \param rect The rect to check for intersections with.
 void AdvancedCollisionSprite::reevaluateIntersects(QRectF rect) {
     auto collidingSprites= getCollidingSprites(rect);
 
@@ -101,10 +101,10 @@ void AdvancedCollisionSprite::reevaluateIntersects(QRectF rect) {
     }
 }
 
-//! Returns a list of AdvancedCollisionSprites that the sprite is colliding with
-//! Only returns AdvancedCollisionSprites that have the same collision tag as this sprite
-//! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite
-//! \return A list of AdvancedCollisionSprites that the sprite is colliding with
+//! Returns a list of AdvancedCollisionSprites that the sprite is colliding with.
+//! Only returns AdvancedCollisionSprites that have the same collision tag as this sprite.
+//! \param rect The rect to check for intersections with. If empty, uses the current scene bounding rect of the sprite.
+//! \return A list of AdvancedCollisionSprites that the sprite is colliding with.
 QList<AdvancedCollisionSprite*> AdvancedCollisionSprite::getCollidingSprites(QRectF rect) const {
     auto collidingSprites = m_pParentScene->collidingSprites((rect.isEmpty()) ? collisionRect() : rect);
     collidingSprites.removeAll(this);
@@ -133,16 +133,16 @@ QList<AdvancedCollisionSprite*> AdvancedCollisionSprite::getCollidingSprites(QRe
     return advCollidingSprites;
 }
 
-//! Called when the sprites intersects with another sprite as a trigger
-//! Emits the notifyTrigger signal
-//! \param pOther The other sprite
+//! Called when the sprites intersects with another sprite as a trigger.
+//! Emits the notifyTrigger signal.
+//! \param pOther The other sprite.
 void AdvancedCollisionSprite::onTrigger(AdvancedCollisionSprite* pOther) {
     emit notifyTrigger(pOther);
 }
 
-//! Called when the sprites intersects with another sprite as a collision
-//! Emits the notifyCollision signal
-//! \param pOther The other sprite
+//! Called when the sprites intersects with another sprite as a collision.
+//! Emits the notifyCollision signal.
+//! \param pOther The other sprite.
 void AdvancedCollisionSprite::onCollision(AdvancedCollisionSprite* pOther) {
     emit notifyCollision(pOther);
 }
