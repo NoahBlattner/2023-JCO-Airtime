@@ -9,4 +9,4 @@ ainsi d'atteindre la fin d'un niveau et lancer le suivant.
 - Les touches *A* et *D* peuvent être utilisé pour se déplacer à gauche et à droite respéctivement.
 - La touche *Espace* permet au joueur de sauter.
 - Le joueur peut effectuer un dash avec la touche *Shift*
-  - Le dash est efféctué dans la direction actuelle du mouvement du joueur. De plus les touche *W* et *S* peuvent être utilisé pour plus de directions.
+  - Le dash est efféctué dans la direction actuelle du mouvement du joueur. De plus les touches *W* et *S* peuvent être utilisé pour plus de directions.
