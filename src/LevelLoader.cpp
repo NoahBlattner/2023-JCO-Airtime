@@ -147,6 +147,8 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
     sprite->setPos(spriteObject["x"].toDouble(), spriteObject["y"].toDouble());
     sprite->setScale(spriteObject["scale"].toDouble());
     sprite->setRotation(spriteObject["rotation"].toInt());
+    sprite->setZValue(spriteObject["z-index"].toInt());
+    sprite->setOpacity(spriteObject["opacity"].toDouble());
 
     // If additional parameters are specified, apply them
     if (tagInfos.size() > 1) {

@@ -1,13 +1,18 @@
 /*! \mainpage 2023-JCO-Airtime
  *
- * \author 
+ * \author Noah Blattner
  * \section intro_sec Introduction
  *
- * Ce projet est pour l'instant une architecture de base en vue de la création d'un jeu simple en 2D.
- * Il est plutôt orienté jeu d'action.
+ * Un simple platformer 2D codé en C++ avec Qt.
+ * Créé avec le GameFramework de JCO, lors de l'atelier de programmation de jeux vidéo
  *
- * Il prend en charge l'organisation des classes nécessaires à l'affichage
- * d'une surface de jeu en deux dimensions.
+ * Le jeu consiste à sauter sur des plateformes tout en évitant des obstacles,
+ * ainsi d'atteindre la fin d'un niveau et lancer le suivant.
+ * Le joueur peut se déplacer avec les touches fléchées et sauter avec la barre d'espace.
+ * Il peut aussi faire un dash avec la touche shift.
+ *
+ * Si le joueur touche un obstacle, le niveau recommence.
+ * Si il atteint la fin du niveau le prochain niveau est chargé.
  *
  * \section architecture_sec Architecture
  * La classe MainFrm se charge d'afficher la fenêtre de l'application. Elle utilise le
