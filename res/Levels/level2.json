@@ -1,0 +1,22 @@
+{
+    "background": "city-background-streets.png",
+    "sceneHeight": 1080,
+    "sceneWidth": 4000,
+    "sprites": [
+        {
+            "rotation": 0,
+            "scale": 1,
+            "tag": "Player",
+            "textureName": "base-player.png",
+            "x": 69.34306569343065,
+            "y": 925.1824817518246
+        }
+    ],
+    "tags": [
+        "DirectionalCollider-Top",
+        "BlockAll",
+        "Player",
+        "KillZone",
+        "KillZone?Anim:50,50"
+    ]
+}

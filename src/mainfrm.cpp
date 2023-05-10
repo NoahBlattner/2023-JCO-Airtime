@@ -19,11 +19,18 @@ MainFrm::MainFrm(QWidget *pParent) : QWidget(pParent), ui(new Ui::MainFrm) {
     // Pour fermer l'application si demandé par GameCanvas.
     connect(m_pGameCanvas, &GameCanvas::requestToCloseApp, this, &QWidget::close);
 
+    // Pour quand l'application change de focus
+    connect(dynamic_cast<QGuiApplication*>(QGuiApplication::instance()), &QGuiApplication::applicationStateChanged, m_pGameCanvas, &GameCanvas::onWindowFocusChanged);
+
     // Pour que la vue adapte sa taille à celle de la fenêtre
-    //ui->grvGame->setFitToScreenEnabled(true);
+    // ui->grvGame->setFitToScreenEnabled(true);
 
     // Pour supprimer les marges de la zone de jeu
-    // ui->verticalLayout->setContentsMargins(QMargins(0,0,0,0));
+    ui->verticalLayout->setContentsMargins(QMargins(0,0,0,0));
+
+    // Deactivate the scrollbars
+    ui->grvGame->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->grvGame->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 //! Détruit la fenêtre principale.

@@ -55,6 +55,9 @@ class SpriteTickHandler;
 //! d'apparence. Il est également possible de faire changer automatiquement ces
 //! images dans le but d'obtenir un sprite animé.
 //!
+//! La méthode createAnimation() permet de créer une animation à partir d'une image contenant plusieurs images.
+//! Si nécessaire, elle cré une nouvelle animation, sinon elle ajoute les images à l'animation actuelle.
+//!
 //! La méthode addAnimationFrame() permet d'ajouter une image au sprite.
 //! Si plusieurs images sont ajoutées, elles sont conservées dans une liste qui
 //! préserve l'ordre d'ajout des images.
@@ -164,7 +167,7 @@ public:
     Sprite(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
     virtual ~Sprite() override;
 
-    void addAnimationFrame(const QPixmap& rPixmap);
+    void addAnimationFrame(const QPixmap& rPixmap, float duration);
     void setCurrentAnimationFrame(int frameIndex);
     int currentAnimationFrame() const;
     void clearAnimationFrames();
@@ -175,10 +178,14 @@ public:
     void startAnimation(int frameDuration);
     bool isAnimationRunning() const;
 
+    void showFrameFor(const QPixmap& pixmap, int durationMS);
+    bool showingFrame = false;
+
     void addAnimation();
     void clearAnimations();
     int animationCount() const;
     void setActiveAnimation(int index);
+    void createAnimation(const QImage& spritesheet, QList<int> frameDurationList);
 
     void setEmitSignalEndOfAnimationEnabled(bool enabled);
     bool isEmitSignalEndOfAnimationEnabled() const;
@@ -245,6 +252,7 @@ private:
     bool m_animationStopLater = false;
 
     QList<QList <QPixmap>> m_animationList;
+    QList<QList<float>> m_animationDurationList;
     int m_frameDuration;
     int m_currentAnimationFrame;
     int m_currentAnimationIndex;
@@ -255,7 +263,7 @@ private:
 
 private slots:
     void onNextAnimationFrame();
-
+    void endShowFrame();
 };
 
 #ifdef QT_DEBUG

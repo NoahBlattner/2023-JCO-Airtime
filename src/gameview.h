@@ -1,6 +1,8 @@
 /**
   Déclaration de la classe GameView, qui affiche une scène.
 
+  @file     gameview.h
+  @brief    Déclaration de la classe GameView.
   @author   JCO
   @date     Janvier 2015
  */

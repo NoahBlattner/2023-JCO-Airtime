@@ -16,8 +16,9 @@
 #include "resources.h"
 #include "utilities.h"
 #include "Player.h"
+#include "LevelLoader.h"
 
-const int SCENE_WIDTH = 1280;
+const int SCENE_WIDTH = 3500;
 
 //! Initialise le contrôleur de jeu.
 //! \param pGameCanvas  GameCanvas pour lequel cet objet travaille.
@@ -32,18 +33,15 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     pGameCanvas->setCurrentScene(m_pScene);
     
     // Trace un rectangle blanc tout autour des limites de la scène.
-    m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
-    
-    // Instancier et initialiser les sprite ici :
-    auto* player = new Player(this);
-    player->setPos(500, 0);
-    m_pScene->addSpriteToScene(player);
+    // m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
 
+    levelLoader = new LevelLoader(this, GameFramework::resourcesPath() + "levels");
+    levelLoader->loadLevel("mainLevel");
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
     // sinon le temps passé jusqu'au premier tick (ElapsedTime) peut être élevé et provoquer de gros
-    // déplacements, surtout si le déboggueur est démarré.
+    // déplacements, surtout si le débogueur est démarré.
     m_pGameCanvas->startTick();
 }
 
@@ -53,12 +51,48 @@ GameCore::~GameCore() {
     m_pScene = nullptr;
 }
 
+//! Changes the current level
+//! \param levelName The name of the level to load
+void GameCore::loadLevel(QString levelName) {
+    levelLoader->loadLevel(levelName);
+}
+
+//! Slot called when the player dies
+void GameCore::onPlayerDeath() {
+    qDebug() << "Player died";
+    playerHasDied = true;
+}
+
+//! Resets the game
+void GameCore::resetLevel() {
+    levelLoader->reloadCurrentLevel();
+    playerHasDied = false;
+}
+
+//! Resets the registered keys
+//! All currently pressed keys are forced to be released
+void GameCore::resetKeys() {
+    foreach (int key, m_pressedKeys) {
+        keyReleased(key);
+    }
+    m_pressedKeys.clear();
+}
+
 //! Traite la pression d'une touche.
 //! \param key Numéro de la touche (voir les constantes Qt)
-//!
 void GameCore::keyPressed(int key) {
     emit notifyKeyPressed(key);
 
+    switch (key) {
+        case Qt::Key_Escape:
+            m_pGameCanvas->stopTick();
+            break;
+        case Qt::Key_R:
+            resetLevel();
+            break;
+    }
+
+    m_pressedKeys.append(key);
 }
 
 //! Traite le relâchement d'une touche.
@@ -66,11 +100,16 @@ void GameCore::keyPressed(int key) {
 void GameCore::keyReleased(int key) {
     emit notifyKeyReleased(key);
 
+    m_pressedKeys.removeAll(key);
 }
 
 //! Cadence.
 //! \param elapsedTimeInMilliseconds  Temps écoulé depuis le dernier appel.
 void GameCore::tick(long long elapsedTimeInMilliseconds) {
+    if (playerHasDied) { // If the player has died during the last tick,
+        // Reset the game
+        resetLevel();
+    }
 }
 
 //! La souris a été déplacée.

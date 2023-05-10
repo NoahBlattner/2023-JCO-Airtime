@@ -9,10 +9,11 @@
 
 #include <QObject>
 #include <QPointF>
-
+#include "resources.h"
 
 class GameCanvas;
 class GameScene;
+class LevelLoader;
 
 //! \brief Classe qui gère la logique du jeu.
 //!
@@ -27,12 +28,19 @@ public:
 
     void keyPressed(int key);
     void keyReleased(int key);
+    inline QList<int> pressedKeys() const { return m_pressedKeys; }
+    void resetKeys();
 
     void mouseMoved(QPointF newMousePosition);
     void mouseButtonPressed(QPointF mousePosition, Qt::MouseButtons buttons);
+
     void mouseButtonReleased(QPointF mousePosition, Qt::MouseButtons buttons);
 
     void tick(long long elapsedTimeInMilliseconds);
+
+    inline GameScene* scene() const { return m_pScene; }
+
+    void loadLevel(QString levelName);
 
 signals:
     void notifyMouseMoved(QPointF newMousePosition);
@@ -42,11 +50,19 @@ signals:
     void notifyKeyReleased(int key);
 
 private:
-
     GameCanvas* m_pGameCanvas = nullptr;
     GameScene* m_pScene = nullptr;
 
-private slots:
+    QList<int> m_pressedKeys;
+
+    LevelLoader* levelLoader = nullptr;
+
+    bool playerHasDied = false;
+
+    void resetLevel();
+
+public slots:
+    void onPlayerDeath();
 
 };
 

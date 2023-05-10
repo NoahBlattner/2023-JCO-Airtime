@@ -30,7 +30,7 @@ Sprite::Sprite(QGraphicsItem* pParent) : QGraphicsPixmapItem(pParent) {
 //! \param pParent   Pointeur sur le parent (afin d'obtenir une destruction automatique de cet objet).
 Sprite::Sprite(const QPixmap& rPixmap, QGraphicsItem* pParent) : QGraphicsPixmapItem(pParent) {
     init();
-    addAnimationFrame(rPixmap);
+    addAnimationFrame(rPixmap,0);
 }
 
 //! Construit un sprite et l'initialise.
@@ -57,8 +57,9 @@ Sprite::~Sprite() {
 
 //! Ajoute une image au cycle d'animation.
 //! \param rPixmap  Image à ajouter.
-void Sprite::addAnimationFrame(const QPixmap& rPixmap) {
+void Sprite::addAnimationFrame(const QPixmap& rPixmap, float duration) {
     m_animationList[m_currentAnimationIndex] << rPixmap;
+    m_animationDurationList[m_currentAnimationIndex] << duration;
     onNextAnimationFrame();
 }
 
@@ -74,6 +75,7 @@ void Sprite::setCurrentAnimationFrame(int frameIndex) {
 
     m_currentAnimationFrame = frameIndex;
     setPixmap(m_animationList[m_currentAnimationIndex][frameIndex]);
+    setAnimationSpeed(m_animationDurationList[m_currentAnimationIndex][frameIndex]);
 }
 
 //! \return l'index de l'image d'animation actuellement affichée.
@@ -85,6 +87,7 @@ int Sprite::currentAnimationFrame() const {
 //! Le sprite devient invisible.
 void Sprite::clearAnimationFrames() {
     m_animationList[m_currentAnimationIndex].clear();
+    m_animationDurationList[m_currentAnimationIndex].clear();
     m_currentAnimationFrame = NO_CURRENT_FRAME;
     setPixmap(QPixmap()); // On enlève l'image du sprite afin d'éviter toute confusion.
 }
@@ -148,12 +151,13 @@ bool Sprite::isAnimationRunning() const {
 //! \see animationCount()
 void Sprite::addAnimation() {
     m_animationList.append(QList<QPixmap>());
-
+    m_animationDurationList.append(QList<float>());
 }
 
 //! Efface toutes les animations d'un sprite mais en préserve une vide.
 void Sprite::clearAnimations() {
     m_animationList.clear();
+    m_animationDurationList.clear();
     addAnimation();
     m_currentAnimationIndex = 0;
 }
@@ -173,8 +177,39 @@ void Sprite::setActiveAnimation(int index) {
     if (index < 0 || index >= m_animationList.count())
         index = 0;
 
+    if (index == m_currentAnimationIndex) // Pas de changement.
+        // On ne change pas l'animation pour éviter de la reset.
+        return;
+
     m_currentAnimationIndex = index;
-    setCurrentAnimationFrame(0);
+    m_currentAnimationFrame = NO_CURRENT_FRAME;
+
+    // Override stop later flag.
+    m_animationStopLater = false;
+
+    if (!showingFrame) {
+        setCurrentAnimationFrame(0);
+    }
+}
+
+//! Shows a sprite frame for a given duration.
+//! This overrides any animation for the duration.
+//! Automatically resumes animations after the duration.
+//! This can be useful to show a transition frame in between 2 animations.
+//! \param pixmap  The pixmap to show.
+//! \param duration The duration in milliseconds.
+void Sprite::showFrameFor(const QPixmap& pixmap, int duration) {
+    showingFrame = true;
+    stopAnimation();
+    setPixmap(pixmap);
+    QTimer::singleShot(duration, this, SLOT(endShowFrame()));
+}
+
+//! Called by showFrameFor() after the duration has elapsed.
+//! Restarts animations
+void Sprite::endShowFrame() {
+    showingFrame = false;
+    startAnimation();
 }
 
 //! Choisi si le signal animationFinished() doit être émis chaque fois que l'animation
@@ -392,17 +427,42 @@ void Sprite::onNextAnimationFrame() {
     int PreviousAnimationFrame = m_currentAnimationFrame;
     ++m_currentAnimationFrame;
     if (m_currentAnimationFrame >= m_animationList[m_currentAnimationIndex].count()) {
-        m_currentAnimationFrame = 0;
         if (m_emitSignalEOA)
             emit animationFinished();
         if (m_animationStopLater) {
             m_animationStopLater = false;
             stopAnimation(IMMEDIATE_STOP);
+            return;
         }
+        m_currentAnimationFrame = 0;
     }
     if (PreviousAnimationFrame != m_currentAnimationFrame) {
         setPixmap(m_animationList[m_currentAnimationIndex][m_currentAnimationFrame]);
+        setAnimationSpeed(m_animationDurationList[m_currentAnimationIndex][m_currentAnimationFrame]);
         update();
+    }
+}
+
+//! Create an animation from a spritesheet.
+//! If the current animation is empty, it is used. Otherwise, a new animation is created.
+//! The spritesheet is divided into frames of equal width. The height of each frame is the height of the spritesheet.
+//! The length of the frameDurations list determines the number of frames.
+//! \param spritesheet The spritesheet image.
+//! \param frameDurations The duration of each frame in the animation. The size of the list must be equal to the number of frames.
+void Sprite::createAnimation(const QImage& spritesheet, QList<int> frameDurations) {
+    if (!m_animationList[m_currentAnimationIndex].empty()) { // If the current animation is not empty
+        // Create a new animation
+        addAnimation();
+        setActiveAnimation(m_animationList.count() - 1);
+    }
+
+    // Get the width of each frame
+    int frameWidth = spritesheet.width() / frameDurations.count();
+
+    // Get the images from the spritesheet and add them to the animation
+    for (int i = 0; i < frameDurations.count(); i++) {
+        addAnimationFrame(QPixmap::fromImage(spritesheet.copy(i * frameWidth, 0, frameWidth, spritesheet.height())),
+                          frameDurations[i]);
     }
 }
 

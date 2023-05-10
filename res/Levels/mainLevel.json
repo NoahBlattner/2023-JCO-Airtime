@@ -1,0 +1,185 @@
+{
+    "background": "city-background-streets.png",
+    "sceneHeight": 1080,
+    "sceneWidth": 4000,
+    "sprites": [
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "Player",
+            "textureName": "base-player.png",
+            "x": 69.34306569343065,
+            "y": 925.1824817518246,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "DirectionalCollider-Top",
+            "textureName": "oneside-platform.png",
+            "x": 0,
+            "y": 890,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1.5,
+            "tag": "BlockAll",
+            "textureName": "dumpster-flipped.png",
+            "x": 243,
+            "y": 923,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 600,
+            "y": 800,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 800,
+            "y": 800,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 1000,
+            "y": 800,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 1200,
+            "y": 600,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 1800,
+            "y": 600,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 2300,
+            "y": 450,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 3000,
+            "y": 550,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 2,
+            "tag": "KillZone?Anim:50,50",
+            "textureName": "fan.png",
+            "x": 2700,
+            "y": 450,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 3800,
+            "y": 550,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 2,
+            "tag": "KillZone?Anim:50,50",
+            "textureName": "fan.png",
+            "x": 3350,
+            "y": 500,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 2,
+            "tag": "KillZone?Anim:50,50",
+            "textureName": "fan.png",
+            "x": 3550,
+            "y": 500,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 2,
+            "tag": "KillZone?Anim:50,50",
+            "textureName": "fan.png",
+            "x": 2100,
+            "y": 500,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 1,
+            "tag": "BlockAll",
+            "textureName": "plateforme.png",
+            "x": 3600,
+            "y": 200,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
+            "scale": 0.2,
+            "tag": "LevelTrigger-level2",
+            "textureName": "kill-zone.png",
+            "x": 3517,
+            "y": -170,
+            "z-index": 0
+        }
+    ],
+    "tags": [
+        "DirectionalCollider-Top",
+        "BlockAll",
+        "Player",
+        "KillZone",
+        "KillZone?Anim:50,50",
+        "LevelTrigger-level2"
+    ]
+}
