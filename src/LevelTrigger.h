@@ -12,7 +12,7 @@
 
 class GameCore;
 
-//! A class that can be used to trigger a level change
+//! \brief A class that can be used to trigger a level change
 //!
 //! This class is used to trigger a level change.
 //! This is useful for creating doors and other objects that trigger a level change.

@@ -12,8 +12,8 @@
 
 #include <QVector2D>
 
-//! A sprite that is affected by physics.
-//! This includes gravity and friction.
+//! \brief A sprite that is affected by physics.
+//! \brief This includes gravity and friction.
 //!
 //! This class can be subclassed to create various physics entities such as the player or enemies.
 //!

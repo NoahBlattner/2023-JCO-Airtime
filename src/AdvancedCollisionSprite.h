@@ -11,7 +11,7 @@
 
 #include "sprite.h"
 
-//! A class that can be used to create advanced collisions
+//! \brief A class that can be used to create advanced collisions
 //!
 //! This class is used to create advanced collisions.
 //! This is useful for creating walls and other objects that certain entities can collide with while ignoring others.

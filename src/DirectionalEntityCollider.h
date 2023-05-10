@@ -12,7 +12,7 @@
 #include "AdvancedCollisionSprite.h"
 #include "PhysicsEntity.h"
 
-//! A class that can be used to block entities from moving in certain directions
+//! \brief A class that can be used to block entities from moving in certain directions
 //!
 //! This class is used to block entities from moving in certain directions.
 //! This is useful for creating walls and other objects that entities can collide with.

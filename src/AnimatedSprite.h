@@ -13,7 +13,7 @@ class QImage;
 #include <QList>
 #include "sprite.h"
 
-//! A Sprite whose only purpose is to display an animation.
+//! \brief A Sprite whose only purpose is to display an animation.
 //!
 //! The AnimatedSprite class is a subclass of the Sprite class.
 //! It is used to display an animation.

@@ -15,7 +15,7 @@
 class QJsonArray;
 class Sprite;
 
-//! A class that can be used to load levels
+//! \brief A class that can be used to load levels
 //!
 //! This class is used to easily load levels into the scene of a GameCore.
 //! It can load levels from a JSON file.

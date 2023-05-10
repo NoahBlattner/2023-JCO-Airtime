@@ -14,6 +14,8 @@
 
 class GameCore;
 
+//! \brief A class that represents the player
+//!
 //! The player entity inherits from the PhysicsEntity class.
 //! This class handles the player input and applies the appropriate velocity to the player.
 //! The player is also affected by gravity and friction.
