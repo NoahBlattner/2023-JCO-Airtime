@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 27.03.2023.
-//
+/**
+\file     AdvancedCollisionSprite.h
+\brief    Déclaration de la classe AdvancedCollisionSprite.
+\author   Blattner Noah
+\date     avril 2023
+*/
 
 #ifndef INC_2023_JCO_AIRTIME_ADVANCEDCOLLISIONSPRITE_H
 #define INC_2023_JCO_AIRTIME_ADVANCEDCOLLISIONSPRITE_H
@@ -31,8 +34,9 @@
 //! The class allows the user to specify which AdvancedCollisionSprites it should collide with.
 //! This is done with the addCollidingTag and removeCollidingTag functions.
 //! A tag can be added with these functions, and then the AdvancedCollisionSprite will only collide with sprites that have the same tag.
-//! If no tags are in the list, the AdvancedCollisionSprite won't collide with any sprites. (This is not recommended. Use a Sprite instead)
-//! If the list contains the string "All", the AdvancedCollisionSprite will collide with all other AdvancedCollisionSprite. This can be done with the collideAll function.
+//! If no tags are in the list, the AdvancedCollisionSprite won't collide with any sprites (This is not recommended. Use a Sprite instead).
+//! If the list contains the string "All", the AdvancedCollisionSprite will collide with all other AdvancedCollisionSprite.
+//! This can be done with the collideAll function.
 //!
 //! The class also contains a function called getCollidingSprites.
 //! This function returns a list of all sprites that are colliding with the AdvancedCollisionSprite.

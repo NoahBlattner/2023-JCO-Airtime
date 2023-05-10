@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 27.03.2023.
-//
+/**
+\file     DirectionalEntityCollider.h
+\brief    Déclaration de la classe DirectionalEntityCollider.
+\author   Blattner Noah
+\date     avril 2023
+*/
 
 #ifndef INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLIDER_H
 #define INC_2023_JCO_AIRTIME_DIRECTIONALENTITYCOLLIDER_H

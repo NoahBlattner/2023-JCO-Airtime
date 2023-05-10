@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 22.03.2023.
-//
+/**
+\file     Player.h
+\brief    Déclaration de la classe Player
+\author   Blattner Noah
+\date     avril 2023
+*/
 
 #ifndef INC_2023_JCO_AIRTIME_PLAYER_H
 #define INC_2023_JCO_AIRTIME_PLAYER_H
@@ -11,19 +14,19 @@
 
 class GameCore;
 
-//! The player entity inherits from the PhysicsEntity class
-//! This class handles the player input and applies the appropriate velocity to the player
-//! The player is also affected by gravity and friction
+//! The player entity inherits from the PhysicsEntity class.
+//! This class handles the player input and applies the appropriate velocity to the player.
+//! The player is also affected by gravity and friction.
 //!
-//! On construction, the player is given a set of animations and a set of collision classes
-//! The player is also given a set of physics overrides
-//! Key events are connected to the player from a GameCore instance to allow the player to move
+//! On construction, the player is given a set of animations and a set of collision classes.
+//! The player is also given a set of physics overrides.
+//! Key events are connected to the player from a GameCore instance to allow the player to move.
 //!
-//! The player is always automatically registered for ticks when the parent scene is set
+//! The player is always automatically registered for ticks when the parent scene is set.
 //!
-//! The player's animations are updated according to the current properties of the player
+//! The player's animations are updated according to the current properties of the player.
 //!
-//! The class contains a series of constants that can be used to tweak the player's movement
+//! The class contains a series of constants that can be used to tweak the player's movement.
 class Player : public PhysicsEntity {
     Q_OBJECT
 

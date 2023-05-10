@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 22.03.2023.
-//
+/**
+\file     PhysicsEntity.h
+\brief    Déclaration de la classe PhysicsEntity.
+\author   Blattner Noah
+\date     avril 2023
+*/
 
 #ifndef INC_2023_JCO_AIRTIME_PHYSICSENTITY_H
 #define INC_2023_JCO_AIRTIME_PHYSICSENTITY_H
@@ -9,31 +12,31 @@
 
 #include <QVector2D>
 
-//! A sprite that is affected by physics
-//! This includes gravity and friction
+//! A sprite that is affected by physics.
+//! This includes gravity and friction.
 //!
-//! This class can be subclassed to create various physics entities such as the player or enemies
+//! This class can be subclassed to create various physics entities such as the player or enemies.
 //!
-//! This class is always automatically registered for ticks when the parent scene is set
+//! This class is always automatically registered for ticks when the parent scene is set.
 //!
-//! The physics entity has a velocity vector that is applied to the entity every tick
-//! The velocity is affected by gravity and friction
-//! Gravity is applied by default, but can be disabled
+//! The physics entity has a velocity vector that is applied to the entity every tick.
+//! The velocity is affected by gravity and friction.
+//! Gravity is applied by default, but can be disabled.
 //!
-//! On every tick, the entity is moved according to it's velocity vector
-//! Before moving, the entity checks for collisions with other sprites
-//! If a collision is detected, the entity is moved to the closest position to the collision point
-//! Collision detection is done using the parent AdvancedCollisionSprite class
+//! On every tick, the entity is moved according to it's velocity vector.
+//! Before moving, the entity checks for collisions with other sprites.
+//! If a collision is detected, the entity is moved to the closest position to the collision point.
+//! Collision detection is done using the parent AdvancedCollisionSprite class.
 //!
-//! The isOnGround property is set to true if the entity is on the ground
-//! The entity is considered to be on the ground if the distance to the ground is less than GROUNDED_DISTANCE constant
-//! If needed, the isGrounded property can be reevaluated by calling the reevaluateGrounded function at any time
-//! This is normally not needed, as the isGrounded property is automatically reevaluated every time the entity moves
+//! The isOnGround property is set to true if the entity is on the ground.
+//! The entity is considered to be on the ground if the distance to the ground is less than GROUNDED_DISTANCE constant.
+//! If needed, the isGrounded property can be reevaluated by calling the reevaluateGrounded function at any time.
+//! This is normally not needed, as the isGrounded property is automatically reevaluated every time the entity moves.
 //!
-//! The class always registers for collision events with the DirectionalEntityCollider class
-//! When a collision with a DirectionalEntityCollider is detected, the entity checks if the collisions is blocking the current direction of movement
-//! If collision isn't applied on the current direction of movement, the collision is ignored
-//! Else the collisions is treated as a normal collision
+//! The class always registers for collision events with the DirectionalEntityCollider class.
+//! When a collision with a DirectionalEntityCollider is detected, the entity checks if the collisions is blocking the current direction of movement.
+//! If collision isn't applied on the current direction of movement, the collision is ignored.
+//! Else the collisions is treated as a normal collision.
 class PhysicsEntity : public AdvancedCollisionSprite {
 
     Q_OBJECT

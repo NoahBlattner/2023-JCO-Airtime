@@ -1,6 +1,9 @@
-//
-// Created by blatnoa on 08.05.2023.
-//
+/**
+\file     LevelTrigger.h
+\brief    Déclaration de la classe LevelTrigger.
+\author   Blattner Noah
+\date     avril 2023
+*/
 
 #ifndef INC_2023_JCO_AIRTIME_LEVELTRIGGER_H
 #define INC_2023_JCO_AIRTIME_LEVELTRIGGER_H
@@ -9,6 +12,15 @@
 
 class GameCore;
 
+//! A class that can be used to trigger a level change
+//!
+//! This class is used to trigger a level change.
+//! This is useful for creating doors and other objects that trigger a level change.
+//!
+//! On construction, the LevelTrigger takes a pointer to a GameCore and a QString with the level name.
+//!
+//! This class is a subclass of AdvancedCollisionSprite,
+//! It simply awaits a collision with an Player entity to trigger a level change.
 class LevelTrigger : public AdvancedCollisionSprite {
 
 public :
