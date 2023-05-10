@@ -1,9 +1,8 @@
-/*
- * @file LevelLoader.cpp
- * @brief Définition de la classe LevelLoader.
- * @author Noah Blattner
- * @date Février 2023
- */
+
+//! @file LevelLoader.cpp
+//! @brief Définition de la classe LevelLoader.
+//! @author Noah Blattner
+//! @date Février 2023
 
 #include <QDir>
 #include <QMessageBox>
@@ -97,12 +96,10 @@ QList<Sprite*> LevelLoader::loadSprites(const QJsonArray& spritesArray) {
     return sprites;
 }
 
-/**
- * Load a sprite from a JSON object.
- * Loads a subclass of Sprite if specified in the tag.
- * @param spriteObject The JSON object containing the sprite data.
- * @return The loaded sprite.
- */
+//! Load a sprite from a JSON object.
+//! Loads a subclass of Sprite if specified in the tag.
+//! \param spriteObject The JSON object containing the sprite data.
+//! \return The loaded sprite.
 Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
     // On crée la sprite avec son image
     Sprite* sprite = nullptr;
@@ -176,22 +173,18 @@ void LevelLoader::unloadLevel() {
     }
 }
 
-/**
- * Reloads the current level.
- * This also functions as a "reset" function.
- */
+//! Reloads the current level.
+//! This also functions as a "reset" function.
 void LevelLoader::reloadCurrentLevel() {
     QString level = m_currentLevel;
     unloadLevel();
     loadLevel(level);
 }
 
-/**
- * Applies parameters to a sprite.
- * Such as an animation to play.
- * @param pSprite The sprite to apply the parameters to.
- * @param params The string containing the parameters to apply.
- */
+//! Applies parameters to a sprite.
+//! Such as an animation to play.
+//! \param pSprite The sprite to apply the parameters to.
+//! \param params The parameters to apply.
 void LevelLoader::applyParameters(Sprite* pSprite, const QString params) {
     QList<QString> parameterList = params.split("&");
 

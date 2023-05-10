@@ -69,10 +69,8 @@ GameCanvas::~GameCanvas()
     m_pGameCore = nullptr;
 }
 
-/**
- * Slot appelé lorsque l'application change d'état
- * @param state
- */
+//! Slot appelé lorsque l'application change d'état
+//! \param state
 void GameCanvas::onWindowFocusChanged(Qt::ApplicationState state) {
     // If the application has lost focus
     if (state != Qt::ApplicationState::ApplicationActive) {
