@@ -81,6 +81,12 @@ QList<AdvancedCollisionSprite*> PhysicsEntity::getCollidingSprites(QRectF rectF)
 
     // Remove directional entity colliders that are not blocking the entity
     foreach (auto* pSprite, collidingSprites) {
+        if (pSprite->getIsTrigger()) {
+            // Remove the sprite if it is a trigger
+            collidingSprites.removeOne(pSprite);
+            continue;
+        }
+
         auto pCollider = dynamic_cast<DirectionalEntityCollider*>(pSprite);
 
         // If the collider is not blocking the entity, remove it from the list
