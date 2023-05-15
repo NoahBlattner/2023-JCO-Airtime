@@ -223,9 +223,14 @@ void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
 void Player::showDustParticles() const {
     QPoint playerBottomCenter = QPoint(sceneBoundingRect().center().x(), sceneBoundingRect().bottom());
 
-    auto* dust = new AnimatedSprite(dustParticles .toImage(), QList<int>::fromReadOnlyData(DUST_FRAME_DURATIONS));
+    auto* dust = new AnimatedSprite(dustParticles.toImage(), QList<int>::fromReadOnlyData(DUST_FRAME_DURATIONS));
     dust->setPos(playerBottomCenter - QPoint(dust->boundingRect().width() / 2, dust->boundingRect().height()));
     scene()->addItem(dust);
+}
+
+//! Recharges the dash.
+void Player::rechargeDash() {
+    dashEnabled = true;
 }
 
 /*****************************

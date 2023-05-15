@@ -37,20 +37,23 @@ public:
 
     // Player constants
     const QRectF PLAYER_COLLISION_RECT = QRectF(0, 5, 56, 150);
-    const float PLAYER_GRAVITY_OVERRIDE = -11;
+    const float PLAYER_GRAVITY_OVERRIDE = -9;
     const float PLAYER_FRICTION_OVERRIDE = .75;
     const float PLAYER_WALK_SPEED = 2;
-    const float PLAYER_JUMP_SPEED = -2.5;
-    const float PLAYER_DASH_SPEED = 3;
+    const float PLAYER_JUMP_SPEED = -2.55;
+    const float PLAYER_DASH_SPEED = 2;
     const float PLAYER_DASH_TIME = .1;
     const float PLAYER_STOP_SPEED = .75;
     const float PLAYER_STOP_TIME = .3;
 
     void tick(long long int elapsedTimeInMilliseconds) override;
 
-    virtual void onCollision(AdvancedCollisionSprite* pOther) override;
+    void onCollision(AdvancedCollisionSprite* pOther) override;
 
     bool reevaluateGrounded() override;
+
+    void rechargeDash();
+    inline bool canDash() { return dashEnabled; }
 
 private:
     QVector2D inputDirection = QVector2D(0, 0);

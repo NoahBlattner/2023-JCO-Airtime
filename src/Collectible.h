@@ -15,17 +15,31 @@ class Player;
 //!
 //! This class is used to create collectibles by subclassing it.
 //! It is automatically set to be a trigger.
-//! When the trigger is triggered, the onCollect function is called before the trigger is destroyed.
-//! The onCollect function is called when the collectible is intersecting with a player.
+//! When the trigger is intersecting with a player, the onCollect function is called.
 //! The onCollect function must be overridden to create custom behavior when the collectible is collected by a player.
+//!
+//! The collectible can be set to respawn after a certain amount of time.
+//! The collectible will be hidden and disabled when it is collected and will reappear after the specified amount of time.
+//! If the respawn time is set to 0, the collectible will not respawn but will be destroyed when collected.
 class Collectible : public AdvancedCollisionSprite {
 
-    explicit Collectible(const QString& rImagePath, QGraphicsItem* pParent = nullptr);
-    Collectible(const QString& rImagePath, QRectF collisionOverride, QGraphicsItem* pParent = nullptr);
+protected:
+    explicit Collectible(unsigned int respawnTime = 0, QGraphicsItem* pParent = nullptr);
+    explicit Collectible(const QString& rImagePath, unsigned int respawnTime = 0, QGraphicsItem* pParent = nullptr);
+    Collectible(const QString& rImagePath, QRectF collisionOverride, unsigned int respawnTime = 0, QGraphicsItem* pParent = nullptr);
 
-    virtual void onCollect(Player* player) = 0;
+    virtual void onCollect(Player* player);
 
     void onTrigger(AdvancedCollisionSprite* pOther) override;
+
+private:
+    unsigned int m_respawnTime = 0;
+    GameScene* m_pScene = nullptr;
+
+    void disable();
+
+private slots:
+    void enable();
 };
 
 

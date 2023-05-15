@@ -51,6 +51,8 @@ private:
     QList<Sprite*> loadSprites(const QJsonArray& spritesArray);
 
     void applyParameters(Sprite* pSprite, QString params);
+
+    Sprite* generateSprite(const QString &tag, const QString &imagePath) const;
 };
 
 
