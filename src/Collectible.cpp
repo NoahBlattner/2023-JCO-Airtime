@@ -9,7 +9,7 @@
 //! Constructor :
 //! Automatically sets the collectible to be a trigger.
 //! \param pParent The parent of the collectible.
-Collectible::Collectible(int respawnTime, QGraphicsItem* pParent) {
+Collectible::Collectible(unsigned int respawnTime, QGraphicsItem* pParent) {
     isTrigger = true;
     m_respawnTime = respawnTime;
 }
@@ -18,7 +18,7 @@ Collectible::Collectible(int respawnTime, QGraphicsItem* pParent) {
 //! Automatically sets the collectible to be a trigger.
 //! \param rImagePath The path to the image of the collectible.
 //! \param pParent The parent of the collectible.
-Collectible::Collectible(const QString &rImagePath, int respawnTime, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
+Collectible::Collectible(const QString &rImagePath, unsigned int respawnTime, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, pParent) {
     isTrigger = true;
     m_respawnTime = respawnTime;
 }
@@ -28,7 +28,7 @@ Collectible::Collectible(const QString &rImagePath, int respawnTime, QGraphicsIt
 //! \param rImagePath The path to the image of the collectible.
 //! \param collisionOverride The collision of the collectible.
 //! \param pParent The parent of the collectible.
-Collectible::Collectible(const QString &rImagePath, QRectF collisionOverride, int respawnTime, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, collisionOverride, pParent) {
+Collectible::Collectible(const QString &rImagePath, QRectF collisionOverride, unsigned int respawnTime, QGraphicsItem* pParent) : AdvancedCollisionSprite(rImagePath, collisionOverride, pParent) {
     isTrigger = true;
     m_respawnTime = respawnTime;
 }
