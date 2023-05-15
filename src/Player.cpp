@@ -17,6 +17,8 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     // Create animations
     initAnimations();
 
+    setZValue(1);
+
     // Apply physics overrides
     friction = PLAYER_FRICTION_OVERRIDE;
     gravity = PLAYER_GRAVITY_OVERRIDE;

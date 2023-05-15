@@ -118,7 +118,7 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
 
         // Find the intersection between the new rect and the sprite
         QRectF intersection = rect.intersected(otherCollisionRect);
-        if (intersection.width() < intersection.height()) { // If the intersection is wider than it is tall
+        if (intersection.width() < intersection.height() && intersection.height() > STEP_HEIGHT) { // If the intersection is wider than it is tall
             if (x() < pSprite->x()) { // If the entity is to the left of the sprite
                 rect.setX(otherCollisionRect.left() - rect.width());
             } else { // If the entity is to the right of the sprite
