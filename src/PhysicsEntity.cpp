@@ -81,12 +81,6 @@ QList<AdvancedCollisionSprite*> PhysicsEntity::getCollidingSprites(QRectF rectF)
 
     // Remove directional entity colliders that are not blocking the entity
     foreach (auto* pSprite, collidingSprites) {
-        if (pSprite->getIsTrigger()) {
-            // Remove the sprite if it is a trigger
-            collidingSprites.removeOne(pSprite);
-            continue;
-        }
-
         auto pCollider = dynamic_cast<DirectionalEntityCollider*>(pSprite);
 
         // If the collider is not blocking the entity, remove it from the list
@@ -152,6 +146,13 @@ bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
     QRectF groundRect = collisionRect().translated(0, GROUNDED_DISTANCE);
     auto groundCheckCollisions = getCollidingSprites(groundRect);
+
+    // Remove triggers
+    foreach (auto* pSprite, groundCheckCollisions) {
+        if (pSprite->getIsTrigger()) {
+            groundCheckCollisions.removeOne(pSprite);
+        }
+    }
 
     // Determine if the player is on the ground
     if (!groundCheckCollisions.empty() // If the player is colliding with another sprite at the bottom
