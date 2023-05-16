@@ -27,7 +27,16 @@ SOURCES += main.cpp\
     gameview.cpp \
     utilities.cpp \
     gamecanvas.cpp \
-    spritetickhandler.cpp
+    spritetickhandler.cpp \
+    AdvancedCollisionSprite.cpp \
+    AnimatedSprite.cpp \
+    Collectible.cpp \
+    DashRefill.cpp \
+    DirectionalEntityCollider.cpp \
+    LevelLoader.cpp \
+    LevelTrigger.cpp \
+    PhysicsEntity.cpp \
+    Player.cpp \
 
 HEADERS  += mainfrm.h \
     gamescene.h \
@@ -37,7 +46,17 @@ HEADERS  += mainfrm.h \
     gameview.h \
     utilities.h \
     gamecanvas.h \
-    spritetickhandler.h
+    spritetickhandler.h \
+    AdvancedCollisionSprite.h \
+    AnimatedSprite.h \
+    Collectible.h \
+    DashRefill.h \
+    DirectionalEntityCollider.h \
+    LevelLoader.h \
+    LevelTrigger.h \
+    PhysicsEntity.h \
+    Player.h \
+
 
 FORMS    += mainfrm.ui
 
