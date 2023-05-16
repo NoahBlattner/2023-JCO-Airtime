@@ -9,9 +9,7 @@
 //! Constructor :
 //! Automatically sets the collectible to be a trigger.
 //! \param pParent The parent of the collectible.
-Collectible::Collectible(unsigned int respawnTime, QGraphicsItem* pParent) {
-    isTrigger = true;
-    m_respawnTime = respawnTime;
+Collectible::Collectible(unsigned int respawnTime, QGraphicsItem* pParent) : Collectible("", respawnTime, pParent) {
 }
 
 //! Constructor :
