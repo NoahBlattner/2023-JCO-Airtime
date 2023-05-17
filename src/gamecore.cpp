@@ -17,6 +17,7 @@
 #include "utilities.h"
 #include "Player.h"
 #include "LevelLoader.h"
+#include "Particle.h"
 
 const int SCENE_WIDTH = 3500;
 
@@ -36,7 +37,14 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     // m_pScene->addRect(m_pScene->sceneRect(), QPen(Qt::white));
 
     levelLoader = new LevelLoader(this, GameFramework::resourcesPath() + "levels");
-    levelLoader->loadLevel("mainLevel");
+    QList<Sprite*> list = levelLoader->loadLevel("mainLevel");
+
+    QList<int> frames;
+    frames. append(1000);
+    auto* particle = new Particle(Particle::TRAVEL, GameFramework::imagesPath() + "kill-zone.png");
+    particle -> setTravelTarget(list[0]);
+    particle->setPos(200, 200);
+    m_pScene -> addSpriteToScene(particle);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,

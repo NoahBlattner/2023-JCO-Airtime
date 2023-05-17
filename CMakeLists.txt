@@ -40,13 +40,15 @@ add_executable(2023-JCO-Airtime
         src/LevelLoader.cpp src/LevelLoader.h
         src/AnimatedSprite.cpp src/AnimatedSprite.h
         src/LevelTrigger.cpp src/LevelTrigger.h
-        src/Collectible.cpp src/Collectible.h src/DashRefill.cpp src/DashRefill.h)
+        src/Collectible.cpp src/Collectible.h src/DashRefill.cpp src/DashRefill.h src/Particle.cpp src/Particle.h)
 
 target_link_libraries(2023-JCO-Airtime
         Qt::Core
         Qt::Gui
         Qt6::Widgets
         )
+
+qt_import_plugins(${PROJECT_NAME} INCLUDE Qt6::QSvgPlugin)
 
 if (WIN32)
     set(DEBUG_SUFFIX)
