@@ -5,6 +5,9 @@
 #include "gamescene.h"
 
 #include "Collectible.h"
+#include "Particle.h"
+#include "resources.h"
+#include "Player.h"
 
 //! Constructor :
 //! Automatically sets the collectible to be a trigger.
@@ -47,6 +50,7 @@ void Collectible::onTrigger(AdvancedCollisionSprite* pOther) {
 //! \param player The player that collected the collectible.
 void Collectible::onCollect(Player* player) {
     disable();
+    spawnCollectParticles(player);
 }
 
 //! Disables the collectible and hides it.
@@ -66,7 +70,21 @@ void Collectible::disable() {
     }
 }
 
-// Enables the collectible and shows it.
+//! Enables the collectible and shows it.
 void Collectible::enable() {
     m_pScene->addSpriteToScene(this);
+}
+
+//! Spawn particles that travel towards the player.
+void Collectible::spawnCollectParticles(Player* pPlayer, int particleCount) {
+    for (int i = 1; i < particleCount; i++) {
+        auto* particle = new Particle(Particle::TRAVEL, GameFramework::imagesPath() + "particle.png");
+        particle->setPos(sceneBoundingRect().center());
+        particle->setScale(.1);
+        particle->setTravelTarget(pPlayer);
+        particle->initialSpeed = 7.5;
+        particle->acceleration = 0.975f;
+        particle->fadeTime = .5f;
+        m_pScene->addSpriteToScene(particle);
+    }
 }

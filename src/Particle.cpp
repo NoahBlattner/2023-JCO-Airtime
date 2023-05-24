@@ -26,6 +26,19 @@ Particle::Particle(Particle::ParticleType type, const QString& rImagePath, QGrap
     friction = 0;
 }
 
+//! Set the travel target for the TRAVEL particle type.
+//! \param pTarget The target of the particle.
+void Particle::setTravelTarget(Sprite* pTarget) {
+    pTravelTarget = pTarget;
+
+    // Listen to the destroyed signal of the target
+    connect(pTravelTarget, &Sprite::destroyed, this, [this]() {
+        // When the target is destroyed, remove the target pointer
+        pTravelTarget = nullptr;
+        deleteLater();
+    });
+}
+
 //! Override of the setParentScene function.
 //! Initializes the particle.
 void Particle::setParentScene(GameScene* pScene) {
@@ -38,9 +51,20 @@ void Particle::setParentScene(GameScene* pScene) {
 void Particle::initParticle() {
     switch (particleType) {
         case TRAVEL:
+            // Initially, the particle is not deleted when it reaches its destination
+            deleteOnReach = false;
+            QTimer::singleShot(fadeTime * 1000, this, [this]() {
+                // After the fade time, the particle is deleted when it reaches its target
+                deleteOnReach = true;
+            });
+
+            // Set a random starting velocity
             float randRange = initialSpeed * randomisation;
-            setVelocity(QVector2D(randomGenerator.generateDouble() * randRange - randRange / 2.0f,
-                                  randomGenerator.generateDouble() * randRange - randRange / 2.0f));
+            float randX = QRandomGenerator::global()->generateDouble() * randRange - randRange / 2.0f;
+            float randY = QRandomGenerator::global()->generateDouble() * randRange - randRange / 2.0f;
+
+            setVelocity(QVector2D(randX,
+                                  randY));
             break;
     }
 }
@@ -79,8 +103,6 @@ void Particle::tick(long long elapsedTimeInMilliseconds) {
         (this->*updateFunction)(elapsedTimeInMilliseconds);
     }
 
-    qDebug() << velocityVector << pos();
-
     PhysicsEntity::tick(elapsedTimeInMilliseconds);
 }
 
@@ -90,18 +112,20 @@ void Particle::tick(long long elapsedTimeInMilliseconds) {
 void Particle::updateTravel(long long elapsedTimeInMilliseconds) {
     // Check if the target is valid
     if (pTravelTarget == nullptr) {
+        // If no target, delete the particle
+        deleteLater();
         return;
     }
 
     // Calculate the direction
-    QVector2D direction = QVector2D(pTravelTarget->pos() - PhysicsEntity::pos());
+    QVector2D direction = QVector2D(pTravelTarget->pos() - pos());
 
     // Normalize the direction
     direction.normalize();
 
-    // Randomise the direction
-    direction.setX(direction.x() + randomGenerator.generateDouble() * randomisation - randomisation / 2.0f);
-    direction.setY(direction.y() + randomGenerator.generateDouble() * randomisation - randomisation / 2.0f);
+    // Randomise the directionw
+    direction.setX(direction.x() + QRandomGenerator::global()->generateDouble() * randomisation - randomisation / 2.0f);
+    direction.setY(direction.y() + QRandomGenerator::global()->generateDouble() * randomisation - randomisation / 2.0f);
 
     // Lerp new and old velocity
     float lerpFactor = acceleration * elapsedTimeInMilliseconds / 1000.0f;
@@ -136,10 +160,8 @@ void Particle::updateDust(long long int elapsedTimeInMilliseconds) {
 void Particle::onTrigger(AdvancedCollisionSprite* pOther) {
     AdvancedCollisionSprite::onTrigger(pOther);
 
-    if (particleType == TRAVEL) {
+    if (particleType == TRAVEL && deleteOnReach && pOther == pTravelTarget) {
         // If the target is reached, delete the particle
-        if (pOther == pTravelTarget) {
-            deleteLater();
-        }
+        deleteLater();
     }
 }

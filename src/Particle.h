@@ -53,15 +53,15 @@ public:
     void setParticleType(ParticleType type);
     [[nodiscard]] inline ParticleType getParticleType() const { return particleType; };
 
-    inline void setTravelTarget(Sprite* pTarget) { pTravelTarget = pTarget; };
+    void setTravelTarget(Sprite* pTarget);
 
     // Modifiers
     float randomisation = 0.25f;
     float initialSpeed = 5.0f;
-    float acceleration = 0.9f;
+    float acceleration = 0;
     float rotationSpeed = 0.0f;
     float rotationAcceleration = 0.0f;
-    float fadeTime = 0.0f;
+    float fadeTime = 2.0f;
 
 protected:
     virtual void tick(long long int elapsedTimeInMilliseconds) override;
@@ -71,8 +71,10 @@ protected:
 private:
     ParticleType particleType = DEFAULT;
     Sprite* pTravelTarget = nullptr;
+    bool deleteOnReach = false;
+    bool targetReached = false;
 
-    QRandomGenerator64 randomGenerator;
+    //QRandomGenerator64* randomGenerator = QRandomGenerator64::global();
 
     void (Particle::*updateFunction)(long long elapsedTimeInMilliseconds) = nullptr;
 
