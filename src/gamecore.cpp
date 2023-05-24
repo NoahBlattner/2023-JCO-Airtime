@@ -91,6 +91,39 @@ void GameCore::keyPressed(int key) {
         case Qt::Key_R:
             resetLevel();
             break;
+        case Qt::Key_L:
+            for (int i = 0; i < 5; i++) {
+                auto* particle = new Particle(Particle::SMOKE, GameFramework::imagesPath() + "particle.png");
+                particle -> setPos(500, 500);
+                particle -> setScale(.1);
+                particle -> initialSpeed = .5;
+                particle -> acceleration = 0.975f;
+                particle -> fadeTime = 1.5f;
+                m_pScene -> addSpriteToScene(particle);
+            }
+            break;
+        case Qt::Key_M:
+            for (int i = 0; i < 5; i++) {
+                auto* particle = new Particle(Particle::DUST, GameFramework::imagesPath() + "particle.png");
+                particle -> setPos(500, 500);
+                particle -> setScale(.1);
+                particle -> initialSpeed = .5;
+                particle -> acceleration = 1.575f;
+                particle -> fadeTime = 1.5f;
+                m_pScene -> addSpriteToScene(particle);
+            }
+            break;
+        case Qt::Key_O:
+            for (int i = 0; i < 5; i++) {
+                auto* particle = new Particle(Particle::EXPLOSIVE, GameFramework::imagesPath() + "particle.png");
+                particle -> setPos(500, 500);
+                particle -> setScale(.1);
+                particle -> initialSpeed = 10.5;
+                particle -> acceleration = 0.975f;
+                particle -> fadeTime = .5f;
+                m_pScene -> addSpriteToScene(particle);
+            }
+            break;
     }
 
     m_pressedKeys.append(key);

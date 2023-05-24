@@ -74,16 +74,17 @@ private:
     bool deleteOnReach = false;
     bool targetReached = false;
 
-    //QRandomGenerator64* randomGenerator = QRandomGenerator64::global();
-
     void (Particle::*updateFunction)(long long elapsedTimeInMilliseconds) = nullptr;
 
     void initParticle();
 
     void updateTravel(long long elapsedTimeInMilliseconds);
-    void updateExplosive(long long elapsedTimeInMilliseconds);
-    void updateSmoke(long long elapsedTimeInMilliseconds);
-    void updateDust(long long elapsedTimeInMilliseconds);
+    void updateDefault(long long elapsedTimeInMilliseconds);
+
+    void randomizeDirection(QVector2D &direction) const;
+
+    void setRandomVelocity();
+    void deleteOnFadeEnd();
 };
 
 

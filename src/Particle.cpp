@@ -47,10 +47,48 @@ void Particle::setParentScene(GameScene* pScene) {
     initParticle();
 }
 
+//! Delete the particle after the fade time.
+void Particle::deleteOnFadeEnd() {
+    // Set the particle to be deleted after the fade time
+    QTimer::singleShot(fadeTime * 1000, this, [this]() {
+        deleteLater();
+    });
+}
+
 //! Initialize the particle.
 void Particle::initParticle() {
+
+    setRandomVelocity();
+
     switch (particleType) {
+        case EXPLOSIVE:
+            setGravityEnabled(false);
+            deleteOnFadeEnd();
+
+            break;
+        case SMOKE:
+            gravity = 0.5f;
+            friction = 0;
+
+            deleteOnFadeEnd();
+
+            // Set the initial y velocity to be upwards
+            setYVelocity(-initialSpeed);
+            break;
+
+        case DUST:
+            gravity = -0.5f;
+            friction = 0;
+
+            deleteOnFadeEnd();
+
+            // Set the initial y velocity to be downwards
+            setYVelocity(initialSpeed);
+            break;
+
         case TRAVEL:
+            setGravityEnabled(false);
+
             // Initially, the particle is not deleted when it reaches its destination
             deleteOnReach = false;
             QTimer::singleShot(fadeTime * 1000, this, [this]() {
@@ -58,15 +96,18 @@ void Particle::initParticle() {
                 deleteOnReach = true;
             });
 
-            // Set a random starting velocity
-            float randRange = initialSpeed * randomisation;
-            float randX = QRandomGenerator::global()->generateDouble() * randRange - randRange / 2.0f;
-            float randY = QRandomGenerator::global()->generateDouble() * randRange - randRange / 2.0f;
-
-            setVelocity(QVector2D(randX,
-                                  randY));
             break;
     }
+}
+
+//! Set a random velocity for the particle.
+void Particle::setRandomVelocity() {
+    float randRange = initialSpeed * randomisation;
+    float randX = QRandomGenerator::global()->generateDouble() * randRange - randRange / 2.0f;
+    float randY = QRandomGenerator::global()->generateDouble() * randRange - randRange / 2.0f;
+
+    setVelocity(QVector2D(randX,
+                          randY));
 }
 
 //! Update the particle type
@@ -80,16 +121,11 @@ void Particle::setParticleType(Particle::ParticleType type) {
             updateFunction = nullptr;
             break;
         case EXPLOSIVE:
-            updateFunction = &Particle::updateExplosive;
-            break;
         case SMOKE:
-            updateFunction = &Particle::updateSmoke;
-            break;
         case DUST:
-            updateFunction = &Particle::updateDust;
+            updateFunction = &Particle::updateDefault;
             break;
         case TRAVEL:
-            setGravityEnabled(false);
             updateFunction = &Particle::updateTravel;
             break;
     }
@@ -120,39 +156,43 @@ void Particle::updateTravel(long long elapsedTimeInMilliseconds) {
     // Calculate the direction
     QVector2D direction = QVector2D(pTravelTarget->pos() - pos());
 
-    // Normalize the direction
-    direction.normalize();
-
-    // Randomise the directionw
-    direction.setX(direction.x() + QRandomGenerator::global()->generateDouble() * randomisation - randomisation / 2.0f);
-    direction.setY(direction.y() + QRandomGenerator::global()->generateDouble() * randomisation - randomisation / 2.0f);
+    randomizeDirection(direction);
 
     // Lerp new and old velocity
     float lerpFactor = acceleration * elapsedTimeInMilliseconds / 1000.0f;
-    QVector2D velocity = velocityVector * (1.0f - lerpFactor) + direction * initialSpeed * lerpFactor;
+    QVector2D velocity = velocityVector * (1.0f - lerpFactor) + direction.normalized() * initialSpeed * lerpFactor;
 
     setVelocity(velocity);
 }
 
-//! Update function for particles of type EXPLOSIVE.
-//! Moves the particle away from the spawn point in a random direction.
-//! \param elapsedTimeInMilliseconds The elapsed time since the last tick.
-void Particle::updateExplosive(long long int elapsedTimeInMilliseconds) {
-    // TODO
+//! Slightly randomize the direction of the particle.
+//! This is used to make the particles look more natural.
+//! It does not completely randomize the direction, but only slightly changes it.
+//! \param direction The direction to randomize.
+void Particle::randomizeDirection(QVector2D &direction) const {// Randomise the direction
+    QVector2D newDirection = direction.normalized();
+
+    newDirection.setX(newDirection.x() + QRandomGenerator::global()->generateDouble() * randomisation - randomisation / 2.0f);
+    newDirection.setY(newDirection.y() + QRandomGenerator::global()->generateDouble() * randomisation - randomisation / 2.0f);
+
+    newDirection *= direction.length();
+
+    direction = newDirection;
 }
 
-//! Update function for particles of type SMOKE.
-//! Moves the particle upwards.
+//! Update function for most particles (except TRAVEL).
+//! Randomizes the direction and decreases the opacity to make the particle fade out.
+//! Also applies acceleration.
 //! \param elapsedTimeInMilliseconds The elapsed time since the last tick.
-void Particle::updateSmoke(long long int elapsedTimeInMilliseconds) {
-    // TODO
-}
+void Particle::updateDefault(long long int elapsedTimeInMilliseconds) {
+    // Randomise the direction
+    randomizeDirection(velocityVector);
 
-//! Update function for particles of type DUST.
-//! Moves the particle slowly downwards.
-//! \param elapsedTimeInMilliseconds The elapsed time since the last tick.
-void Particle::updateDust(long long int elapsedTimeInMilliseconds) {
-    // TODO
+    // Set opacity
+    setOpacity(opacity() - (float)elapsedTimeInMilliseconds / (fadeTime * 1000.0f));
+
+    // Add acceleration
+    velocityVector += velocityVector.normalized() * acceleration * elapsedTimeInMilliseconds / 1000.0f;
 }
 
 //! Override of the onTrigger function.
