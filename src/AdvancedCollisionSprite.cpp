@@ -146,3 +146,10 @@ void AdvancedCollisionSprite::onTrigger(AdvancedCollisionSprite* pOther) {
 void AdvancedCollisionSprite::onCollision(AdvancedCollisionSprite* pOther) {
     emit notifyCollision(pOther);
 }
+
+//! Called when the sprite is stepped an physics entity.
+//! Emits the notifySteppedOn signal.
+//! \param pEntity The physics entity that stepped on the sprite.
+void AdvancedCollisionSprite::onSteppedOn(PhysicsEntity* pEntity) {
+    emit notifySteppedOn(pEntity);
+}

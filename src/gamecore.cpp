@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "LevelLoader.h"
 #include "Particle.h"
+#include "MovingPlatform.h"
 
 const int SCENE_WIDTH = 3500;
 
@@ -38,6 +39,10 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
 
     levelLoader = new LevelLoader(this, GameFramework::resourcesPath() + "levels");
     levelLoader->loadLevel("mainLevel");
+
+    MovingPlatform* platform = new MovingPlatform(QVector2D(300, 300), 5000);
+    platform -> setPos(200, 500);
+    m_pScene->addSpriteToScene(platform);
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
@@ -90,39 +95,6 @@ void GameCore::keyPressed(int key) {
             break;
         case Qt::Key_R:
             resetLevel();
-            break;
-        case Qt::Key_L:
-            for (int i = 0; i < 5; i++) {
-                auto* particle = new Particle(Particle::SMOKE, GameFramework::imagesPath() + "particle.png");
-                particle -> setPos(500, 500);
-                particle -> setScale(.1);
-                particle -> initialSpeed = .5;
-                particle -> acceleration = 0.975f;
-                particle -> fadeTime = 1.5f;
-                m_pScene -> addSpriteToScene(particle);
-            }
-            break;
-        case Qt::Key_M:
-            for (int i = 0; i < 5; i++) {
-                auto* particle = new Particle(Particle::DUST, GameFramework::imagesPath() + "particle.png");
-                particle -> setPos(500, 500);
-                particle -> setScale(.1);
-                particle -> initialSpeed = .5;
-                particle -> acceleration = 1.575f;
-                particle -> fadeTime = 1.5f;
-                m_pScene -> addSpriteToScene(particle);
-            }
-            break;
-        case Qt::Key_O:
-            for (int i = 0; i < 5; i++) {
-                auto* particle = new Particle(Particle::EXPLOSIVE, GameFramework::imagesPath() + "particle.png");
-                particle -> setPos(500, 500);
-                particle -> setScale(.1);
-                particle -> initialSpeed = 10.5;
-                particle -> acceleration = 0.975f;
-                particle -> fadeTime = .5f;
-                m_pScene -> addSpriteToScene(particle);
-            }
             break;
     }
 

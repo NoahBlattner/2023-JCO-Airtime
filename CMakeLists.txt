@@ -40,7 +40,7 @@ add_executable(2023-JCO-Airtime
         src/LevelLoader.cpp src/LevelLoader.h
         src/AnimatedSprite.cpp src/AnimatedSprite.h
         src/LevelTrigger.cpp src/LevelTrigger.h
-        src/Collectible.cpp src/Collectible.h src/DashRefill.cpp src/DashRefill.h src/Particle.cpp src/Particle.h)
+        src/Collectible.cpp src/Collectible.h src/DashRefill.cpp src/DashRefill.h src/Particle.cpp src/Particle.h src/MovingPlatform.cpp src/MovingPlatform.h)
 
 target_link_libraries(2023-JCO-Airtime
         Qt::Core
