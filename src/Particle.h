@@ -27,14 +27,18 @@
 //!
 //! A particle contains multiple modifiers that can be used to change the behavior of the particle.
 //! These modifiers can be used to change the speed, acceleration, etc.
-//! These modifiers can be accessed directly.
+//! Most of these modifiers are accessible through the public variables of the particle. (except for the acceleration)
 //! Modifiers:
 //!     - randomisation: The randomisation of the particle. This is the amount of randomness that is applied to the particle.
+//!                      Initial speed will be modified to range from initialSpeed - randomisation to initialSpeed + randomisation.
+//!                      On each tick, the direction of the particle will be modified by a random amount between -randomisation and +randomisation.
 //!     - initialSpeed: The initial speed of the particle. This is the speed at which the particle is spawned.
 //!     - acceleration: The acceleration of the particle. This is the acceleration at which the particle moves.
-//!     - rotationSpeed: The rotation speed of the particle. This is the speed at which the particle rotates.
-//!     - rotationAcceleration: The rotation acceleration of the particle. This is the acceleration at which the particle rotates.
+//!                     A general acceleration that is applied to the particle as currentVelocity += acceleration * elapsedTimeInMilliseconds / 1000.0f.
+//!                     Except for particles of type TRAVEL. For these particles, the acceleration is used to lerp the travel speed and the pull towards the target. (Limited to 0.0f - 1.0f)
 //!     - fadeTime: The fade speed of the particle. This is the speed at which the particle fades.
+//!                 The particle will fade from 1.0f to 0.0f in fadeTime seconds.
+//!                 Particles of type TRAVEL use this modifier to determine how long the particle will have to exist before it can be deleted by reaching its target.
 class Particle : public PhysicsEntity {
 
 public:
@@ -58,10 +62,9 @@ public:
     // Modifiers
     float randomisation = 0.25f;
     float initialSpeed = 5.0f;
-    float acceleration = 0;
-    float rotationSpeed = 0.0f;
-    float rotationAcceleration = 0.0f;
     float fadeTime = 2.0f;
+    void setAcceleration(float acceleration);
+    [[nodiscard]] inline float getAcceleration() const { return acceleration; };
 
 protected:
     virtual void tick(long long int elapsedTimeInMilliseconds) override;
@@ -73,6 +76,8 @@ private:
     Sprite* pTravelTarget = nullptr;
     bool deleteOnReach = false;
     bool targetReached = false;
+
+    float acceleration = 0;
 
     void (Particle::*updateFunction)(long long elapsedTimeInMilliseconds) = nullptr;
 

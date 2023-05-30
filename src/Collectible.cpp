@@ -83,7 +83,7 @@ void Collectible::spawnCollectParticles(Player* pPlayer, int particleCount) {
         particle->setScale(.1);
         particle->setTravelTarget(pPlayer);
         particle->initialSpeed = 7.5;
-        particle->acceleration = 0.925f;
+        particle->setAcceleration(0.925f);
         particle->fadeTime = .5f;
         m_pScene->addSpriteToScene(particle);
     }

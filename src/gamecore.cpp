@@ -40,9 +40,11 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     levelLoader = new LevelLoader(this, GameFramework::resourcesPath() + "levels");
     levelLoader->loadLevel("mainLevel");
 
+    /**
     MovingPlatform* platform = new MovingPlatform(QVector2D(300, 300), 5000);
     platform -> setPos(200, 500);
     m_pScene->addSpriteToScene(platform);
+     **/
 
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,

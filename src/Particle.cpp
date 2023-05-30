@@ -205,3 +205,15 @@ void Particle::onTrigger(AdvancedCollisionSprite* pOther) {
         deleteLater();
     }
 }
+
+//! Set the acceleration of the particle.
+//! If the particle is of type TRAVEL, the acceleration is limited between 0 and 1.
+//! \param acceleration The new acceleration.
+void Particle::setAcceleration(float acceleration) {
+    this->acceleration = acceleration;
+
+    if (particleType == TRAVEL) {
+        // Limit the acceleration between 0 and 1
+        this->acceleration = std::min(1.0f, std::max(0.0f, this->acceleration));
+    }
+}
