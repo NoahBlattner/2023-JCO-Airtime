@@ -12,7 +12,6 @@
 //! Automatically sets the image of the collectible.
 //! \param pParent The parent of the collectible.
 DashRefill::DashRefill(QGraphicsItem* pParent) : Collectible(RESPAWN_TIME, pParent) {
-    qDebug() << RESPAWN_TIME;
     setPixmap(QPixmap(QDir::toNativeSeparators(GameFramework::imagesPath() + "energy.png")));
 }
 

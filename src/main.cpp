@@ -60,31 +60,6 @@
  * compose de projet.
  * \image html UML_classes.png "Diagramme de classe simplifié"
  *
- * \section afaire_sec Travail à réaliser
- * Développer le jeu au sein de la classe GameCore, en spécialisant la classe Sprite et en créant toutes les autres classes nécessaires au jeu.
- *
- * Les initialisations peuvent être faites dans le constructeur de GameCore : GameCore::GameCore().
- *
- * Si l'initialisation du jeu implique de nombreuses instructions, ajouter à GameCore
- * des fonctions privées d'initialisation qui seront appelées depuis le constructeur.
- *
- * Au sein de la classe GameCore, la variable membre m_pCanvas permet d'accéder
- * aux fonctions de la classe GameCanvas.
- *
- * La classe GameScene, qui représente un espace de jeu en deux dimensions, met
- * à disposition plusieurs fonctions utiles pour le jeu :
- *
- * - GameScene::setWidth() : Permet de déterminer la largeur, en pixels, de la surface de jeu. La fonction GameScene::width() permet de la relire.
- * - GameScene::setHeight() : Permet de déterminer la hauteur, en pixels, de la surface de jeu. La fonction GameScene::height() permet de la relire.
- * - GameScene::addSpriteToScene() : Cette fonction intègre le sprite donné à la scène. La scène en prend la propriété
- *   et se chargera donc de le détruire lorsque l'application se termine.
- * - GameScene::collidingSprites() : Cette fonction permet d'obtenir une liste de sprites en collision avec un sprite donné.
- * - GameScene::spriteAt() : Cette fonction permet de récupérer le sprite se trouvant à la position donnée.
- * - GameScene::createText() : Cette fonction ajoute à la scène un texte et retourne un pointeur permettant de manipuler ce texte.
- *
- * La classe GameCanvas intercepte les événements produits par le clavier (appui et
- * relâche d'une touche, voir \ref input_keyboard) et la souris (voir \ref input_mouse).
- *
  * \section sprite_sec Les objets animés
  * Un jeu est essentiellement constitué d'élément graphiques animés qui se déplacent sur
  * la surface de jeu.

@@ -8,6 +8,13 @@
 
 #include "PhysicsEntity.h"
 
+//! \brief A class that can be used to create moving platforms.
+//!
+//! This class is used to create moving platforms.
+//!
+//! It is activated when a player steps on it.
+//! When activated, it will move in a direction over a certain amount of time.
+//! When it reaches the end of its path, it will move back to its original position.
 class MovingPlatform : public PhysicsEntity {
 
 public:
