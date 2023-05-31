@@ -1,15 +1,15 @@
-:: Ce script génère l'executable de gameframework en mode release pour le déploiement.
-:: Auteur : Jérôme Conus
+:: Ce script gï¿½nï¿½re l'executable de gameframework en mode release pour le dï¿½ploiement.
+:: Auteur : Jï¿½rï¿½me Conus
 :: Date   : 06.1209.2022
 
 @ECHO OFF
 
-::Avant de changer de dossier, on mémorise le dossier actuel
+::Avant de changer de dossier, on mï¿½morise le dossier actuel
 ::set OLDDIR=%CD%
 
 set PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
 
-C:\Qt\6.3.0\mingw_64\bin\qmake.exe ..\src\GameFramework.pro
+C:\Qt\6.4.0\mingw_64\bin\qmake.exe ..\src\2023-JCO-Airtime.pro
 
 C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe -f Makefile qmake_all
 
@@ -23,17 +23,17 @@ IF ERRORLEVEL 1 GOTO errorHandling
 :: Nettoyage
 C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe clean -j2
 
-:: Création du dossier release qui contiendra les fichiers de déploiement
+:: Crï¿½ation du dossier release qui contiendra les fichiers de dï¿½ploiement
 mkdir ..\release
-copy .\release\GameFramework.exe ..\release\ /Y
+copy .\release\2023-JCO-Airtime.exe ..\release\ /Y
 xcopy ..\res ..\release\res\ /E /Y
 
-c:\Qt\6.3.0\mingw_64\bin\windeployqt.exe ..\release\GameFramework.exe
+c:\Qt\6.4.0\mingw_64\bin\windeployqt.exe ..\release\2023-JCO-Airtime.exe
 
-:: Suppression du dossier inutiles créés par windeployqt
+:: Suppression du dossier inutiles crï¿½ï¿½s par windeployqt
 rmdir ..\release\translations /S /Q
 rmdir ..\release\tls /S /Q
-:: Rétablissement du dossier d'origine
+:: Rï¿½tablissement du dossier d'origine
 ::cd %OLDDIR%
 exit
 

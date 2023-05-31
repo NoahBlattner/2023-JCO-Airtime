@@ -1,15 +1,24 @@
 cmake_minimum_required(VERSION 3.24)
-project(2023-JCO-Airtime)
 
 set(UIS src/mainfrm.ui)
+
+# Find Qt6
+file(GLOB QT_INSTALL_PATH C:/Qt/6.*)
+
+set(CMAKE_PREFIX_PATH ${QT_INSTALL_PATH}/mingw_64)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_PREFIX_PATH C:/Qt/6.4.0/mingw_64)
 set(CMAKE_AUTOMOC TRUE)
-set(QT_INSTALL_PATH C:/Qt/6.4.0)
+
+set(CMAKE_CXX_COMPILER "C:/Qt/Tools/mingw1120_64/bin/g++.exe")
+
+project(2023-JCO-Airtime LANGUAGES CXX)
+
+# set cmake make program
+set(CMAKE_MAKE_PROGRAM "C:/Qt/Tools/mingw1120_64/bin/mingw32-make.exe")
 
 find_package(Qt6 COMPONENTS
         Core
@@ -35,13 +44,21 @@ add_executable(2023-JCO-Airtime
         src/PhysicsEntity.cpp src/PhysicsEntity.h
         src/AdvancedCollisionSprite.cpp src/AdvancedCollisionSprite.h
         src/DirectionalEntityCollider.cpp src/DirectionalEntityCollider.h
-        src/LevelLoader.cpp src/LevelLoader.h src/AnimatedSprite.cpp src/AnimatedSprite.h src/LevelTrigger.cpp src/LevelTrigger.h)
+        src/LevelLoader.cpp src/LevelLoader.h
+        src/AnimatedSprite.cpp src/AnimatedSprite.h
+        src/LevelTrigger.cpp src/LevelTrigger.h
+        src/Collectible.cpp src/Collectible.h
+        src/DashRefill.cpp src/DashRefill.h
+        src/Particle.cpp src/Particle.h
+        src/MovingPlatform.cpp src/MovingPlatform.h)
 
 target_link_libraries(2023-JCO-Airtime
         Qt::Core
         Qt::Gui
         Qt6::Widgets
         )
+
+qt_import_plugins(${PROJECT_NAME} INCLUDE Qt6::QSvgPlugin)
 
 if (WIN32)
     set(DEBUG_SUFFIX)

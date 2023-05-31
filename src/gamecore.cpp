@@ -17,6 +17,8 @@
 #include "utilities.h"
 #include "Player.h"
 #include "LevelLoader.h"
+#include "Particle.h"
+#include "MovingPlatform.h"
 
 const int SCENE_WIDTH = 3500;
 
@@ -38,6 +40,12 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
     levelLoader = new LevelLoader(this, GameFramework::resourcesPath() + "levels");
     levelLoader->loadLevel("mainLevel");
 
+    /**
+    MovingPlatform* platform = new MovingPlatform(QVector2D(300, 300), 5000);
+    platform -> setPos(200, 500);
+    m_pScene->addSpriteToScene(platform);
+     **/
+
     // Démarre le tick pour que les animations qui en dépendent fonctionnent correctement.
     // Attention : il est important que l'enclenchement du tick soit fait vers la fin de cette fonction,
     // sinon le temps passé jusqu'au premier tick (ElapsedTime) peut être élevé et provoquer de gros
@@ -49,6 +57,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
 GameCore::~GameCore() {
     delete m_pScene;
     m_pScene = nullptr;
+
+    delete levelLoader;
+    levelLoader = nullptr;
 }
 
 //! Changes the current level

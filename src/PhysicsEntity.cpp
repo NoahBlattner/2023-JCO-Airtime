@@ -49,9 +49,9 @@ void PhysicsEntity::tick(long long elapsedTimeInMilliseconds) {
 
 //! Move the entity by a given vector.
 //! This movement is blocked by other sprites and the scene boundaries.
-//! \param moveVector The vector to move the entity by.
+//! \param moveVector The vector to startMove the entity by.
 void PhysicsEntity::move(QVector2D moveVector) {
-    if (moveVector.isNull()) { // If the move vector is null, do nothing
+    if (moveVector.isNull()) { // If the startMove vector is null, do nothing
         return;
     }
 
@@ -95,7 +95,7 @@ QList<AdvancedCollisionSprite*> PhysicsEntity::getCollidingSprites(QRectF rectF)
 //! Limits a RectF to the scene rect.
 //! \param rect The reference to the RectF.
 void PhysicsEntity::limitRectToScene(QRectF &rect) const {
-    // If the given rect is outside the scene, move it back inside
+    // If the given rect is outside the scene, startMove it back inside
     if (rect.left() < 0) {
         rect.setX(0);
     } else if (rect.right() > m_pParentScene ->sceneRect().right()) {
@@ -118,7 +118,7 @@ void PhysicsEntity::alignRectToSprite(QRectF &rect, Sprite* pSprite) {
 
         // Find the intersection between the new rect and the sprite
         QRectF intersection = rect.intersected(otherCollisionRect);
-        if (intersection.width() < intersection.height()) { // If the intersection is wider than it is tall
+        if (intersection.width() < intersection.height() && intersection.height() > STEP_HEIGHT) { // If the intersection is wider than it is tall
             if (x() < pSprite->x()) { // If the entity is to the left of the sprite
                 rect.setX(otherCollisionRect.left() - rect.width());
             } else { // If the entity is to the right of the sprite
@@ -146,6 +146,15 @@ bool PhysicsEntity::reevaluateGrounded() {
     // Check if the player is on the ground
     QRectF groundRect = collisionRect().translated(0, GROUNDED_DISTANCE);
     auto groundCheckCollisions = getCollidingSprites(groundRect);
+
+    // Remove triggers
+    foreach (auto* pSprite, groundCheckCollisions) {
+        if (pSprite->getIsTrigger()) {
+            groundCheckCollisions.removeOne(pSprite);
+        } else {
+            pSprite->onSteppedOn(this);
+        }
+    }
 
     // Determine if the player is on the ground
     if (!groundCheckCollisions.empty() // If the player is colliding with another sprite at the bottom

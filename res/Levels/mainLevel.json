@@ -16,6 +16,16 @@
         {
             "opacity": 100,
             "rotation": 0,
+            "scale": 0.25,
+            "tag": "DashRefill",
+            "textureName": "energy.png",
+            "x": 600,
+            "y": 300,
+            "z-index": 0
+        },
+        {
+            "opacity": 100,
+            "rotation": 0,
             "scale": 1,
             "tag": "DirectionalCollider-Top",
             "textureName": "oneside-platform.png",
@@ -170,7 +180,7 @@
             "tag": "LevelTrigger-level2",
             "textureName": "kill-zone.png",
             "x": 3517,
-            "y": -170,
+            "y": 170,
             "z-index": 0
         }
     ],

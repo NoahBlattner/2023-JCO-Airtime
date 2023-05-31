@@ -8,6 +8,7 @@
 #ifndef INC_2023_JCO_AIRTIME_ADVANCEDCOLLISIONSPRITE_H
 #define INC_2023_JCO_AIRTIME_ADVANCEDCOLLISIONSPRITE_H
 
+class PhysicsEntity;
 
 #include "sprite.h"
 
@@ -70,6 +71,7 @@ public:
     // Intersection events
     virtual void onTrigger(AdvancedCollisionSprite* pOther);
     virtual void onCollision(AdvancedCollisionSprite* pOther);
+    virtual void onSteppedOn(PhysicsEntity* pEntity);
 
     // Intersections checks
     virtual void reevaluateIntersects();
@@ -93,6 +95,7 @@ protected:
 signals:
     void notifyTrigger(Sprite* pOther);
     void notifyCollision(Sprite* pOther);
+    void notifySteppedOn(PhysicsEntity* pEntity);
 };
 
 

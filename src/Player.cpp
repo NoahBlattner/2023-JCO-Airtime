@@ -17,6 +17,8 @@ Player::Player(GameCore *gameCore, QGraphicsItem *parent) : PhysicsEntity(parent
     // Create animations
     initAnimations();
 
+    setZValue(1);
+
     // Apply physics overrides
     friction = PLAYER_FRICTION_OVERRIDE;
     gravity = PLAYER_GRAVITY_OVERRIDE;
@@ -223,9 +225,14 @@ void Player::applyWalkInput(long long int elapsedTimeInMilliseconds) {
 void Player::showDustParticles() const {
     QPoint playerBottomCenter = QPoint(sceneBoundingRect().center().x(), sceneBoundingRect().bottom());
 
-    auto* dust = new AnimatedSprite(dustParticles .toImage(), QList<int>::fromReadOnlyData(DUST_FRAME_DURATIONS));
+    auto* dust = new AnimatedSprite(dustParticles.toImage(), QList<int>::fromReadOnlyData(DUST_FRAME_DURATIONS));
     dust->setPos(playerBottomCenter - QPoint(dust->boundingRect().width() / 2, dust->boundingRect().height()));
     scene()->addItem(dust);
+}
+
+//! Recharges the dash.
+void Player::rechargeDash() {
+    dashEnabled = true;
 }
 
 /*****************************

@@ -70,6 +70,8 @@ public:
 
 private:
     const float GROUNDED_DISTANCE = 1;
+    const int STEP_HEIGHT = 10;
+
     bool m_isOnGround = false;
 
     QRectF m_newRect;

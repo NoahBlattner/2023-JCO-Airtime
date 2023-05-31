@@ -17,6 +17,7 @@
 #include "DirectionalEntityCollider.h"
 #include "AdvancedCollisionSprite.h"
 #include "LevelTrigger.h"
+#include "DashRefill.h"
 
 //! Constructor :
 //! \param core The game core managing the scene in which the level will be loaded.
@@ -98,49 +99,14 @@ QList<Sprite*> LevelLoader::loadSprites(const QJsonArray& spritesArray) {
 //! \param spriteObject The JSON object containing the sprite data.
 //! \return The loaded sprite.
 Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
-    Sprite* sprite = nullptr;
+    // Get the tag
+    QList<QString> tagInfos = spriteObject["tag"].toString().split("?");
+    QString tag = tagInfos[0];
 
     QString imagePath = QDir::toNativeSeparators(GameFramework::imagesPath() +
             spriteObject["textureName"].toString());
 
-    // Get the tag
-    QList<QString> tagInfos = spriteObject["tag"].toString().split("?");
-    QString tag = tagInfos[0];
-    qDebug() << "Loading sprite " << imagePath << " with tag " << tag;
-
-    if (tag.isEmpty()) {
-        // Create a simple sprite
-        sprite = new Sprite(imagePath);
-    } else if (tag.startsWith("LevelTrigger")) {
-        // Create a level trigger
-        sprite = new LevelTrigger(m_pCore, tag . split("-")[1]);
-    } else if (tag.startsWith("DirectionalCollider")) {
-        DirectionalEntityCollider::BlockingSides blockingSides;
-
-        // Define the blocking sides
-        if (tag.contains("Top"))
-            blockingSides.top = true;
-        if (tag.contains("Bottom"))
-            blockingSides.bottom = true;
-        if (tag.contains("Left"))
-            blockingSides.left = true;
-        if (tag.contains("Right"))
-            blockingSides.right = true;
-
-        // Create a directional collider
-        sprite = new DirectionalEntityCollider(imagePath, blockingSides);
-    } else if (tag.startsWith("Player")) {
-        // Create a player
-        sprite = new Player(m_pCore);
-    } else {
-        // Create an AdvancedCollisionSprite
-        auto* advSprite = new AdvancedCollisionSprite(imagePath);
-
-        // Set the tag of the sprite as the collision tag
-        advSprite->collisionTag = tag;
-
-        sprite = advSprite;
-    }
+    Sprite* sprite = generateSprite(tag, imagePath);
 
     // Apply transformations
     sprite->setTransformOriginPoint(sprite->globalBoundingRect().center());
@@ -157,6 +123,69 @@ Sprite* LevelLoader::loadSprite(const QJsonObject &spriteObject) {
 
     m_pCore->scene()->addSpriteToScene(sprite); // Add the sprite to the scene
 
+    return sprite;
+}
+
+//! Generates a sprite from a tag.
+//! Creates a new sprite or a subclass of Sprite depending on the tag.
+//! \param tag The tag of the sprite.
+//! \param imagePath The path of the image of the sprite.
+//! \return The generated sprite.
+Sprite* LevelLoader::generateSprite(const QString &tag, const QString &imagePath) const {
+    Sprite* sprite;
+
+    // If the tag is empty
+    if (tag.isEmpty()) {
+        // Create a simple sprite
+        sprite = new Sprite(imagePath);
+    }
+
+    // If the tag is a LevelTrigger
+    else if (tag.startsWith("LevelTrigger")) {
+        // Create a level trigger
+        sprite = new LevelTrigger(m_pCore, tag . split("-")[1]);
+    }
+
+    // If the tag is a DirectionalCollider
+    else if (tag.startsWith("DirectionalCollider")) {
+        DirectionalEntityCollider::BlockingSides blockingSides;
+
+        // Define the blocking sides
+        if (tag.contains("Top"))
+            blockingSides.top = true;
+        if (tag.contains("Bottom"))
+            blockingSides.bottom = true;
+        if (tag.contains("Left"))
+            blockingSides.left = true;
+        if (tag.contains("Right"))
+            blockingSides.right = true;
+
+        // Create a directional collider
+        sprite = new DirectionalEntityCollider(imagePath, blockingSides);
+    }
+
+    // If the tag is a Player
+    else if (tag.startsWith("Player")) {
+        // Create a player
+        sprite = new Player(m_pCore);
+    }
+
+    // If the tag is a DashRefill
+    else if (tag.startsWith("DashRefill")) {
+        // Create a dash refill
+        sprite = new DashRefill();
+    }
+
+    // If the tag is anything else
+    else {
+        // Create an AdvancedCollisionSprite
+        auto* advSprite = new AdvancedCollisionSprite(imagePath);
+
+        // Set the tag of the sprite as the collision tag
+        advSprite->collisionTag = tag;
+
+        sprite = advSprite;
+    }
     return sprite;
 }
 
