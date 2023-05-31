@@ -39,7 +39,7 @@ Collectible::Collectible(const QString &rImagePath, QRectF collisionOverride, un
 void Collectible::onTrigger(AdvancedCollisionSprite* pOther) {
     AdvancedCollisionSprite::onTrigger(pOther);
 
-    if (pOther->collisionTag == "Player") {
+    if (pOther->collisionTag == "Player" && isEnabled()) {
         // Collectible was collected by player
         onCollect((Player*) pOther);
     }
@@ -57,9 +57,9 @@ void Collectible::onCollect(Player* player) {
 //! If the respawn time is set to 0, the collectible will be destroyed.
 //! Else, the collectible will reappear after the specified amount of time.
 void Collectible::disable() {
-    // Collectible is removed from the scene
-    m_pScene = parentScene();
-    m_pScene->removeSpriteFromScene(this);
+    // Collectible is rendered invisible and disabled
+    setVisible(false);
+    setEnabled(false);
 
     if (m_respawnTime == 0) {
         // Destroy the collectible
@@ -70,9 +70,11 @@ void Collectible::disable() {
     }
 }
 
-//! Enables the collectible and shows it.
+//! Enables the collectible by reactivating it's collisions and rendering it visible.
 void Collectible::enable() {
-    m_pScene->addSpriteToScene(this);
+    // Collectible is rendered visible and enabled
+    setVisible(true);
+    setEnabled(true);
 }
 
 //! Spawn particles that travel towards the player.
@@ -85,6 +87,6 @@ void Collectible::spawnCollectParticles(Player* pPlayer, int particleCount) {
         particle->initialSpeed = 7.5;
         particle->setAcceleration(0.925f);
         particle->fadeTime = .5f;
-        m_pScene->addSpriteToScene(particle);
+        parentScene()->addSpriteToScene(particle);
     }
 }

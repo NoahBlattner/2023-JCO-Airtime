@@ -34,7 +34,6 @@ protected:
 
 private:
     unsigned int m_respawnTime = 0;
-    GameScene* m_pScene = nullptr;
 
     void spawnCollectParticles(Player* pPlayer, int particleCount = 5);
 

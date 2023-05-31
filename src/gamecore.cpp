@@ -57,6 +57,9 @@ GameCore::GameCore(GameCanvas* pGameCanvas, QObject* pParent) : QObject(pParent)
 GameCore::~GameCore() {
     delete m_pScene;
     m_pScene = nullptr;
+
+    delete levelLoader;
+    levelLoader = nullptr;
 }
 
 //! Changes the current level

@@ -45,10 +45,6 @@ Sprite::Sprite(const QString& rImagePath, QGraphicsItem* pParent) : Sprite(QPixm
 Sprite::~Sprite() {
     emit spriteDestroyed(this);
 
-    if (parentScene()) { // If the sprite is still in a scene, remove it.
-        parentScene()->removeSpriteFromScene(this);
-    }
-
 #ifdef DEBUG_SPRITE_COUNT
     s_spriteCount--;
     displaySpriteCount();
