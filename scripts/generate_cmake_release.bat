@@ -2,7 +2,12 @@
 
 set PATH=%PATH%;C:\Qt\Tools\CMake_64\bin
 
-cd ../release
+:: Create build directory
+cd..
+mkdir cmake-build-release
+cd cmake-build-release
+
+:: Start build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
 
