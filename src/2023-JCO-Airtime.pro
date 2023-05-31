@@ -37,6 +37,8 @@ SOURCES += main.cpp\
     LevelTrigger.cpp \
     PhysicsEntity.cpp \
     Player.cpp \
+    Particle.cpp \
+    MovingPlatform.cpp \
 
 HEADERS  += mainfrm.h \
     gamescene.h \
@@ -56,6 +58,8 @@ HEADERS  += mainfrm.h \
     LevelTrigger.h \
     PhysicsEntity.h \
     Player.h \
+    Particle.h \
+    MovingPlatform.h \
 
 
 FORMS    += mainfrm.ui

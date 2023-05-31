@@ -13,8 +13,6 @@
 //! When the collectible is collected, the player's dash is recharged.
 class DashRefill : public Collectible {
 
-const int RESPAWN_TIME = 2500;
-
 public:
     explicit DashRefill(QGraphicsItem* pParent = nullptr);
 

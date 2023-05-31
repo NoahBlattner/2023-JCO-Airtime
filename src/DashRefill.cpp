@@ -8,6 +8,8 @@
 
 #include "DashRefill.h"
 
+const int RESPAWN_TIME = 2500;
+
 //! Constructor :
 //! Automatically sets the image of the collectible.
 //! \param pParent The parent of the collectible.
