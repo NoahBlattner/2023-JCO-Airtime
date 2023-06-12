@@ -1,10 +1,10 @@
-:: Ce script g�n�re l'executable de gameframework en mode release pour le d�ploiement.
-:: Auteur : J�r�me Conus
+:: Ce script génère l'executable de gameframework en mode release pour le d�ploiement.
+:: Auteur : Jérome Conus
 :: Date   : 06.1209.2022
 
 @ECHO OFF
 
-::Avant de changer de dossier, on m�morise le dossier actuel
+::Avant de changer de dossier, on mémorise le dossier actuel
 ::set OLDDIR=%CD%
 
 set PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
@@ -23,17 +23,17 @@ IF ERRORLEVEL 1 GOTO errorHandling
 :: Nettoyage
 C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe clean -j2
 
-:: Cr�ation du dossier release qui contiendra les fichiers de d�ploiement
+:: Création du dossier release qui contiendra les fichiers de d�ploiement
 mkdir ..\release
 copy .\release\2023-JCO-Airtime.exe ..\release\ /Y
 xcopy ..\res ..\release\res\ /E /Y
 
 c:\Qt\6.4.0\mingw_64\bin\windeployqt.exe ..\release\2023-JCO-Airtime.exe
 
-:: Suppression du dossier inutiles cr��s par windeployqt
+:: Suppression du dossier inutiles créés par windeployqt
 rmdir ..\release\translations /S /Q
 rmdir ..\release\tls /S /Q
-:: R�tablissement du dossier d'origine
+:: Rétablissement du dossier d'origine
 ::cd %OLDDIR%
 exit
 

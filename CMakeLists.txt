@@ -13,12 +13,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC TRUE)
 
-set(CMAKE_CXX_COMPILER "C:/Qt/Tools/mingw1120_64/bin/g++.exe")
-
+# set the project name
 project(2023-JCO-Airtime LANGUAGES CXX)
-
-# set cmake make program
-set(CMAKE_MAKE_PROGRAM "C:/Qt/Tools/mingw1120_64/bin/mingw32-make.exe")
 
 find_package(Qt6 COMPONENTS
         Core
