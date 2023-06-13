@@ -78,4 +78,10 @@ plus élévé dans la hiérarchie :
     QString imagesPath() {
         return resourcesPath() + QString("images") + QDir::separator();
     }
+
+    //! Indique le chemin d'accès aux resources sons.
+    //! \return une chaîne de caractères contenant le chemin absolu du répertoire des sons.
+    QString soundsPath() {
+        return resourcesPath() + QString("sounds") + QDir::separator();
+    }
 }

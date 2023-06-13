@@ -16,5 +16,6 @@
 namespace GameFramework {
     QString resourcesPath();
     QString imagesPath();
+    QString soundsPath();
 }
 #endif // RESOURCES_H

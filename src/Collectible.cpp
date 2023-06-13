@@ -51,6 +51,11 @@ void Collectible::onTrigger(AdvancedCollisionSprite* pOther) {
 void Collectible::onCollect(Player* player) {
     disable();
     spawnCollectParticles(player);
+
+    if (m_collectSound.isLoaded()) {
+        // Play the collect sound
+        m_collectSound.play();
+    }
 }
 
 //! Disables the collectible and hides it.
@@ -89,4 +94,10 @@ void Collectible::spawnCollectParticles(Player* pPlayer, int particleCount) {
         particle->fadeTime = .5f;
         parentScene()->addSpriteToScene(particle);
     }
+}
+
+//! Sets the sound that is played when the collectible is collected.
+//! \param rSoundPath The path to the sound file.
+void Collectible::setSound(const QString &rSoundPath) {
+    m_collectSound.setSource(QUrl::fromLocalFile(rSoundPath));
 }

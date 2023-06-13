@@ -9,6 +9,8 @@
 
 class Player;
 
+#include <QSoundEffect>
+
 #include "AdvancedCollisionSprite.h"
 
 //! \brief An abstract class that can be subclassed to create collectibles.
@@ -32,6 +34,9 @@ protected:
 
     void onTrigger(AdvancedCollisionSprite* pOther) override;
 
+    void setSound(const QString& rSoundPath);
+    QSoundEffect m_collectSound;
+
 private:
     unsigned int m_respawnTime = 0;
 
@@ -42,6 +47,5 @@ private:
 private slots:
     void enable();
 };
-
 
 #endif //INC_2023_JCO_AIRTIME_COLLECTIBLE_H

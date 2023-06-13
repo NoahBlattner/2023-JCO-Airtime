@@ -15,6 +15,8 @@ const int RESPAWN_TIME = 2500;
 //! \param pParent The parent of the collectible.
 DashRefill::DashRefill(QGraphicsItem* pParent) : Collectible(RESPAWN_TIME, pParent) {
     setPixmap(QPixmap(QDir::toNativeSeparators(GameFramework::imagesPath() + "energy.png")));
+
+    setSound(QDir::toNativeSeparators(GameFramework::soundsPath() + "dash-refill.wav"));
 }
 
 //! Override of the onCollect function from Collectible.
