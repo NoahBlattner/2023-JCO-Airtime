@@ -4,12 +4,14 @@
     "sceneWidth": 4000,
     "sprites": [
         {
+            "opacity": 100,
             "rotation": 0,
             "scale": 1,
             "tag": "Player",
             "textureName": "base-player.png",
             "x": 69.34306569343065,
-            "y": 925.1824817518246
+            "y": 925.1824817518246,
+            "z-index": 0
         }
     ],
     "tags": [
